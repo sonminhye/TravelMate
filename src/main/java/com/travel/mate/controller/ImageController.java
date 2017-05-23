@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ImageController {
 
 	
-	/*
+	
 	@RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
 	public String uploadImage(Model model) {
 		
@@ -19,5 +19,5 @@ public class ImageController {
 		
 		return "uploadImage";
 	}
-	*/
+	
 }

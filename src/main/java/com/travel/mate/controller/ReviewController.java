@@ -12,7 +12,7 @@ public class ReviewController {
 	
 	
 
-/*	@RequestMapping(value = "/showReviewForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/showReviewForm", method = RequestMethod.GET)
 	public String showReviewForm(Model model) {
 		
 		return "showReviewForm";
@@ -33,6 +33,6 @@ public class ReviewController {
 		
 		return "showReview";
 	}
-*/
+
 	
 }
