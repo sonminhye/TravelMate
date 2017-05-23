@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/footer.css">
     
-        <!-- jQuery -->
+<!--         jQuery
     <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- Plugin JavaScript -->
+    Plugin JavaScript
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" integrity="sha384-mE6eXfrb8jxl0rzJDBRanYqgBxtJ6Unn4/1F7q4xRRyIw7Vdg9jP4ycT7x1iVsgb" crossorigin="anonymous"></script>
-    <!-- Contact Form JavaScript -->
+    Contact Form JavaScript
     <script src="js/jqBootstrapValidation.js"></script>
     <script src="js/contact_me.js"></script>
-    <!-- Theme JavaScript -->
-    <script src="js/agency.min.js"></script>
+    Theme JavaScript
+    <script src="js/agency.min.js"></script> -->
 </head>
 
 <body>
@@ -65,6 +65,6 @@
         </div>
     </footer>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-</body>
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ --></body>
 </html>
