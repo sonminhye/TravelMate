@@ -10,11 +10,14 @@
 <title>여행정보 보기</title>
 </head>
 <body>
+
+<jsp:include page="header.jsp"></jsp:include>
+	<div class="container">
 	<table class="table" width=500 height=700>
 		<tr>
 			<td colspan=2>제목</td>
 			<td>올린날</td>
-			<td><button class="btn btn-default">신청하기</button></td>
+			<td><button class="btn btn-default" >신청하기</button></td>
 		</tr>
 		<tr>
 			<td>홍길동</td>
@@ -52,5 +55,7 @@
 			<td><button class="btn btn-default">등록</button></td>
 		</tr>
 	</table>
+	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

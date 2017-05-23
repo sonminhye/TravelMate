@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="./js/bootstrap-datepicker.js"></script>
 <link rel="stylesheet" href="./css/datepicker3.css">
 <title>여행등록</title>
@@ -15,13 +15,15 @@
 $(document).ready(function(){
 	 $('#startDate').datepicker();
 	 $('#endDate').datepicker();
-	 $('#startTime').timepicker();
 }); 	
-
 </script>
 </head>
 <body>
+
+<jsp:include page="header.jsp"></jsp:include>
+	<div class="container">
 	<form action="doWriteTravelForm">
+		
 		<table class="table" width="500">
 			<tr>
 				<td>여행이름</td>
@@ -90,8 +92,8 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-		
 		<button type="submit" class="btn btn-default">등록하기</button>
-	</form>
+	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
