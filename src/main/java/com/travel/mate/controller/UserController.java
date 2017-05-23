@@ -1,7 +1,5 @@
 package com.travel.mate.controller;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import org.springframework.stereotype.Controller;
@@ -23,5 +21,12 @@ public class UserController {
 //		
 //		return "signup";
 //	}	
+	
+	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
+	public String myPage(Locale locale, Model model) {
+	
+		return "myPage";
+	}
+	
 	
 }
