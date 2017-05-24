@@ -4,15 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <title>여행정보 보기</title>
 </head>
 <body>
 
 <jsp:include page="header.jsp"></jsp:include>
-	<div class="container">
+
+	<div class="container" style="margin-top:150px;margin-bottom:100px;">
 	<table class="table" width=500 height=700>
 		<tr>
 			<td colspan=2>제목</td>
@@ -20,7 +18,7 @@
 			<td><button class="btn btn-default" >신청하기</button></td>
 		</tr>
 		<tr>
-			<td>홍길동</td>
+			<td>글쓴이 이름</td>
 			<td colspan=2></td>
 			<td rowspan=3>
 				<img src="./img/kyoungbok.jpg" alt="없음" width="300" class='img-thumbnail'>
@@ -28,27 +26,34 @@
 		</tr>
 		<tr>
 			<td>날짜</td>
-			<td colspan=2></td>
+			<td colspan=2>날짜적는곳</td>
 		</tr>
 		<tr>
 			<td>시간</td>
-			<td colspan=2></td>
+			<td colspan=2>시간적는곳</td>
 		
 		</tr>
 		<tr>
 			<td>설명</td>
-			<td colspan=3></td>
+			<td colspan=3>설명하는곳</td>
 		</tr>
 		<tr>
 			<td>장소</td>
-			<td colspan=3></td>
+			<td colspan=3>
+				
+			</td>
 		</tr>
 		<tr>
-			<td colspan=4></td>
+			<td colspan=4>다음api 지도 들어갈 자리</td>
 		</tr>
 		<tr>
 			<td>후기</td>
-			<td colspan=3></td>
+			<td colspan=3>별점 아이콘 넣는 곳</td>
+		</tr>
+		<tr>
+			<td colspan=4>
+				<textarea></textarea>
+			</td>
 		</tr>
 		<tr>
 			<td colspan=3></td>

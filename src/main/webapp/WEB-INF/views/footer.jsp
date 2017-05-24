@@ -8,14 +8,9 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/footer.css">
     
-<<<<<<< HEAD
-
-    <!-- Plugin JavaScript -->
-=======
 <!--         jQuery
     <script src="vendor/jquery/jquery.min.js"></script>
     Plugin JavaScript
->>>>>>> 11a47ee91b9dd8776f2e08c5e9629a7440261560
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" integrity="sha384-mE6eXfrb8jxl0rzJDBRanYqgBxtJ6Unn4/1F7q4xRRyIw7Vdg9jP4ycT7x1iVsgb" crossorigin="anonymous"></script>
     Contact Form JavaScript
     <script src="js/jqBootstrapValidation.js"></script>
@@ -69,12 +64,7 @@
             <p>© 2017 Copyright Text </p>
         </div>
     </footer>
-
-
-
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-</body>
-
-
+    
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ --></body>
 </html>

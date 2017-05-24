@@ -4,24 +4,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<!-- 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">  
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>  
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="./js/bootstrap-datepicker.js"></script>
-<link rel="stylesheet" href="./css/datepicker3.css">
+<!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+
 <title>여행등록</title>
-<script type="text/javascript">
-$(document).ready(function(){
-	 $('#startDate').datepicker();
-	 $('#endDate').datepicker();
-}); 	
-</script>
+
 </head>
 <body>
 
 <jsp:include page="header.jsp"></jsp:include>
-	<div class="container">
+<script src="./js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="./css/datepicker3.css">
+<script type="text/javascript">
+
+$(document).ready(function(){
+	 $('#startDate').datepicker();
+	 $('#endDate').datepicker();
+}); 	
+
+</script>
+	
+	<div class="container" style="margin-top:150px;margin-bottom:100px;">
 	<form action="doWriteTravelForm">
 		
 		<table class="table" width="500">

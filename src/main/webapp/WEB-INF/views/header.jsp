@@ -3,14 +3,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <title>Agency - Start Bootstrap Theme</title>
-
     <script src="http://code.jquery.com/jquery-latest.js"></script>
  
     <!-- jQuery -->
@@ -35,7 +33,6 @@
 	Latest compiled and minified JavaScript
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
  -->
-
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -43,14 +40,15 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
-
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Theme CSS -->
     <link href="css/agency.min.css" rel="stylesheet">
-
+    
 </head>
+
 <body>
+
     <!-- Navigation -->
     <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container">
@@ -81,7 +79,7 @@
                         <a class="page-scroll" href="#team">Team</a>
                     </li>
                     <li>
-  					    <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#myModal">회원가입</a>
+      <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#myModal">회원가입</a>
                   
                     </li>
                 </ul>
@@ -90,7 +88,6 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-
 	
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
