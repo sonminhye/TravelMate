@@ -56,20 +56,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#services">Services</a>
+                        <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signInModal">로그인</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Portfolio</a>
+      <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signUpModal">회원가입</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#team">Team</a>
-                    </li>
-                    <li>
-      <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#myModal">회원가입</a>
-                  
+                     <li>
+                        <a class="page-scroll" href="#about">쪽지</a>
                     </li>
                 </ul>
             </div>
@@ -78,8 +71,8 @@
         <!-- /.container-fluid -->
     </nav>
 	
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	<!-- 회원가입 Modal -->
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -121,6 +114,38 @@
 							<input type="text" class="form-control" id="language" placeholder="사용 가능한 언어를 입력하세요">
 						</div>
 						<button type="submit" class="btn btn-default">가입</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+ 
+ 
+    <!-- 로그인 Modal -->
+	<div class="modal fade" id="signInModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">로그인</h4>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="email">이메일 주소</label>
+							<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요">
+						</div>
+						<div class="form-group">
+							<label for="password1">비밀번호</label>
+							<input type="password" class="form-control" id="password1" placeholder="비밀번호">
+						</div>
+						
+						<button type="submit" class="btn btn-default">Sign In</button>
 					</form>
 				</div>
 			</div>

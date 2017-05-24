@@ -149,11 +149,9 @@ fieldset[disabled] .btn-xl.active {
 
 
 .navbar-custom {
-/*   background-color: #222222;
- */  border-color: #222222;
-  background-color: rgba(255,255,255,0.7);
-  padding-top:10px;
-  padding-bottom:10px;
+  background-color: #333333;
+  border-color: #333333;
+
  
 }
 .navbar-custom .navbar-brand {
@@ -168,7 +166,7 @@ fieldset[disabled] .btn-xl.active {
 }
 .navbar-custom .navbar-collapse {
   border-color: rgba(255, 255, 255, 0.02);
-    background-color: rgba(255, 255, 255, 0.02);
+  background-color: #333333;
 }
 .navbar-custom .navbar-toggle {
   background-color: #fed136;
@@ -225,7 +223,7 @@ fieldset[disabled] .btn-xl.active {
 }
 @media (min-width: 768px) {
   .navbar-custom.affix {
-    background-color: #222222;
+    background-color: #333333;
     padding: 10px 0;
   }
   .navbar-custom.affix .navbar-brand {
