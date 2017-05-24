@@ -147,14 +147,14 @@ fieldset[disabled] .btn-xl.active {
   background-color: white;
 }
 
-.navbar-default {
-    background-color: #F8F8F8;
-    border-color: #E7E7E7;
-}
 
 .navbar-custom {
-  background-color: #222222;
-  border-color: transparent;
+/*   background-color: #222222;
+ */  border-color: #222222;
+  background-color: rgba(255,255,255,0.7);
+  padding-top:10px;
+  padding-bottom:10px;
+ 
 }
 .navbar-custom .navbar-brand {
   color: #fed136;
@@ -168,6 +168,7 @@ fieldset[disabled] .btn-xl.active {
 }
 .navbar-custom .navbar-collapse {
   border-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, 0.02);
 }
 .navbar-custom .navbar-toggle {
   background-color: #fed136;
@@ -203,10 +204,10 @@ fieldset[disabled] .btn-xl.active {
   color: white;
   background-color: #fec503;
 }
-@media (min-width: 768px) {
+@media (min-width: 500px) {
   .navbar-custom {
-    background-color: transparent;
-    padding: 25px 0;
+    background-color: #333333;
+    padding: 12px 0;
     -webkit-transition: padding 0.3s;
     -moz-transition: padding 0.3s;
     transition: padding 0.3s;

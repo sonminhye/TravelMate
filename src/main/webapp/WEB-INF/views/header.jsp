@@ -10,20 +10,9 @@
 
     <title>Agency - Start Bootstrap Theme</title>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
  
-    <!-- jQuery -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    
-    <!-- Plugin JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" integrity="sha384-mE6eXfrb8jxl0rzJDBRanYqgBxtJ6Unn4/1F7q4xRRyIw7Vdg9jP4ycT7x1iVsgb" crossorigin="anonymous"></script>
-    <!-- Contact Form JavaScript -->
-    <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
-    <!-- Theme JavaScript -->
-    <script src="js/agency.min.js"></script>
-    
+
     
     <!-- Bootstrap Core CSS -->
  	 <!-- Latest compiled and minified CSS -->
@@ -43,21 +32,21 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Theme CSS -->
-    <link href="css/agency.min.css" rel="stylesheet">
-    
+  <!-- <link href="css/header.css?ver=1" rel="stylesheet"> -->
+<link href="css/agency.css?ver=1" rel="stylesheet">
 </head>
 
 <body>
 
     <!-- Navigation -->
-    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <nav id="mainNav" class="navbar navbar-default navbar-custom  navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
+            <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="main">Travle Mate</a>
+                <a class="navbar-brand" href="main">Travle Mate</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
