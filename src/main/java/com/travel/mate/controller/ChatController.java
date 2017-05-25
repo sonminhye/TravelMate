@@ -1,18 +1,23 @@
 package com.travel.mate.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.travel.mate.dto.ChatRoomDTO;
 import com.travel.mate.service.ChatServiceImpl;
 
 @Controller
 public class ChatController {
 	
-	ChatServiceImpl chat;
+	@Autowired
+	ChatServiceImpl chatService;
 
 
 	@RequestMapping(value = "/chat", method = RequestMethod.GET )
@@ -28,8 +33,10 @@ public class ChatController {
 	
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
+		int userCode = 2;
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Þ¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
+		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
+		model.addAttribute("list", list);
 		
 		return "chatList";
 	}
@@ -37,7 +44,7 @@ public class ChatController {
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public String sendMessage(Model model) {
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Þ¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
+		//ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ìµµ, ï¿½ï¿½ï¿½â¼­ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½, ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		
 		return "viewMessage";
 	}
@@ -45,8 +52,8 @@ public class ChatController {
 	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
 	public String viewMessage(Model model) {
 		
-		//ajax ¸¦ ÅëÇØ »ç¿ëÀÚ°¡ ÀÐÁö ¾ÊÀº ¸Þ¼¼Áö¸¦ °¡Á®¿À´Â °æ¿ì
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Þ¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
+		//ajax ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+		//ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ìµµ, ï¿½ï¿½ï¿½â¼­ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½, ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		
 		return "viewMeesage";
 	}

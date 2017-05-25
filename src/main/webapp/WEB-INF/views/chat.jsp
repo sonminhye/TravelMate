@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,9 +22,9 @@
 	width: 100px;
 }
 
-li{
-	margin:15px;
-	list-style:none;
+li {
+	margin: 15px;
+	list-style: none;
 }
 
 .noti {
@@ -36,6 +36,7 @@ li{
 	position: relative;
 	background: #88b7d5;
 }
+
 .arrow_box:after {
 	left: 100%;
 	top: 50%;
@@ -50,10 +51,12 @@ li{
 	border-width: 7px;
 	margin-top: -7px;
 }
+
 .arrow_box_oth {
 	position: relative;
 	background: #99d58a;
 }
+
 .arrow_box_oth:after {
 	right: 100%;
 	top: 50%;
@@ -73,11 +76,11 @@ li{
 <title>채팅창</title>
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
-	<div style="margin-top:150px;">
-		
+	<jsp:include page="header.jsp"></jsp:include>
+	<div style="margin-top: 150px;">
+
 		<h3>채팅창</h3>
-		
+
 		<div id="msgcontainer">
 			<div id="msgdisplay"></div>
 			<form>
@@ -86,11 +89,10 @@ li{
 			</form>
 		</div>
 	</div>
-	
+
 	<script type="text/javascript">
 	
 		var socket = io('http://localhost:3000');
-		
 		var room = '${room}';
 		var nickname = '${name}'; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
 		
@@ -108,13 +110,19 @@ li{
 					$('<li class="noti">').text(nickname + '님 환영합니다.'));
 		});
 		
+		
+		
 		// 송신: 메시지
 		$('form').submit(function() {
+			
+			var date = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
+			
 			socket.emit('msg', {
 		          name: $("#name").val(),
 		          room: $("#room").val(),
-		          msg: $("#msg").val()
-		        });
+		          msg: $("#msg").val(),
+		          date: date
+		    });
 
 			$('#msg').val('');
 			$('#msg').focus();
@@ -143,10 +151,8 @@ li{
 			$('#msgdisplay').append(
 					$('<li class="noti">').text(nick + '님이 퇴장하셨습니다.'));
 		});
-		
-		
 	</script>
-<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 
 </html>

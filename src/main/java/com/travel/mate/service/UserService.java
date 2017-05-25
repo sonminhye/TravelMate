@@ -1,5 +1,10 @@
 package com.travel.mate.service;
 
-public interface UserService {
+import java.util.ArrayList;
 
+import com.travel.mate.dto.UserDTO;
+
+
+public interface UserService {
+	public ArrayList<UserDTO> showList();
 }
