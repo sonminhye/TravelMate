@@ -9,7 +9,7 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.6</java-version>
-		<org.springframework-version>3.2.8.RELEASE</org.springframework-version>
+		<org.springframework-version>4.1.5.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
@@ -149,13 +149,29 @@
 		    <version>1.2.0</version>
 		</dependency>
 		
-		<dependency>
+<!-- 		<dependency>
 2	    	<groupId>org.springframework</groupId>
 3	    	<artifactId>spring-jdbc</artifactId>
 4	    	<version>${org.springframework-version}</version>
 5		</dependency>
+ -->
+		<dependency> 
+			<groupId>commons-dbcp</groupId> 
+			<artifactId>commons-dbcp</artifactId> 
+			<version>1.4</version> 
+		</dependency> 
+		<dependency> 
+			<groupId>mysql</groupId> 
+			<artifactId>mysql-connector-java</artifactId> 
+			<version>5.1.31</version> 
+		</dependency> 
+		<dependency> 
+			<groupId>org.springframework</groupId> 
+			<artifactId>spring-jdbc</artifactId> 
+			<version>${org.springframework-version}</version> 
+		</dependency>
 
-		
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
