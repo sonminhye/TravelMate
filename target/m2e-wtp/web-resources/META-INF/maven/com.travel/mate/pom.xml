@@ -135,6 +135,27 @@
 			<version>3.2.4.RELEASE</version>
 		</dependency>
 		
+		
+		<!--mybatis -->
+		<dependency>
+	    	<groupId>org.mybatis</groupId>
+	    	<artifactId>mybatis</artifactId>
+	    	<version>3.2.2</version>
+		</dependency>
+		 
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>1.2.0</version>
+		</dependency>
+		
+		<dependency>
+2	    	<groupId>org.springframework</groupId>
+3	    	<artifactId>spring-jdbc</artifactId>
+4	    	<version>${org.springframework-version}</version>
+5		</dependency>
+
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
