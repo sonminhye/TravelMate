@@ -16,6 +16,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-preview">
+                <hr><hr><hr>
                     <c:forEach items="${list}" var="dto">
                         <a href="post_view.do?pId=${dto.userCode}">
                             <h2>
