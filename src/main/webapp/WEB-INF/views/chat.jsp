@@ -22,6 +22,10 @@
 	width: 100px;
 }
 
+li{
+	margin:15px;
+}
+
 .noti {
 	text-align: center;
 	color: blue;
@@ -29,13 +33,9 @@
 
 .arrow_box {
 	position: relative;
-	background: #82afcc;
-	border: 2px solid #48baba;
-	margin: 15px;
-	width: 50%;
+	background: #88b7d5;
 }
-
-.arrow_box:after, .arrow_box:before {
+.arrow_box:after {
 	left: 100%;
 	top: 50%;
 	border: solid transparent;
@@ -44,29 +44,16 @@
 	width: 0;
 	position: absolute;
 	pointer-events: none;
-}
-
-.arrow_box:after {
-	border-color: rgba(130, 175, 204, 0);
-	border-left-color: #82afcc;
-	border-width: 4px;
-	margin-top: -4px;
-}
-
-.arrow_box:before {
-	border-color: rgba(72, 186, 186, 0);
-	border-left-color: #48baba;
+	border-color: rgba(136, 183, 213, 0);
+	border-left-color: #88b7d5;
 	border-width: 7px;
 	margin-top: -7px;
 }
-
 .arrow_box_oth {
 	position: relative;
-	background: #82afcc;
-	border: 2px solid #baa51a;;
+	background: #99d58a;
 }
-
-.arrow_box_oth:after, .arrow_box:before {
+.arrow_box_oth:after {
 	right: 100%;
 	top: 50%;
 	border: solid transparent;
@@ -75,18 +62,8 @@
 	width: 0;
 	position: absolute;
 	pointer-events: none;
-}
-
-.arrow_box_oth:after {
-	border-color: rgba(130, 175, 204, 0);
-	border-right-color: #adcc12;
-	border-width: 4px;
-	margin-top: -4px;
-}
-
-.arrow_box_oth:before {
-	border-color: rgba(72, 186, 186, 0);
-	border-right-color: #baa51a;;
+	border-color: rgba(153, 213, 138, 0);
+	border-right-color: #99d58a;
 	border-width: 7px;
 	margin-top: -7px;
 }
@@ -95,9 +72,11 @@
 <title>채팅창</title>
 </head>
 <body>
-	<div>
+<jsp:include page="header.jsp"></jsp:include>
+	<div style="margin-top:150px;">
+		
 		<h3>채팅창</h3>
-
+		
 		<div id="msgcontainer">
 			<div id="msgdisplay"></div>
 			<form>
@@ -110,10 +89,16 @@
 	<script type="text/javascript">
 	
 		var socket = io('http://localhost:3000');
-		var nickname = "ss"; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
-
+		
+		var room = '${room}';
+		var nickname = '${name}'; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
+		
 		//실제로 구현할 때는, 페이지에 저장되어있는 나의 계정정보 혹은 아이디값이 nickname 이 되도록 함
-		socket.emit('join', nickname); // 접속 이벤트
+		socket.emit('join', {
+			nickname : nickname,
+			room : room
+		}); // 접속 이벤트
+		
 		$('#msg').focus();
 
 		//내가 입장
@@ -121,10 +106,15 @@
 			$('#msgdisplay').append(
 					$('<li class="noti">').text(nickname + '님 환영합니다.'));
 		});
-
+		
 		// 송신: 메시지
 		$('form').submit(function() {
-			socket.emit('msg', $('#msg').val());
+			socket.emit('msg', {
+		          name: $("#name").val(),
+		          room: $("#room").val(),
+		          msg: $("#msg").val()
+		        });
+
 			$('#msg').val('');
 			$('#msg').focus();
 			return false;
@@ -135,15 +125,18 @@
 			var span = $('<span class="nickname">').text(data.nickname);
 			var li;
 
-			if (data.nickname == nickname)
+			if (data.nickname == nickname){
 				li = $('<li class="arrow_box">');
-			else
+			}
+			else{
 				li = $('<li class="arrow_box_oth">');
-
+			}
+			
 			li.append(span).append(data.msg);
 			$('#msgdisplay').append(li);
 		});
 	</script>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 
 </html>

@@ -1,5 +1,7 @@
 package com.travel.mate.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +15,23 @@ public class ChatController {
 	ChatServiceImpl chat;
 
 
-	@RequestMapping(value = "/chat")
-	public String chatView(Model model) {
+	@RequestMapping(value = "/chat", method = RequestMethod.GET )
+	public String chatView(HttpServletRequest request, Model model) {
+		String name = request.getParameter("name");
+		String room = request.getParameter("room");
+	
+		model.addAttribute("name", name);
+		model.addAttribute("room", room);
+		
+		return "chat";
+	}
+	
+	@RequestMapping(value = "/chatList")
+	public String chatListview(Model model) {
 		
 		//이거 같은 경우도, 여기서 메세지를 보낸 후에, 어떤 페이지를 사용자에게 보여줄지 다시 논의해봐야 할 것 같음
 		
-		return "chat";
+		return "chatList";
 	}
 	
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
