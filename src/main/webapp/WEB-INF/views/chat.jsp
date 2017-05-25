@@ -24,6 +24,7 @@
 
 li{
 	margin:15px;
+	list-style:none;
 }
 
 .noti {
@@ -134,7 +135,16 @@ li{
 			
 			li.append(span).append(data.msg);
 			$('#msgdisplay').append(li);
+			$('#msgdisplay').scrollTop($('#msgdisplay').scrollHeight);
 		});
+		
+		socket.on('left',function(data){ //이 부분은 나중에 온라인 혹은 비온라인 식으로 고쳐줘도 될 듯
+			var nick = data.nickname;
+			$('#msgdisplay').append(
+					$('<li class="noti">').text(nick + '님이 퇴장하셨습니다.'));
+		});
+		
+		
 	</script>
 <jsp:include page="footer.jsp"></jsp:include>
 </body>
