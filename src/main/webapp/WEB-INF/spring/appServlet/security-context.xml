@@ -22,11 +22,20 @@
  
     </security:http>
  
+ <!-- 	<jdbc-user-service data-source-ref="dataSource" id="userService"
+ users-by-username-query="SELECT id as username, password as password,enabled as enabled​ FROM user WHERE id=?"
+ authorities-by-username-query="SELECT EMAIL as username, AUTHORITY AS authority
+          FROM user u
+          WHERE EMAIL=?"/> -->
+          
     <security:authentication-manager>
         <security:authentication-provider>
-            <security:user-service>
-                <security:user name="guest@test.com" password="guest" authorities="ROLE_USER" />
-            </security:user-service>
+            <security:jdbc-user-service data-source-ref="dataSource" 
+            users-by-username-query="select id, password, enabled from user where id=?"
+            authorities-by-username-query="select id,authority from user where id=?"/>
+                <!-- <security:user name="guest@test.com" password="guest" authorities="ROLE_USER" /> -->
+                
+           
         </security:authentication-provider>
     </security:authentication-manager>
 </beans>
