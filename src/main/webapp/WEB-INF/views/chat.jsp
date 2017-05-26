@@ -88,11 +88,13 @@ li {
 					value="Send" />
 			</form>
 		</div>
+		
 	</div>
 
 	<script type="text/javascript">
 	
 		var socket = io('http://localhost:3000');
+		
 		var room = '${room}';
 		var nickname = '${name}'; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
 		
@@ -110,8 +112,6 @@ li {
 					$('<li class="noti">').text(nickname + '님 환영합니다.'));
 		});
 		
-		
-		
 		// 송신: 메시지
 		$('form').submit(function() {
 			
@@ -126,10 +126,12 @@ li {
 
 			$('#msg').val('');
 			$('#msg').focus();
-			return false;
+			
+			return false; // submit 취소
+			
 		});
 
-		// 수신: 메시지
+		//메세지 수신 부분
 		socket.on('msg', function(data) {
 			var span = $('<span class="nickname">').text(data.nickname);
 			var li;
@@ -143,7 +145,6 @@ li {
 			
 			li.append(span).append(data.msg);
 			$('#msgdisplay').append(li);
-			$('#msgdisplay').scrollTop($('#msgdisplay').scrollHeight);
 		});
 		
 		socket.on('left',function(data){ //이 부분은 나중에 온라인 혹은 비온라인 식으로 고쳐줘도 될 듯
@@ -151,6 +152,8 @@ li {
 			$('#msgdisplay').append(
 					$('<li class="noti">').text(nick + '님이 퇴장하셨습니다.'));
 		});
+		
+		
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
