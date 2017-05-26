@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +43,12 @@ public class ChatController {
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
 		
-		int userCode = 2; //이 부분은 나중에 자기 userCode로 바꿔주기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
+		String id = authentication.getName();
 
 		//채팅방의 리스트를 불러오는 부분
-		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
+		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(id);
 		model.addAttribute("list", list);
-		
 		return "chatList";
 	}
 	

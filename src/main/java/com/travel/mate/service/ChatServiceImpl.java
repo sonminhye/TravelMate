@@ -18,14 +18,14 @@ public class ChatServiceImpl implements ChatService {
 	private SqlSession sqlSession;
 
 	@Override
-	public ArrayList<ChatRoomDTO> showChatRooms(int userCode) {
+	public ArrayList<ChatRoomDTO> showChatRooms(String id) {
 		// TODO Auto-generated method stub
 		System.out.println("showChatList()");
 		
 		ArrayList<ChatRoomDTO> result = new ArrayList<ChatRoomDTO>();
 		
 		ChatService dao = sqlSession.getMapper(ChatService.class);
-		result = dao.showChatRooms(userCode);
+		result = dao.showChatRooms(id);
 		
 		return result;
 	}

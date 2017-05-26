@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	String email = auth.getName();
+%>
+
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,18 +48,31 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                
+                <!-- 로그인 정보가 존재하지 않을 때. 익명의 사용자 -->
+				<sec:authorize access="isAnonymous()">
                     <li class="hidden">
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signInModal">로그인</a>
+                        <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signInModal">SignIn</a>
                     </li>
                     <li>
-                        <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signUpModal">회원가입</a>
+                        <a class="page-scroll" data-toggle="modal" data-dismiss="modal" href="#signUpModal">SignUp</a>
                     </li>
-                     <li>
-                        <a class="page-scroll" href="#about">쪽지</a>
-                    </li>
+                </sec:authorize>
+                <!-- 로그인 정보가 존재할 때 -->
+                <sec:authorize access="isAuthenticated()">
+               		<li>
+	                	<a class="page-scroll"  href="myPage"><%=email %>님 반갑습니다!</a>	
+	                </li>
+	                <li>
+	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
+	                </li>
+	                <li>
+	                	<a class="page-scroll" href="#about">Message</a>
+	                </li>
+                </sec:authorize>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -123,14 +144,14 @@
 					<h4 class="modal-title" id="myModalLabel">로그인</h4>
 				</div>
 				<div class="modal-body">
-					<form>
+					<form action='j_spring_security_check' method='post'>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요">
+							<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" name="j_username">
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
-							<input type="password" class="form-control" id="password1" placeholder="비밀번호">
+							<input type="password" class="form-control" id="password1" placeholder="비밀번호" name="j_password">
 						</div>
 						
 						<button type="submit" class="btn btn-default">Sign In</button>

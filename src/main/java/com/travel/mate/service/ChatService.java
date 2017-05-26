@@ -7,7 +7,7 @@ import com.travel.mate.dto.ChatRoomDTO;
 
 public interface ChatService {
 	
-	public ArrayList<ChatRoomDTO> showChatRooms(int userCode);
+	public ArrayList<ChatRoomDTO> showChatRooms(String id);
 	public ArrayList<ChatDTO> showChats(int roomCode);
 	public int showChatRoomExist(int senderCode, int receiverCode);
 	

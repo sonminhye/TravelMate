@@ -4,7 +4,7 @@
 
 <mapper namespace="com.travel.mate.service.ChatService">
 	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
-		select * from messageroom where senderCode=#{userCode} or receiverCode=#{userCode} order by latestDate
+		select * from messageroom where senderCode=(select userCode from user where id=#{id}) or receiverCode=(select userCode from user where id=#{id}) order by latestDate
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
