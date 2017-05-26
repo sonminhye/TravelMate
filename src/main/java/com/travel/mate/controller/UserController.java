@@ -29,11 +29,18 @@ public class UserController {
 		return "signup";
 	}	
 	
+	@RequestMapping(value = "/signIn", method = RequestMethod.GET)
+	public String signIn(Locale locale, Model model) {
+	
+		return "signIn";
+	}
+	
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public String myPage(Locale locale, Model model) {
 	
 		return "myPage";
 	}
+	
 	
 	//TEST용//////////////
 	@RequestMapping(value = "/testList", method = RequestMethod.GET)

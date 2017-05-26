@@ -1,31 +1,82 @@
 package com.travel.mate.controller;
 
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.travel.mate.dto.ChatDTO;
+import com.travel.mate.dto.ChatRoomDTO;
 import com.travel.mate.service.ChatServiceImpl;
 
 @Controller
 public class ChatController {
+
+	@Autowired
+	ChatServiceImpl chatService;
+
+	//ì±„íŒ…ì°½ ë·°
+	@RequestMapping(value = "/chat", method = RequestMethod.GET)
+	public String chatView(HttpServletRequest request, Model model) {
+		
+		//í˜„ì¬ name ì€ 2, room ì€ 1ë¡œ í•œ ê²ƒ
+		String userCode = request.getParameter("name");
+		String roomCode = request.getParameter("room");
+		model.addAttribute("name", userCode);
+		model.addAttribute("room", roomCode);
+		
+		//í˜„ì¬ ì´ ë°©ì— ì±„íŒ…ë¡œê·¸ê°€ ì €ì¥ë˜ì–´ìˆë‹¤ë©´, ë¶ˆëŸ¬ì˜¤ê¸°
+		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
+		model.addAttribute("list", list);
+		
+		return "chat";
+	}
+
+	//ì±„íŒ…ë°©ë¦¬ìŠ¤íŠ¸ ë·°
+	@RequestMapping(value = "/chatList")
+	public String chatListview(Model model) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
+		String id = authentication.getName();
+
+		//ì±„íŒ…ë°©ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ë¶€ë¶„
+		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(id);
+		model.addAttribute("list", list);
+		return "chatList";
+	}
 	
-	ChatServiceImpl chat;
-	
-	
+	@RequestMapping(value="/checkChatRoom")
+	public String checkChatRoomExist(HttpServletRequest request ,Model model){
+		
+		int senderCode = 2; // ì±„íŒ… ë¨¼ì € ê±°ëŠ” ìª½
+		int receiverCode = 3; //ì±„íŒ… ë©”ì„¸ì§€ ë°›ëŠ” ìª½
+		
+		
+		//ì±„íŒ…ë°©ì´ ìˆëŠ”ì§€ ë³´ê¸°
+		//ì—†ë‹¤ë©´ ë§Œë“¤ê³ , ë£¸ ë²ˆí˜¸ ê±´ë„¤ì£¼ê¸°
+		//ìˆìœ¼ë©´ ë£¸ë²ˆí˜¸ ê±´ë„¤ì£¼ê¸°
+		
+		return "redirect:/chat";
+	}
+
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public String sendMessage(Model model) {
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Ş¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
-		
 		return "viewMessage";
 	}
-	
+
 	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
 	public String viewMessage(Model model) {
+
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Ş¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
-		
+
 		return "viewMeesage";
 	}
 }
