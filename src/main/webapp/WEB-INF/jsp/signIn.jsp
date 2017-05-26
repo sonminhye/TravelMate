@@ -14,7 +14,7 @@
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action='j_spring_security_check' method='post'>
 
-			<h3>로그인</h3>
+			<h3>로그인</h3><hr>
 			<div class="form-group">
 			    <label for="exampleInputEmail1" class="col-sm-2 control-label">Email address</label>
 			     <div class="col-sm-10">
@@ -28,14 +28,19 @@
 			  	 	<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="j_password">
 				 </div>
 			</div>
+			
+			<!-- 첫번째 로그인 시도가 실패할 경우 fail 파라미터를 true로 설정해줌.
+			c:if태그를 통해 파라미터 값을 확인하고 메세지를 출력해줌. -->
 			<c:if test="${not empty param.fail }">
 				<div>
 					<font color = "red">
-						<p>로그인에 실패하였습니다.</p>
+						<p>로그인에 실패했습니다.</p>
+						<p>${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message }</p>
 					</font>
 					<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
 				</div>
 			</c:if>
+			<hr>
 			<button type="submit" class="btn btn-default">로그인</button>
 		</form>
 	</div>
