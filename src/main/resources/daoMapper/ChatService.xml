@@ -6,5 +6,14 @@
 	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
 		select * from messageroom where senderCode=#{userCode} or receiverCode=#{userCode} order by latestDate
 	</select>
+	
+	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
+		select * from message where roomCode=#{roomCode} order by sendDate
+	</select>
+	
+	<select id="checkChatRoomExist" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
+		select * from message where roomCode=#{roomCode} order by sendDate
+		<!-- insert into messageroom(senderCode, receiverCode, latestdate) select 2,3,now() from dual where not exists (select roomCode from messageroom where senderCode=2 and receiverCode=3) -->
+	</select>
 </mapper>
 

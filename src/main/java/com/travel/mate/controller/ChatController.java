@@ -10,51 +10,71 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.travel.mate.dto.ChatDTO;
 import com.travel.mate.dto.ChatRoomDTO;
 import com.travel.mate.service.ChatServiceImpl;
 
 @Controller
 public class ChatController {
-	
+
 	@Autowired
 	ChatServiceImpl chatService;
 
-
-	@RequestMapping(value = "/chat", method = RequestMethod.GET )
+	//채팅창 뷰
+	@RequestMapping(value = "/chat", method = RequestMethod.GET)
 	public String chatView(HttpServletRequest request, Model model) {
-		String name = request.getParameter("name");
-		String room = request.getParameter("room");
-	
-		model.addAttribute("name", name);
-		model.addAttribute("room", room);
+		
+		//현재 name 은 2, room 은 1로 한 것
+		String userCode = request.getParameter("name");
+		String roomCode = request.getParameter("room");
+		model.addAttribute("name", userCode);
+		model.addAttribute("room", roomCode);
+		
+		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
+		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
+		model.addAttribute("list", list);
 		
 		return "chat";
 	}
-	
+
+	//채팅방리스트 뷰
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
-		int userCode = 2;
 		
+		int userCode = 2; //이 부분은 나중에 자기 userCode로 바꿔주기
+
+		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
 		model.addAttribute("list", list);
 		
 		return "chatList";
 	}
 	
+	@RequestMapping(value="/checkChatRoom")
+	public String checkChatRoomExist(HttpServletRequest request ,Model model){
+		
+		int senderCode = 2; // 채팅 먼저 거는 쪽
+		int receiverCode = 3; //채팅 메세지 받는 쪽
+		
+		
+		//채팅방이 있는지 보기
+		//없다면 만들고, 룸 번호 건네주기
+		//있으면 룸번호 건네주기
+		
+		return "redirect:/chat";
+	}
+
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
 	public String sendMessage(Model model) {
 		
-		//�̰� ���� ��쵵, ���⼭ �޼����� ���� �Ŀ�, � �������� ����ڿ��� �������� �ٽ� �����غ��� �� �� ����
-		
 		return "viewMessage";
 	}
-	
+
 	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
 	public String viewMessage(Model model) {
+
 		
-		//ajax �� ���� ����ڰ� ���� ���� �޼����� �������� ���
-		//�̰� ���� ��쵵, ���⼭ �޼����� ���� �Ŀ�, � �������� ����ڿ��� �������� �ٽ� �����غ��� �� �� ����
-		
+
 		return "viewMeesage";
 	}
 }

@@ -5,16 +5,40 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
+<style>
+.chatlist {
+	text-decoration: none;
+}
+.chatlist:hover{
+	text-decoration: none;
+}
+
+.chatlist div{
+	background-color:#fed136;
+	color:black;
+	font-size:13px;
+	height:100px;
+}
+
+.chatlist div:hover{
+	background-color:#fed935;
+}
+
+</style>
+
+<title>채팅방 리스트 출력</title>
 </head>
 <body>
 <jsp:include page="header.jsp"></jsp:include>
 	<div style="margin-top:150px;">
-		<c:forEach items="${list}" var="dto">                    
-			<div>
+		<c:forEach items="${list}" var="dto">
+			<a class="chatlist" href="chat?name=${dto.senderCode }&room=${dto.roomCode }">                 
+				<div>
 				참여자 : ${dto.receiverCode} , ${dto.senderCode} , ${dto.latestDate}
-				<a href="chat?name=joy&room=${dto.roomCode}">${dto.roomCode}채팅방 입장하기 </a>
-			</div>
+				
+					${dto.roomCode} 채팅방 입장하기
+				</div>
+			</a>
 		</c:forEach>
 	</div>
 <jsp:include page="footer.jsp"></jsp:include>
