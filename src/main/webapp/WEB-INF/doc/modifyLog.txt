@@ -1,3 +1,6 @@
 [2017/05/25]
 travelList.jsp 추가(travelController 등)
 main.jsp -> 여행보러가기 링크 travelList로 수정
+
+mybatis 통해 DB연동
+testList 뷰 작성
