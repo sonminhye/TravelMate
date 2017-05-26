@@ -170,7 +170,13 @@
 			<artifactId>spring-jdbc</artifactId> 
 			<version>${org.springframework-version}</version> 
 		</dependency>
-
+		
+		<!-- @valid annotation -->
+		<dependency>
+		        <groupId>javax.validation</groupId> 
+		        <artifactId>validation-api</artifactId> 
+		        <version>1.0.0.GA</version> 
+		</dependency>
 
 		<!-- Test -->
 		<dependency>
