@@ -8,7 +8,7 @@ public class TravelRouteDTO {
 	double lng;
 	String location;
 	
-	List<TravelRouteDTO> TravelRouteList;
+	List<TravelRouteDTO> trlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -42,11 +42,11 @@ public class TravelRouteDTO {
 		this.location = location;
 	}
 
-	public List<TravelRouteDTO> getTravelRouteList() {
-		return TravelRouteList;
+	public List<TravelRouteDTO> getTrlist() {
+		return trlist;
 	}
 
-	public void setTravelRouteList(List<TravelRouteDTO> travelRouteList) {
-		TravelRouteList = travelRouteList;
+	public void setTrlist(List<TravelRouteDTO> trlist) {
+		this.trlist = trlist;
 	}
 }

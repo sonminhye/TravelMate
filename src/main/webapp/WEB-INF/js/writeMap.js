@@ -44,9 +44,9 @@ function addMarker(position) {
 	var hiddenInput2 = document.createElement('input');
 	var hiddenInput3 = document.createElement('input');
 	var countIdx = count - 1;
-	hiddenInput1.name = "travelRouteList[" + countIdx + "].lat";
-	hiddenInput2.name = "travelRouteList[" + countIdx + "].lng";
-	hiddenInput3.name = "travelRouteList[" + countIdx + "].location";
+	hiddenInput1.name = "trlist[" + countIdx + "].lat";
+	hiddenInput2.name = "trlist[" + countIdx + "].lng";
+	hiddenInput3.name = "trlist[" + countIdx + "].location";
 
 	hiddenInput1.type = "hidden";
 	hiddenInput2.type = "hidden";
@@ -105,9 +105,9 @@ function deleteAction(object) {
 			// span id update
 			var nu = needUpdates[i].childNodes;
 			var nuIdx = i - 1;
-			nu[0].name = "travelRouteList[" + nuIdx + "].lat";
-			nu[1].name = "travelRouteList[" + nuIdx + "].lng";
-			nu[2].name = "travelRouteList[" + nuIdx + "].location";
+			nu[0].name = "trlist[" + nuIdx + "].lat";
+			nu[1].name = "trlist[" + nuIdx + "].lng";
+			nu[2].name = "trlist[" + nuIdx + "].location";
 			nu[2].value = nuIdx;
 			nu[3].innerHTML = i;
 		}

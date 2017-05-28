@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,10 @@ import com.travel.mate.service.TravelServiceImpl;
 @Controller
 public class TravelController extends HandlerInterceptorAdapter{
 
+	@Resource(name="TravelService")
+	private TravelService travelService;
+	
+	
 	@RequestMapping(value = "/travelList")
 	public String travelList(Model model) {
 		System.out.println("travelList");
@@ -44,46 +49,32 @@ public class TravelController extends HandlerInterceptorAdapter{
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
 	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
 	public ModelAndView doWrite(
-			@ModelAttribute("travel") TravelDTO travelDto,
-			@ModelAttribute("travelDetail") TravelDetailDTO travelDetailDto,
-			@ModelAttribute("travelImage") TravelImageDTO travelImageDto,
-			@ModelAttribute("travelRouteList") TravelRouteDTO travelRouteDto) {
+			@ModelAttribute("tlist") TravelDTO travelDto,
+			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
+			@ModelAttribute("tilist") TravelImageDTO travelImageDto,
+			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto) throws Exception {
 		// 좌표 여러개(리스트) 얻은 후
 		/* DTO의 method를 콜하는 것에서 주의!
 		 * jsp파일의 list명과 DTO 내의 객체이름이 같아야함
 		 * */
-		List<TravelDTO> travels = travelDto.getTravels();
-		List<TravelDetailDTO> travelDetails = travelDetailDto.getTravelDetails();
-		List<TravelImageDTO> travelImages = travelImageDto.getTravelImages();
-		List<TravelRouteDTO> routes = travelRouteDto.getTravelRouteList();
+		System.out.println(travelRouteDto);
+		List<TravelDTO> travels = travelDto.getTlist();
+		List<TravelDetailDTO> travelDetails = travelDetailDto.getTdlist();
+		List<TravelImageDTO> travelImages = travelImageDto.getTilist();
+		List<TravelRouteDTO> routes = travelRouteDto.getTrlist();
 		
-		/* 	
-		List<UserDTO> list = userService.showList();
-		model.addAttribute("list", list);
-		return "testList";
-		 */
+		// 다시 표시될 페이지 주소 세팅
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("redirect:/main");
 		
 		if (null != travels && travels.size() > 0) {
 			// travel table에 넣음
 			for (TravelDTO travel : travels) {
 				System.out.println("travel : " + travel.getTitle() + " " + travel.getContent());
 				System.out.println("====");
-
-				System.out.println("db test start");
-				
-				TravelDTO dto = new TravelDTO();
-				
-				dto.setTitle(travel.getTitle());
-				dto.setContent(travel.getContent());
-				
-				List<TravelDTO> list = new ArrayList<TravelDTO>();
-				list.add(dto);
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("list", list);
-				
-//				TravelServiceImpl ts = new TravelServiceImpl();
-//				ts.insertTravel(travels, travelDetails, travelImages, routes);
-				System.out.println("db test end");
+				System.out.println("insert : travel");
+				travelService.insertTravel(travel);
+				System.out.println("insert end");
 			}
 		}
 		if (null != travelDetails && travelDetails.size() > 0) {
@@ -93,6 +84,9 @@ public class TravelController extends HandlerInterceptorAdapter{
 				System.out.println(travelDetail.getEndDate() + " " + travelDetail.getEndTime());
 				System.out.println(travelDetail.getMinPeople() + " " + travelDetail.getMaxPeople());
 				System.out.println("====");
+				System.out.println("insert : detail");
+				travelService.insertTravelDetail(travelDetail);
+				System.out.println("insert end");
 			}
 		}
 		if (null != travelImages && travelImages.size() > 0) {
@@ -100,6 +94,9 @@ public class TravelController extends HandlerInterceptorAdapter{
 			for (TravelImageDTO travelImage : travelImages) {
 				System.out.println("travelImage : " + travelImage.getImage());
 				System.out.println("====");
+				System.out.println("insert : image");
+				travelService.insertTravelImage(travelImage);
+				System.out.println("insert end");
 			}
 		}
 		// 좌표 리스트에 있는 것을 모두 출력
@@ -107,6 +104,9 @@ public class TravelController extends HandlerInterceptorAdapter{
 			// 변수 : 배열의 for문
 			for (TravelRouteDTO route : routes) {
 				System.out.println(route.getLat() + " " + route.getLng() + " " + route.getLocation());
+				System.out.println("====");
+				System.out.println("insert: routes");
+				travelService.insertTravelRoute(route);
 			}
 		}
 		else {
@@ -115,15 +115,9 @@ public class TravelController extends HandlerInterceptorAdapter{
 		}
 		// ModelAndView(Object view, String modelName, Object modelObject) 렌더링 할 View와 View에 전달할 객체의 이름과 값
 		// ModelAndView(String viewName, String modelName, Object modelObject) : ViewResolver에 전달할 View 이름과 View에 전달할 객체의 이름과 값
-		return new ModelAndView("travelList", "writeTravel", travelRouteDto);
+		return mv;
 	}
 	
-	@RequestMapping(value = "/writeTravel")
-	public String writeTravel(Model model) {
-		// writeTravel.jsp로 이동
-		return "writeTravel";
-	}
-
 	@RequestMapping(value = "/joinTravel", method = RequestMethod.POST)
 	public String joinTravel(Model model) {
 		

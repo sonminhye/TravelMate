@@ -11,7 +11,7 @@ public class TravelDetailDTO {
 	int minPeople;
 	int maxPeople;
 	
-	List<TravelDetailDTO> TravelDetails;
+	List<TravelDetailDTO> tdlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -69,12 +69,11 @@ public class TravelDetailDTO {
 		this.maxPeople = maxPeople;
 	}
 
-	public List<TravelDetailDTO> getTravelDetails() {
-		return TravelDetails;
+	public List<TravelDetailDTO> getTdlist() {
+		return tdlist;
 	}
 
-	public void setTravelDetails(List<TravelDetailDTO> travelDetails) {
-		TravelDetails = travelDetails;
+	public void setTdlist(List<TravelDetailDTO> tdlist) {
+		this.tdlist = tdlist;
 	}
-
 }

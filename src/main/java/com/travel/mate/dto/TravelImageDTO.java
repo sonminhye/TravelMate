@@ -6,7 +6,7 @@ public class TravelImageDTO {
 	int travelCode;
 	String image;
 	
-	List<TravelImageDTO> travelImages;
+	List<TravelImageDTO> tilist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -24,11 +24,11 @@ public class TravelImageDTO {
 		this.image = image;
 	}
 
-	public List<TravelImageDTO> getTravelImages() {
-		return travelImages;
+	public List<TravelImageDTO> getTilist() {
+		return tilist;
 	}
 
-	public void setTravelImages(List<TravelImageDTO> travelImages) {
-		this.travelImages = travelImages;
+	public void setTilist(List<TravelImageDTO> tilist) {
+		this.tilist = tilist;
 	}
 }

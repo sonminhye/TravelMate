@@ -1,5 +1,6 @@
 package com.travel.mate.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class TravelDTO {
@@ -7,9 +8,9 @@ public class TravelDTO {
 	int userCode;
 	String title;
 	String content;
-	String writeDate;
+	Date writeDate;
 	
-	List<TravelDTO> TravelsList;
+	List<TravelDTO> tlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -43,20 +44,19 @@ public class TravelDTO {
 		this.content = content;
 	}
 
-	public String getWriteDate() {
+	public Date getWriteDate() {
 		return writeDate;
 	}
 
-	public void setWriteDate(String writeDate) {
+	public void setWriteDate(Date writeDate) {
 		this.writeDate = writeDate;
 	}
 
-	public List<TravelDTO> getTravels() {
-		return TravelsList;
+	public List<TravelDTO> getTlist() {
+		return tlist;
 	}
 
-	public void setTravels(List<TravelDTO> travels) {
-		TravelsList = travels;
+	public void setTlist(List<TravelDTO> tlist) {
+		this.tlist = tlist;
 	}
-
 }
