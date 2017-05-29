@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="travel">
+	<insert id="insertTravel" parameterType="com.travel.mate.dto.TravelDTO">
+		<![CDATA[
+			INSERT	INTO
+				travel (userCode, title, content, writeDate)
+			VALUES
+				(1, #{title}, #{content}, now())
+		]]>
+	</insert>
+	
+	<insert id="insertTravelDetail" parameterType="com.travel.mate.dto.TravelDetailDTO">
+		<![CDATA[
+			INSERT	INTO
+				traveldetail (travelCode, startDate, startTime, endDate, endTime, minPeople, maxPeople)
+			VALUES
+				((SELECT MAX(travelCode) FROM travel), #{startDate}, #{startTime}, #{endDate}, #{endTime}, #{minPeople}, #{maxPeople})
+		]]>
+	</insert>
+
+	<insert id="insertTravelRoute" parameterType="com.travel.mate.dto.TravelRouteDTO">
+		<![CDATA[
+			INSERT	INTO
+				travelroute (travelCode, lat, lng, location)
+			VALUES
+				((SELECT MAX(travelCode) FROM travel), #{lat}, #{lng}, #{location})
+		]]>
+	</insert>
+	
+	<insert id="insertTravelImage" parameterType="com.travel.mate.dto.TravelImageDTO">
+		<![CDATA[
+			INSERT	INTO
+				travelimage (travelCode, image)
+			VALUES
+				((SELECT MAX(travelCode) FROM travel), #{image})
+		]]>
+	</insert>
+</mapper>
+
