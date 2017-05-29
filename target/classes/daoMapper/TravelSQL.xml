@@ -5,11 +5,10 @@
 	
 	<select id="selectTravel" parameterType="hashmap" resultType="hashmap">
 		<![CDATA[
-			SELECT		t.travelCode, t.userCode, t.title, t.content, t.writeDate, tr.lat, tr.lng, tr.location
-			FROM		travel t, travelroute tr
-			WHERE		t.travelCode = tr.travelCode
-			ORDER BY	writeDate DESC, travelCode DESC
-			LIMIT	0, 6
+			SELECT		t.travelCode, t.userCode, t.title, t.content, t.writeDate
+			FROM		travel t
+			ORDER BY	t.writeDate DESC, t.travelCode DESC
+			LIMIT		0, 6
 		]]>
 	</select>
 	

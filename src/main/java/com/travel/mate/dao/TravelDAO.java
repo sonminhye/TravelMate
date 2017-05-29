@@ -50,8 +50,4 @@ public class TravelDAO extends AbstractDAO{
 		return (List<Map<String, Object>>)selectList("travel.selectTravelDetail", code);
 	}
 
-	public List<Map<Object, Object>> selectTravelDetailbyCode(int code) {
-		System.out.println("int : DAO에서 selectTravelDetail을 콜했습니다");
-		return (List<Map<Object, Object>>)selectList("travel.selectTravelDetailbyCode", code);
-	}
 }

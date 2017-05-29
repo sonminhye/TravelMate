@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.travel.mate.common.common.CommandMap;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;

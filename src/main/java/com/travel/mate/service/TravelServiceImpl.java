@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.travel.mate.common.common.CommandMap;
 import com.travel.mate.dao.TravelDAO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
