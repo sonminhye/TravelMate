@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<% request.setCharacterEncoding("euc-kr"); %>
+<% response.setContentType("text/html"); %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,7 +18,7 @@
 				<div id="msgdisplay">
 					<c:forEach items="${list}" var="dto">
 						<c:choose>
-							<c:when test="${dto.senderCode==name}">
+							<c:when test="${dto.senderCode==mcode}">
 								<li class="arrow_box">
 							</c:when>
 							<c:otherwise>
@@ -42,7 +44,7 @@
 		var socket = io('http://localhost:3000');
 		var room = '${room}';
 		var nickname = '${name}'; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
-
+		var mcode = '${mcode}';
 		//실제로 구현할 때는, 페이지에 저장되어있는 나의 계정정보 혹은 아이디값이 nickname 이 되도록 함
 		socket.emit('join', {
 			nickname : nickname,

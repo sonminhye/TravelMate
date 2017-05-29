@@ -1,5 +1,7 @@
 package com.travel.mate.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +29,17 @@ public class ChatController {
 	public String chatView(HttpServletRequest request, Model model) {
 		
 		//현재 name 은 2, room 은 1로 한 것
-		String userCode = request.getParameter("name");
+		String userCode = request.getParameter("mcode");
 		String roomCode = request.getParameter("room");
-		model.addAttribute("name", userCode);
+		String userName = request.getParameter("name");
+		try {
+			userName = URLEncoder.encode("string","EUC-KR");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("mcode", userCode);
+		model.addAttribute("name", userName);
 		model.addAttribute("room", roomCode);
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
@@ -39,7 +49,7 @@ public class ChatController {
 		return "chat";
 	}
 
-	//채팅방리스트 뷰
+	//채팅방 리스트 뷰
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
 		
@@ -57,7 +67,6 @@ public class ChatController {
 		
 		int senderCode = 2; // 채팅 먼저 거는 쪽
 		int receiverCode = 3; //채팅 메세지 받는 쪽
-		
 		
 		//채팅방이 있는지 보기
 		//없다면 만들고, 룸 번호 건네주기
