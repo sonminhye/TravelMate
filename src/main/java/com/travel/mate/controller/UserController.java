@@ -19,7 +19,18 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 	
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	//TEST용//////////////
+	@RequestMapping(value = "/testList", method = RequestMethod.GET)
+	public String showList(Model model) {
+		System.out.println("list()");
+		
+		List<UserDTO> list = userService.showList();
+		model.addAttribute("list", list);
+		return "testList";
+
+	}
+	
+	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
 	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO , Model model) {
 		System.out.println("signup controller");
 		//값확인용
@@ -30,12 +41,6 @@ public class UserController {
 			
 		return "signIn"; //회원가입 후 로그인 페이지로
 	}
-	
-	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public String signIn(Model model) {
-		
-		return "signup";
-	}	
 	
 	@RequestMapping(value = "/signIn", method = RequestMethod.GET)
 	public String signIn(Locale locale, Model model) {
@@ -50,16 +55,5 @@ public class UserController {
 	}
 	
 	
-	//TEST용//////////////
-	@RequestMapping(value = "/testList", method = RequestMethod.GET)
-	public String showList(Model model) {
-		System.out.println("list()");
-		
-		List<UserDTO> list = userService.showList();
-		model.addAttribute("list", list);
-		return "testList";
 
-	}
-	
-	
 }

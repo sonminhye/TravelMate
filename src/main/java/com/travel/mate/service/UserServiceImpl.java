@@ -42,11 +42,11 @@ public class UserServiceImpl implements UserService {
 		System.out.println("doSignup Service");
 		int userCode = 0;
 		
-		System.out.println("userCode : " + userCode);
 		userDAO.insertUser(userDTO);
-		userCode = userDTO.getUserCode();
-		System.out.println("userCode : " + userCode);
-		userDetailDTO.setUserCode(userCode);
+		userCode = userDTO.getUserCode();               //auto increment된 값 얻어오기
+		System.out.println("userCode : " + userCode);   //확인용출력
+		
+		userDetailDTO.setUserCode(userCode);            //PK userCode값 입력
 		userDAO.insertUserDetail(userDetailDTO);
 	}
 

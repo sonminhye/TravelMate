@@ -24,14 +24,24 @@
  
           
     <security:authentication-manager>
-        <security:authentication-provider>
-            <security:jdbc-user-service data-source-ref="dataSource" 
+        <security:authentication-provider user-service-ref="customJdbcDaoImpl"/>
+     <!--        <security:jdbc-user-service data-source-ref="dataSource" 
             users-by-username-query="select id, password, enabled from user where id=?"
             authorities-by-username-query="select id,authority from user where id=?"/>
-                <!-- <security:user name="guest@test.com" password="guest" authorities="ROLE_USER" /> -->
-
-        </security:authentication-provider>
+                -->
+		
+<!--         </security:authentication-provider> -->
     </security:authentication-manager>
+    
+    <bean id="customJdbcDaoImpl" class="com.travel.mate.security.CustomJdbcDaoImpl">
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="rolePrefix" value=""/>
+    	<property name="usersByUsernameQuery" value="SELECT userCode, id, password FROM user WHERE id=?"/>
+    	<property name="authoritiesByUsernameQuery" value="SELECT id, authority FROM user WHERE id=? "/>
+    	<property name="enableGroups" value="false"/>
+    	
+    
+    </bean>
 </beans>
 
 

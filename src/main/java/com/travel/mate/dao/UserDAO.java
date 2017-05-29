@@ -16,14 +16,16 @@ public class UserDAO extends AbstractDAO{
 	}
 	
 	public int insertUser(UserDTO userDTO){
-		int userCode;
 		System.out.println("DAO에서 insertUser를 콜했습니다");
+		
+		int userCode;
 		userCode = (Integer) insert("user.insertUser", userDTO);
 		return userCode;
 	}
 	
 	public void insertUserDetail(UserDetailDTO userDetailDTO){
 		System.out.println("DAO에서 insertUserDetail을 콜했습니다");
+		
 		insert("user.insertUserDetail", userDetailDTO);
 	}
 }
