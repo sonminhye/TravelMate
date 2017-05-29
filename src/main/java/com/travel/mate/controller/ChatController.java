@@ -1,6 +1,7 @@
 package com.travel.mate.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -28,24 +29,25 @@ public class ChatController {
 	@RequestMapping(value = "/chat", method = RequestMethod.GET)
 	public String chatView(HttpServletRequest request, Model model) {
 		
-		//현재 name 은 2, room 은 1로 한 것
-		String userCode = request.getParameter("mcode");
-		String roomCode = request.getParameter("room");
-		String userName = request.getParameter("name");
-		try {
-			userName = URLEncoder.encode("string","EUC-KR");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("mcode", userCode);
+		String sCode = request.getParameter("scode"); //보내는 이 (자신)
+		String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
+		String roomCode = request.getParameter("room"); //room Code 
+		String userName = request.getParameter("name"); //이름
+		
+		System.out.println("정보");
+		System.out.println("userCode : " + sCode);
+		System.out.println("roomCode : " + roomCode);
+		System.out.println("userName : " + userName);
+		
+		model.addAttribute("rcode", sCode);
+		model.addAttribute("scode", sCode);
 		model.addAttribute("name", userName);
 		model.addAttribute("room", roomCode);
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
 		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
 		model.addAttribute("list", list);
-		
+
 		return "chat";
 	}
 
