@@ -7,8 +7,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.travel.mate.common.common.CommandMap;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
@@ -33,17 +37,47 @@ public class TravelController extends HandlerInterceptorAdapter{
 	@Resource(name="TravelService")
 	private TravelService travelService;
 	
+	Logger log = Logger.getLogger(this.getClass());
+	
 	
 	@RequestMapping(value = "/travelList")
-	public String travelList(Model model) {
+	public ModelAndView travelList(Map<String, Object> map) {
 		System.out.println("travelList");
-		return "travelList";
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/travelList");
+		List<Map<String, Object>> list = travelService.selectTravel(map);
+		System.out.println(list);
+		mv.addObject("list", list);
+		return mv;
 	}
 	
-	@RequestMapping(value = "/readTravel", method = RequestMethod.GET)
-	public String readTravel(Model model) {
+	@RequestMapping(value = "/readTravel")
+	public ModelAndView readTravel(TravelDTO travelDto) {
 		System.out.println("readTravel");
-		return "readTravel";
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/readTravel");
+//		System.out.println(travelDetailDto.getTravelCode());
+//		int travelCode = travelDetailDto.getTravelCode();
+		
+		
+		System.out.println("dto :" +travelDto);
+		
+		System.out.println("dto.code: " + travelDto.getTravelCode());
+		int code = travelDto.getTravelCode();
+		
+		List<Map<String, Object>> list = travelService.selectTravelDetail(code);
+		mv.addObject("list", list);
+		
+		System.out.println("list 출력");
+		
+		System.out.println(list);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/writeTravel")
+	public String writeTravel(Model model) {
+		// writeTravel.jsp로 이동
+		return "writeTravel";
 	}
 	
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
@@ -65,7 +99,7 @@ public class TravelController extends HandlerInterceptorAdapter{
 		
 		// 다시 표시될 페이지 주소 세팅
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/main");
+		mv.setViewName("redirect:/travelList");
 		
 		if (null != travels && travels.size() > 0) {
 			// travel table에 넣음

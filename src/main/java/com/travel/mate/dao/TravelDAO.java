@@ -17,12 +17,6 @@ import com.travel.mate.dto.TravelRouteDTO;
 @Repository("TravelDAO")
 public class TravelDAO extends AbstractDAO{
 
-	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectTravelList(List<TravelDTO> travels) {
-		// TODO Auto-generated method stub
-		return (List<Map<String, Object>>)selectList("travel.selectTravelList", travels);
-	}
-	
 	public void insertTravel(TravelDTO travel) {
 		System.out.println("DAO에서 inserTravel을 콜했습니다");
 		insert("travel.insertTravel", travel);
@@ -42,5 +36,22 @@ public class TravelDAO extends AbstractDAO{
 	public void insertTravelRoute(TravelRouteDTO travelRoute) {
 		System.out.println("DAO에서 insertTravelRoute를 콜했습니다");
 		insert("travel.insertTravelRoute", travelRoute);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectTravel(Map<String, Object> map) {
+		System.out.println("DAO에서 selectTravel을 콜했습니다");
+		return (List<Map<String, Object>>)selectList("travel.selectTravel", map);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectTravelDetail(int code) {
+		System.out.println("DAO에서 selectTravelDetail을 콜했습니다");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelDetail", code);
+	}
+
+	public List<Map<Object, Object>> selectTravelDetailbyCode(int code) {
+		System.out.println("int : DAO에서 selectTravelDetail을 콜했습니다");
+		return (List<Map<Object, Object>>)selectList("travel.selectTravelDetailbyCode", code);
 	}
 }

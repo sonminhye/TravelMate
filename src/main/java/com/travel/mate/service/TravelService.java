@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.travel.mate.common.common.CommandMap;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
@@ -19,4 +20,9 @@ public interface TravelService {
 	void insertTravelImage(TravelImageDTO travelImage);
 	
 	void insertTravelRoute(TravelRouteDTO travelRoute);
+
+	List<Map<String, Object>> selectTravel(Map<String, Object> map);
+
+	List<Map<String, Object>> selectTravelDetail(int code);
+
 }

@@ -6,13 +6,19 @@
 <html>
 <head>
 <title>Home</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="<c:url value='/js/travelCommon.js'/>" charset="utf-8"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
 	<hr>
 	<hr>
+
+
+	<form id="commonForm" name="commonForm"></form>
+
+
+
 	<div class="row">
 		<div class="col-lg-12 text-center"></div>
 	</div>
@@ -27,10 +33,16 @@
             <c:when test="${fn:length(list) > 0}">
                 <c:forEach items="${list }" var="row">
                     <tr>
-                        <td>${row.IDX }</td>
-                        <td>${row.TITLE }</td>
-                        <td>${row.HIT_CNT }</td>
-                        <td>${row.CREA_DTM }</td>
+                        <td>${row.travelCode }</td>
+                        <td class="title">
+                        	<a href="#this" name="title">${row.title }</a>
+                        	<input type="hidden" id="travelCode" value="${row.travelCode }">
+                        </td>
+                        <td>${row.content }</td>
+                        <td>${row.writeDate }</td>
+                        <td>${row.lat }</td>
+                        <td>${row.lng }</td>
+                        <td>${row.location }</td>
                     </tr>
                 </c:forEach>
             </c:when>
@@ -40,6 +52,21 @@
                 </tr>
             </c:otherwise>
             </c:choose>
+            
+            <script type="text/javascript">
+            	$(document).ready(function() {
+            		$("a[name='title']").on("click", function(e) {
+            			e.preventDefault();
+            			readTravel($(this));
+            		});
+            	});
+            	function readTravel(obj) {
+            		var comSubmit = new ComSubmit();
+            		comSubmit.setUrl("<c:url value='/readTravel' />");
+            		comSubmit.addParam("travelCode", obj.parent().find("#travelCode").val());
+            		comSubmit.submit();
+            	}
+            </script>
 
 							<div class="col-md-4 col-sm-6 portfolio-item">
 								<a href="#portfolioModal1" class="portfolio-link"

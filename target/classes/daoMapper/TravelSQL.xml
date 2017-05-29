@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="travel">
+	
+	<select id="selectTravel" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			SELECT		t.travelCode, t.userCode, t.title, t.content, t.writeDate, tr.lat, tr.lng, tr.location
+			FROM		travel t, travelroute tr
+			WHERE		t.travelCode = tr.travelCode
+			ORDER BY	writeDate DESC, travelCode DESC
+			LIMIT	0, 6
+		]]>
+	</select>
+	
+	<select id="selectTravelDetail" parameterType="int" resultType="hashmap">
+		
+		SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople
+		FROM	travel t, travelDetail td
+		WHERE	t.travelCode = td.travelCode
+			AND	t.travelCode = #{code}
+		
+	</select>
+
+
 	<insert id="insertTravel" parameterType="com.travel.mate.dto.TravelDTO">
 		<![CDATA[
 			INSERT	INTO
