@@ -39,7 +39,7 @@ public class ChatController {
 		System.out.println("roomCode : " + roomCode);
 		System.out.println("userName : " + userName);
 		
-		model.addAttribute("rcode", sCode);
+		model.addAttribute("rcode", rCode);
 		model.addAttribute("scode", sCode);
 		model.addAttribute("name", userName);
 		model.addAttribute("room", roomCode);

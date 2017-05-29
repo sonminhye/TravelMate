@@ -1,9 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet" href="css/chat.css">
@@ -23,7 +24,8 @@
 								<li class="arrow_box_oth">
 							</c:otherwise>
 						</c:choose>
-						<span class="${dto.senderCode}">${dto.content}</span>
+						<span class="nickname">${dto.senderCode}</span>
+						${dto.content}
 						</li>
 					</c:forEach>
 
@@ -37,31 +39,31 @@
 			</div>
 	</div>
 	<script type="text/javascript">
-	$(document).ready(function(){
-		
+
 		var socket = io('http://localhost:3000');	
 		var room = '${room}';
-		var nickname = '${name}';//유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
-		var scode = '${scode}';
+		var nickname = '${name}'; //유니크한 이름으로 표현해야 함. 나중에 계정으로 하던가 아이디로 해야될 듯
 		var rcode = '${rcode}';
-		
-		alert(nickname);
-		
+		var scode = '${scode}';
+		nickname =  encodeURI(nickname);
 			//실제로 구현할 때는, 페이지에 저장되어있는 나의 계정정보 혹은 아이디값이 nickname 이 되도록 함
 			socket.emit('join', {
-				nickname : nickname,
-				room : room,
-				scode: scode,
-				rcode: rcode
+				nickname : nickname
 			}); // 접속 이벤트
-
+			
 			$('#msg').focus();
 
+			socket.emit('join:room',{
+				room : room,
+				scode : scode,
+				rcode : rcode
+			});
+			
 			//내가 입장
 			socket.on('welcome',
 					function(data) {
 						$('#msgdisplay').append(
-								$('<li class="noti">').text(nickname + ''));
+								$('<li class="noti">').text(nickname + '님이 접속하셨습니다'));
 					});
 
 			// 온 메세지
@@ -72,8 +74,6 @@
 								.replace('T', ' ');
 
 						socket.emit('msg', {
-							name : $("#name").val(),
-							room : $("#room").val(),
 							msg : $("#msg").val(),
 							date : date
 						});
@@ -85,6 +85,7 @@
 
 			//메세지 수신 부분
 			socket.on('msg', function(data) {
+				
 				var span = $('<span class="nickname">').text(data.nickname);
 				var li;
 
@@ -103,9 +104,6 @@
 				$('#msgdisplay').append($('<li class="noti">').text(nick + ''));
 			});
 			
-			
-	}); //ready function close
-	
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
