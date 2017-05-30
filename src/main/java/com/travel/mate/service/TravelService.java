@@ -19,4 +19,11 @@ public interface TravelService {
 	void insertTravelImage(TravelImageDTO travelImage);
 	
 	void insertTravelRoute(TravelRouteDTO travelRoute);
+
+	List<Map<String, Object>> selectTravel(Map<String, Object> map);
+
+	List<Map<String, Object>> selectTravelDetail(int code);
+
+	List<Map<String, Object>> selectTravelRoute(int code);
+
 }

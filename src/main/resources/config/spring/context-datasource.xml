@@ -9,15 +9,10 @@
 		<property name="url" value="jdbc:mysql://localhost:3306/travel"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="8386"></property>
-	</bean>
+	</bean>   
 
-<!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/travel"></property>
-		<property name="username" value="travel"></property>
-		<property name="password" value="1234"></property>
-	</bean> 
-	-->   
+
+
 
 <!-- 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>

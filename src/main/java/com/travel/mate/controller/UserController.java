@@ -6,10 +6,12 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.travel.mate.dto.UserDTO;
+import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.service.UserServiceImpl;
 
 @Controller
@@ -17,17 +19,28 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 	
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String signUp(Model model) {
+	//TEST용//////////////
+	@RequestMapping(value = "/testList", method = RequestMethod.GET)
+	public String showList(Model model) {
+		System.out.println("list()");
 		
-		return "signup";
+		List<UserDTO> list = userService.showList();
+		model.addAttribute("list", list);
+		return "testList";
+
 	}
 	
-	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public String signIn(Model model) {
+	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
+	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO , Model model) {
+		System.out.println("signup controller");
+		//값확인용
+		System.out.println(userDTO.toString());
+		System.out.println(userDetailDTO.toString());
 		
-		return "signup";
-	}	
+		userService.doSignup(userDTO, userDetailDTO);
+			
+		return "signIn"; //회원가입 후 로그인 페이지로
+	}
 	
 	@RequestMapping(value = "/signIn", method = RequestMethod.GET)
 	public String signIn(Locale locale, Model model) {
@@ -42,16 +55,5 @@ public class UserController {
 	}
 	
 	
-	//TEST용//////////////
-	@RequestMapping(value = "/testList", method = RequestMethod.GET)
-	public String showList(Model model) {
-		System.out.println("list()");
-		
-		List<UserDTO> list = userService.showList();
-		model.addAttribute("list", list);
-		return "testList";
 
-	}
-	
-	
 }

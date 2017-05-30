@@ -17,30 +17,42 @@ import com.travel.mate.dto.TravelRouteDTO;
 @Repository("TravelDAO")
 public class TravelDAO extends AbstractDAO{
 
-	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectTravelList(List<TravelDTO> travels) {
-		// TODO Auto-generated method stub
-		return (List<Map<String, Object>>)selectList("travel.selectTravelList", travels);
-	}
-	
 	public void insertTravel(TravelDTO travel) {
-		System.out.println("DAO에서 inserTravel을 콜했습니다");
+		System.out.println("DAO Call : insertTravel..");
 		insert("travel.insertTravel", travel);
 	}
 
 	public void insertTravelDetail(TravelDetailDTO travelDetail) {
-		// TODO Auto-generated method stub
-		System.out.println("DAO에서 insertTravelDetail을 콜했습니다");
+		System.out.println("DAO Call : insertTravelDetail..");
 		insert("travel.insertTravelDetail", travelDetail);
 	}
 
 	public void insertTravelImage(TravelImageDTO travelImage) {
-		System.out.println("DAO에서 insertTravelImage를 콜했습니다");
+		System.out.println("DAO Call : insertTravelImage..");
 		insert("travel.insertTravelImage", travelImage);
 	}
 
 	public void insertTravelRoute(TravelRouteDTO travelRoute) {
-		System.out.println("DAO에서 insertTravelRoute를 콜했습니다");
+		System.out.println("DAO Call : insertTravelRoute..");
 		insert("travel.insertTravelRoute", travelRoute);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectTravel(Map<String, Object> map) {
+		System.out.println("DAO Call : selectTravel..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravel", map);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectTravelDetail(int code) {
+		System.out.println("DAO Call : selectTravelDetail..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelDetail", code);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectTravelRoute(int code) {
+		System.out.println("DAO Call : selectTravelRoute..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelRoute", code);
+	}
+
 }

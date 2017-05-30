@@ -3,10 +3,19 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	String email = auth.getName();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+	String email = "";
+	
+	if(principal != null && principal instanceof MyUser){
+		//code는 PK인 유저코드. 
+		code = ((MyUser)principal).getUserCode();
+		email = ((MyUser)principal).getUsername();
+	}
 %>
 
 <html>
@@ -64,7 +73,7 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="myPage"><%=email %>님 반갑습니다!</a>	
+	                	<a class="page-scroll"  href="myPage"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
 	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
@@ -93,34 +102,48 @@
 					<h4 class="modal-title" id="myModalLabel">회원가입</h4>
 				</div>
 				<div class="modal-body">
-					<form>
+					<form action="signUp" method="POST">
+						<div class="form-group">
+							<!-- 권한을 ROLE_USER로 설정 -->
+							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
+						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요">
+							<input type="email" class="form-control" id="email" name="id" placeholder="이메일을 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
-							<input type="password" class="form-control" id="password1" placeholder="비밀번호">
+							<input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
 						</div>
 						<div class="form-group">
 							<label for="password2">비밀번호 확인</label>
-							<input type="password" class="form-control" id="password2" placeholder="비밀번호 확인">
+							<input type="password" class="form-control" id="password2" name="passwordCheck" placeholder="비밀번호 확인">
 						</div>
 						<div class="form-group">
 							<label for="name">이름</label>
-							<input type="text" class="form-control" id="name" placeholder="이름을 입력하세요">
-						</div>
-						<div class="form-group">
-							<label for="city">지역</label>
-							<input type="text" class="form-control" id="city" placeholder="사는 지역을 입력하세요">
+							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
-							<input type="number" class="form-control" id="age" placeholder="나이를 입력하세요">
+							<input type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
 						</div>
 						<div class="form-group">
+							<label for="age">성별</label><br>
+							<label class="radio-inline">
+								<input type="radio" name="sex" id="inlineRadio1" value="male">남
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="sex" id="inlineRadio2" value="female">여
+							</label>
+						</div>
+						<div class="form-group">
+							<label for="city">지역</label>
+							<input type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
+						</div>
+						
+						<div class="form-group">
 							<label for="language">사용가능한 언어</label>
-							<input type="text" class="form-control" id="language" placeholder="사용 가능한 언어를 입력하세요">
+							<input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요">
 						</div>
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
