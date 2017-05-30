@@ -1,5 +1,8 @@
 package com.travel.mate.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,20 +29,35 @@ public class ChatController {
 	@RequestMapping(value = "/chat", method = RequestMethod.GET)
 	public String chatView(HttpServletRequest request, Model model) {
 		
-		//현재 name 은 2, room 은 1로 한 것
-		String userCode = request.getParameter("name");
-		String roomCode = request.getParameter("room");
-		model.addAttribute("name", userCode);
-		model.addAttribute("room", roomCode);
-		
-		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
-		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
-		model.addAttribute("list", list);
+		try {
+			String sCode = request.getParameter("scode"); //보내는 이 (자신)
+			String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
+			String roomCode = request.getParameter("room"); //room Code 
+			String userName = URLDecoder.decode(request.getParameter("name"),"UTF-8");
+
+			System.out.println("정보");
+			System.out.println("userCode : " + sCode);
+			System.out.println("roomCode : " + roomCode);
+			System.out.println("userName : " + userName);
+			
+			model.addAttribute("rcode", rCode);
+			model.addAttribute("scode", sCode);
+			model.addAttribute("name", userName);
+			model.addAttribute("room", roomCode);
+			
+			//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
+			ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
+			model.addAttribute("list", list);
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return "chat";
 	}
 
-	//채팅방리스트 뷰
+	//채팅방 리스트 뷰
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
 		
@@ -57,7 +75,6 @@ public class ChatController {
 		
 		int senderCode = 2; // 채팅 먼저 거는 쪽
 		int receiverCode = 3; //채팅 메세지 받는 쪽
-		
 		
 		//채팅방이 있는지 보기
 		//없다면 만들고, 룸 번호 건네주기

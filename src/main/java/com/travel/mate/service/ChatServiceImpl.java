@@ -39,7 +39,10 @@ public class ChatServiceImpl implements ChatService {
 		
 		ChatService dao = sqlSession.getMapper(ChatService.class);
 		result = dao.showChats(roomCode);
-		
+		for(int i = 0 ; i < result.size(); i++){
+			ChatDTO dto = result.get(i);
+			System.out.println(dto.getSenderName() + " : " + dto.getContent());
+		}
 		return result;
 	}
 
