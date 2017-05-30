@@ -20,6 +20,10 @@
 							<td>${row.title }</td>
 						</tr>
 						<tr>
+							<td>유저코드</td>
+							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
+						</tr>
+						<tr>
 							<td>설명</td>
 							<td>${row.content }</td>
 						</tr>
