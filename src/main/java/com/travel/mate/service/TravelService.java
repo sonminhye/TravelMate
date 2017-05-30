@@ -24,4 +24,6 @@ public interface TravelService {
 
 	List<Map<String, Object>> selectTravelDetail(int code);
 
+	List<Map<String, Object>> selectTravelRoute(int code);
+
 }

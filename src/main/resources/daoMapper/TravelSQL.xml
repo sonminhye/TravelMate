@@ -13,14 +13,23 @@
 	</select>
 	
 	<select id="selectTravelDetail" parameterType="int" resultType="hashmap">
-		
-		SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople
-		FROM	travel t, travelDetail td
-		WHERE	t.travelCode = td.travelCode
-			AND	t.travelCode = #{code}
-		
+		<![CDATA[
+			SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople
+			FROM	travel t, traveldetail td
+			WHERE	t.travelCode = td.travelCode
+				AND	t.travelCode = #{code}
+		]]>
 	</select>
 
+	<select id="selectTravelRoute" parameterType="int" resultType="hashmap">
+		<![CDATA[
+			SELECT		tr.lat, tr.lng, tr.location
+			FROM		travel t, travelroute tr
+			WHERE		t.travelCode = tr.travelCode
+				AND		t.travelCode = #{code}
+			ORDER BY	tr.location ASC
+		]]>
+	</select>
 
 	<insert id="insertTravel" parameterType="com.travel.mate.dto.TravelDTO">
 		<![CDATA[

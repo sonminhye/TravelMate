@@ -49,12 +49,15 @@ public class TravelController extends HandlerInterceptorAdapter {
 		System.out.println("dto.code: " + travelDto.getTravelCode());
 		int code = travelDto.getTravelCode();
 
-		List<Map<String, Object>> list = travelService.selectTravelDetail(code);
-		mv.addObject("list", list);
+		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(code);
+		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(code);
+		mv.addObject("list", listinfo);
+		mv.addObject("route", listRoute);
 
 		System.out.println("list 출력");
 
-		System.out.println(list);
+		System.out.println(listinfo);
+		System.out.println(listRoute);
 		return mv;
 	}
 
