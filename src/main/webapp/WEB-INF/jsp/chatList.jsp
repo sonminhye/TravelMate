@@ -50,7 +50,7 @@
 			<c:when test="${dto.myCode==dto.sCode}">
 				<a class="chatlist" href="chat?scode=${dto.myCode}&rcode=${dto.rCode}&name=<%=send%>&room=${dto.roomCode}">
 				<div>
-					참여자 : ${dto.receive}, ${dto.latestDate}
+					<ㅔ>참여자 : ${dto.receive}, ${dto.latestDate}
 						${dto.roomCode} 채팅방 입장하기
 				</div>
 				</a>

@@ -79,7 +79,7 @@
 	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll" href="#about">Message</a>
+	                	<a class="page-scroll" href="chatList">Message</a>
 	                </li>
                 </sec:authorize>
                 </ul>
