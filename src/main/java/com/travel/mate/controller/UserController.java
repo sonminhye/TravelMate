@@ -3,12 +3,15 @@ package com.travel.mate.controller;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
@@ -47,6 +50,18 @@ public class UserController {
 	
 		return "signIn";
 	}
+	
+	@RequestMapping(value = "/checkSignup", method = RequestMethod.POST)
+	@ResponseBody
+	public String checkSignup(HttpServletRequest request, Model model) {
+		System.out.println("chcekSignup controller");
+		
+		String id = request.getParameter("id");
+		int rowcount = userService.checkSignup(id);
+		
+		return String.valueOf(rowcount);
+	}
+	
 	
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public String myPage(Locale locale, Model model) {
