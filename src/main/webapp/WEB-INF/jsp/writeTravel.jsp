@@ -80,10 +80,10 @@ function fileCheck(obj) {
 					</td>
 				</tr>
 				<tr>
-					<td>최대인원</td>
+					<td>최대인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input name="tdlist[0].maxPeople" class='form-control' type="number" min="1">
+							<input name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>				
 				</tr>
