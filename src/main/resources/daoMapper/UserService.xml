@@ -23,5 +23,13 @@
 				(#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
+	<select id="selectUserId" resultType="int">
+		<![CDATA[
+			SELECT count(*) 
+			AS     rowcount 
+			FROM   user 
+			WHERE  id=#{param1}
+		]]>
+	</select>
 </mapper>
 

@@ -39,6 +39,106 @@
     <!-- CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/agency.css?ver=1" rel="stylesheet">
+    
+    
+    <script type="text/javascript" src="js/httpRequest.js"></script>
+<script>
+
+	var checkFirst = false;
+	var lastKeyword = '';
+	var loopSendKeyword = false;
+	
+	var accountCheck = document.getElementByName(accountCheck).value;
+	var passwordCheck = document.getElementByName(passwordCheck).value;
+
+	
+	function checkEmail() {
+	 if (checkFirst == false) {
+	  //0.5초 후에 sendKeyword()함수 실행
+	  setTimeout("sendEmail();", 500);
+	  loopSendKeyword = true;
+	 }
+	 checkFirst = true;
+	}
+	
+	// 비밀번호확인 
+	function checkPwd(){
+	 var f1 = document.forms[0];
+	 var pw1 = f1.password.value;
+	 var pw2 = f1.passwordCheck.value;
+	 if(pw1!=pw2){
+	  document.getElementById('checkPwd').style.color = "red";
+	  document.getElementById('checkPwd').innerHTML = "비밀번호와 똑같이 입력해주세요.";
+	  passwordCheck = 0;
+	 }else{
+	  document.getElementById('checkPwd').style.color = "blue";
+	  document.getElementById('checkPwd').innerHTML = "비밀번호가 확인 되었습니다.";
+	  passwordCheck = 1;
+	 }
+	 
+	}
+	
+	
+	function sendEmail() {
+	 if (loopSendKeyword == false) return;
+	 var keyword = document.forms[0].id.value;
+	 if (keyword == '') {
+	  lastKeyword = '';
+	  document.getElementById('checkMsg').style.color = "black";
+	  document.getElementById('checkMsg').innerHTML = "이메일을 입력하세요.";
+	 }
+
+	 else if (keyword != lastKeyword) {
+	  lastKeyword = keyword;
+
+		if (keyword != '') {
+		  //중복검사
+ 		  var params = "id="+encodeURIComponent(keyword);
+	 	  sendRequest("checkSignup", params, displayResult, 'POST');
+		}else {
+		}
+	 }
+	 setTimeout("sendEmail();", 500);
+	}
+	
+	
+	function displayResult() {
+	 if (httpRequest.readyState == 4) {
+	  if (httpRequest.status == 200) {
+	   var resultText = httpRequest.responseText;
+	   var listView = document.getElementById('checkMsg');
+	   if(resultText==0){
+	    listView.innerHTML = "";
+	    listView.style.color = "blue";
+	    accountCheck = 1; //아이디 입력했음을 체크
+	   }else{
+	    listView.innerHTML = "이미 등록된 ID 입니다";
+	    listView.style.color = "red";
+	    accountCheck = 2; //중복아이디임을 체크
+	   }
+	  } else {
+	   alert("에러 발생: "+httpRequest.status);
+	  }
+	 }
+	}
+
+ 	function checkSubmit(){
+		var nameCheck = document.forms[0].name.value;
+		var univCheck = document.forms[0].univ.value;
+		
+		if(accountCheck=='2'){
+			alert('이미 존재하는 아이디 입니다.');
+			return false;
+		}
+		if(accountCheck=='0' || passwordCheck=='0' ){
+			alert('회원가입 폼을 정확히 채워 주세요.');
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+</script>
 </head>
 
 <body>
@@ -102,14 +202,15 @@
 					<h4 class="modal-title" id="myModalLabel">회원가입</h4>
 				</div>
 				<div class="modal-body">
-					<form action="signUp" method="POST">
+					<form action="signUp" method="POST" onsubmit="return checkSubmit()">
 						<div class="form-group">
 							<!-- 권한을 ROLE_USER로 설정 -->
 							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
 						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="email" name="id" placeholder="이메일을 입력하세요">
+							<input type="email" class="form-control" id="id" name="id" onkeydown="checkEmail()" placeholder="이메일을 입력하세요">
+							<div id="checkMsg"></div>
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
@@ -117,7 +218,8 @@
 						</div>
 						<div class="form-group">
 							<label for="password2">비밀번호 확인</label>
-							<input type="password" class="form-control" id="password2" name="passwordCheck" placeholder="비밀번호 확인">
+							<input type="password" class="form-control" id="password2" name="passwordCheck" onkeyup="checkPwd()" placeholder="비밀번호 확인">
+							<div id="checkPwd"></div>
 						</div>
 						<div class="form-group">
 							<label for="name">이름</label>
@@ -147,6 +249,12 @@
 						</div>
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
+					
+					<!-- 입력 여부 체크하기위한 hidden input -->
+					<div class="formCheck">
+				        <input name="accountCheck" class="accountCheck" type="hidden" value='0'>
+				        <input name="passwordCheck" class="passwordCheck" type="hidden" value='0'>
+				    </div>
 				</div>
 			</div>
 		</div>

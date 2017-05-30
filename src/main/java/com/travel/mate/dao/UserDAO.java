@@ -15,17 +15,23 @@ public class UserDAO extends AbstractDAO{
 		return (ArrayList<UserDTO>) selectList("user.showList");
 	}
 	
-	public int insertUser(UserDTO userDTO){
+	public void insertUser(UserDTO userDTO){
 		System.out.println("DAO에서 insertUser를 콜했습니다");
 		
-		int userCode;
-		userCode = (Integer) insert("user.insertUser", userDTO);
-		return userCode;
+		insert("user.insertUser", userDTO);
 	}
 	
 	public void insertUserDetail(UserDetailDTO userDetailDTO){
 		System.out.println("DAO에서 insertUserDetail을 콜했습니다");
 		
 		insert("user.insertUserDetail", userDetailDTO);
+	}
+	
+	public int selectUserId(String id){
+		System.out.println("DAO에서 selectUserId를 콜했음");
+		
+		int rowcount = (Integer) selectOne("user.selectUserId", id);
+		System.out.println("DAO에서 selectUserId를 콜했음22 : " + rowcount);
+		return rowcount;
 	}
 }

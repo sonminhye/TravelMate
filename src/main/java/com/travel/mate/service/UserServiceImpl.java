@@ -50,5 +50,9 @@ public class UserServiceImpl implements UserService {
 		userDAO.insertUserDetail(userDetailDTO);
 	}
 
+	public int checkSignup(String id) {
+		
+		return userDAO.selectUserId(id);
+	}
 
 }
