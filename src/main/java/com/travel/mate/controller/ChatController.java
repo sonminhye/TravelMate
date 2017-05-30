@@ -29,25 +29,31 @@ public class ChatController {
 	@RequestMapping(value = "/chat", method = RequestMethod.GET)
 	public String chatView(HttpServletRequest request, Model model) {
 		
-		String sCode = request.getParameter("scode"); //보내는 이 (자신)
-		String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
-		String roomCode = request.getParameter("room"); //room Code 
-		String userName = request.getParameter("name"); //이름
-		
-		System.out.println("정보");
-		System.out.println("userCode : " + sCode);
-		System.out.println("roomCode : " + roomCode);
-		System.out.println("userName : " + userName);
-		
-		model.addAttribute("rcode", rCode);
-		model.addAttribute("scode", sCode);
-		model.addAttribute("name", userName);
-		model.addAttribute("room", roomCode);
-		
-		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
-		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
-		model.addAttribute("list", list);
+		try {
+			String sCode = request.getParameter("scode"); //보내는 이 (자신)
+			String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
+			String roomCode = request.getParameter("room"); //room Code 
+			String userName = URLDecoder.decode(request.getParameter("name"),"UTF-8");
 
+			System.out.println("정보");
+			System.out.println("userCode : " + sCode);
+			System.out.println("roomCode : " + roomCode);
+			System.out.println("userName : " + userName);
+			
+			model.addAttribute("rcode", rCode);
+			model.addAttribute("scode", sCode);
+			model.addAttribute("name", userName);
+			model.addAttribute("room", roomCode);
+			
+			//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
+			ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
+			model.addAttribute("list", list);
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return "chat";
 	}
 

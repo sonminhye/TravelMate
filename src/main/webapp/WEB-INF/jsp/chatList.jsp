@@ -40,6 +40,9 @@
 			String send = (String)pageContext.getAttribute("send");
 			String receive = (String)pageContext.getAttribute("receive");
 			
+			session.setAttribute("send", send);
+			session.setAttribute("receive", receive);
+			
 			send = URLEncoder.encode(send,"UTF-8");
 			receive = URLEncoder.encode(receive,"UTF-8");
 		%>

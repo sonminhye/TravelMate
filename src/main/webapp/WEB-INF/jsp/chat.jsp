@@ -1,109 +1,118 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet" href="css/chat.css">
-<title>ì±„íŒ…ì°½</title>
+<title>Ã¤ÆÃ¹æ</title>
+<script type="text/javascript">
+
+</script>
 </head>
 <body>
+	
 	<jsp:include page="header.jsp"></jsp:include>
-	<div style="margin-top: 120px;">
-			<div id="msgcontainer">
-				<div id="msgdisplay">
-					<c:forEach items="${list}" var="dto">
-						<c:choose>
-							<c:when test="${dto.senderCode==scode}">
-								<li class="arrow_box">
-							</c:when>
-							<c:otherwise>
-								<li class="arrow_box_oth">
-							</c:otherwise>
-						</c:choose>
-						<span class="nickname">${dto.senderCode}</span>
-						${dto.content}
-						</li>
-					</c:forEach>
-
-				</div>
-				<div>
-					<form>
-						<input size="35" id="msg" /> <input id="sendbtn" type="submit"
-							value="Send" />
-					</form>
-				</div>
+	<div style="margin-top:120px;">
+		<div id="msgcontainer">
+			
+			<div id="msgdisplay">
+				<c:forEach items="${list }" var="dto">
+					<c:choose>
+						<c:when test="${dto.senderCode==scode }">
+							<li class="arrow_box">
+						</c:when>
+						<c:otherwise>
+							<li class="arrow_box_oth">
+						</c:otherwise>
+					</c:choose>
+					<span class="nickname">${dto.senderName }</span>
+					${dto.content }
+				</c:forEach>
 			</div>
+			<div>
+				<form>
+					<input size="60" id="msg"/><input id="sendbtn" type="submit" value="Send"/>
+				</form>
+			</div>
+		</div>
 	</div>
 	<script type="text/javascript">
-
+	
 		var socket = io('http://localhost:3000');	
 		var room = '${room}';
-		var nickname = '${name}'; //ìœ ë‹ˆí¬í•œ ì´ë¦„ìœ¼ë¡œ í‘œí˜„í•´ì•¼ í•¨. ë‚˜ì¤‘ì— ê³„ì •ìœ¼ë¡œ í•˜ë˜ê°€ ì•„ì´ë””ë¡œ í•´ì•¼ë  ë“¯
+		var nickname = '${name}';
 		var rcode = '${rcode}';
 		var scode = '${scode}';
-		nickname =  encodeURI(nickname);
-			//ì‹¤ì œë¡œ êµ¬í˜„í•  ë•ŒëŠ”, í˜ì´ì§€ì— ì €ì¥ë˜ì–´ìˆëŠ” ë‚˜ì˜ ê³„ì •ì •ë³´ í˜¹ì€ ì•„ì´ë””ê°’ì´ nickname ì´ ë˜ë„ë¡ í•¨
-			socket.emit('join', {
-				nickname : nickname
-			}); // ì ‘ì† ì´ë²¤íŠ¸
-			
-			$('#msg').focus();
+		
+		var nick =  encodeURI(nickname);
+		
+		//nick name, ¹æÁ¤º¸ µî Á¤º¸¸¦ ¼­¹ö¿¡ º¸³¿
+		socket.emit('join', {
+			nickname : nick,
+			room : room,
+			scode : scode,
+			rcode : rcode
+		}); // Á¢¼Ó ÀÌº¥Æ®
+		
+		$('#msg').focus();
+	
+		//³»°¡ ÀÔÀå
+		socket.on('welcome',
+				function(data) {
+				var nick = decodeURI(data.nickname);
+					$('#msgdisplay').append(
+							$('<li class="noti">').text(nick + '´Ô È¯¿µÇÕ´Ï´Ù'));
+				});
 
-			socket.emit('join:room',{
-				room : room,
-				scode : scode,
-				rcode : rcode
-			});
-			
-			//ë‚´ê°€ ì…ì¥
-			socket.on('welcome',
-					function(data) {
-						$('#msgdisplay').append(
-								$('<li class="noti">').text(nickname + 'ë‹˜ì´ ì ‘ì†í•˜ì…¨ìŠµë‹ˆë‹¤'));
+		//³»°¡ ÀÔÀå
+		socket.on('join',
+				function(data) {
+				var nick = decodeURI(data.nickname);
+					$('#msgdisplay').append(
+							$('<li class="noti">').text(nick + '´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù'));
+				});
+
+		// ¿Â ¸Ş¼¼Áö
+		$('form').submit(
+				function() {
+					var date = (new Date()).toISOString().substring(0, 19)
+							.replace('T', ' ');
+
+					socket.emit('msg', {
+						msg : $("#msg").val(),
+						date : date
 					});
 
-			// ì˜¨ ë©”ì„¸ì§€
-			$('form').submit(
-					function() {
+					$('#msg').val('');
+					$('#msg').focus();
+					return false; // submit Ãë¼Ò
+				});
+		
+		//¸Ş¼¼Áö ¼ö½Å ºÎºĞ
+		socket.on('msg', function(data) {
+			var nick = decodeURI(data.nickname);
+			var span = $('<span class="nickname">').text(nick);
+			var li;
 
-						var date = (new Date()).toISOString().substring(0, 19)
-								.replace('T', ' ');
+			if (nick == nickname) {
+				li = $('<li class="arrow_box">');
+			} else {
+				li = $('<li class="arrow_box_oth">');
+			}
 
-						socket.emit('msg', {
-							msg : $("#msg").val(),
-							date : date
-						});
+			li.append(span).append(data.msg);
+			$('#msgdisplay').append(li);
+		});
 
-						$('#msg').val('');
-						$('#msg').focus();
-						return false; // submit ì·¨ì†Œ
-					});
-
-			//ë©”ì„¸ì§€ ìˆ˜ì‹  ë¶€ë¶„
-			socket.on('msg', function(data) {
-				
-				var span = $('<span class="nickname">').text(data.nickname);
-				var li;
-
-				if (data.nickname == nickname) {
-					li = $('<li class="arrow_box">');
-				} else {
-					li = $('<li class="arrow_box_oth">');
-				}
-
-				li.append(span).append(data.msg);
-				$('#msgdisplay').append(li);
-			});
-
-			socket.on('left', function(data) { //ì´ ë¶€ë¶„ì€ ë‚˜ì¤‘ì— ì˜¨ë¼ì¸ í˜¹ì€ ë¹„ì˜¨ë¼ì¸ ì‹ìœ¼ë¡œ ê³ ì³ì¤˜ë„ ë  ë“¯
-				var nick = data.nickname;
-				$('#msgdisplay').append($('<li class="noti">').text(nick + ''));
-			});
-			
+		socket.on('left', function(data) { //ÀÌ ºÎºĞÀº ³ªÁß¿¡ ¿Â¶óÀÎ È¤Àº ºñ¿Â¶óÀÎ ½ÄÀ¸·Î °íÃÄÁàµµ µÉ µí
+			var nick = decodeURI(data.nickname);
+			$('#msgdisplay').append($('<li class="noti">').text(nick + '´ÔÀÌ ÅğÀåÇÏ¼Ì½À´Ï´Ù'));
+		});
+		
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>

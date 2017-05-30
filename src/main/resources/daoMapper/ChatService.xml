@@ -11,7 +11,7 @@
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
-		select * from message where roomCode=#{roomCode} order by sendDate
+		select * , (select userdetail.name from userdetail where message.senderCode = userdetail.userCode) as senderName, (select userdetail.name from userdetail where message.receiverCode = userdetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
 	</select>
 	
 	<select id="checkChatRoomExist" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
