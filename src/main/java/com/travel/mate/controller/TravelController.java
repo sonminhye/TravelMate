@@ -2,14 +2,21 @@ package com.travel.mate.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -24,6 +31,40 @@ public class TravelController extends HandlerInterceptorAdapter {
 
 	@Resource(name = "TravelService")
 	private TravelService travelService;
+	
+	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView scrollDownPOST(@RequestBody String keys) throws ParseException{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/scrollDownResult");
+		System.out.println(keys);
+		JSONParser jsonParser = new JSONParser();
+		//JSON데이터를 넣어 JSON Object 로 만들어 준다.
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
+        System.out.println("테스트중");
+        int code = Integer.parseInt((String) jsonObject.get("travelCode"));        
+		List<Map<String, Object>> scroll = travelService.scrollDown(code);
+		mv.addObject("scroll", scroll);
+		System.out.println("test!!");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/scrollDownResult", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView scrollDownResult(@RequestBody String keys) throws ParseException{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/scrollDownResult");
+		System.out.println(keys);
+		JSONParser jsonParser = new JSONParser();
+		//JSON데이터를 넣어 JSON Object 로 만들어 준다.
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
+        System.out.println("테스트중");
+        int code = Integer.parseInt((String) jsonObject.get("travelCode"));        
+		List<Map<String, Object>> scroll = travelService.scrollDown(code);
+		mv.addObject("scroll", scroll);
+		System.out.println("test!!");
+		return mv;
+	}
 
 	@RequestMapping(value = "/travelList")
 	public ModelAndView travelList(Map<String, Object> map) {
@@ -41,12 +82,7 @@ public class TravelController extends HandlerInterceptorAdapter {
 		System.out.println("readTravel");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
-		// System.out.println(travelDetailDto.getTravelCode());
-		// int travelCode = travelDetailDto.getTravelCode();
-
-		System.out.println("dto :" + travelDto);
-
-		System.out.println("dto.code: " + travelDto.getTravelCode());
+		// 여행(게시물)의 번호를 가져온다
 		int code = travelDto.getTravelCode();
 
 		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(code);
@@ -54,10 +90,6 @@ public class TravelController extends HandlerInterceptorAdapter {
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
 
-		System.out.println("list 출력");
-
-		System.out.println(listinfo);
-		System.out.println(listRoute);
 		return mv;
 	}
 
@@ -68,8 +100,7 @@ public class TravelController extends HandlerInterceptorAdapter {
 	}
 
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
-	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에
-	// 담음 / 사용할 변수명
+	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
 	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
 			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
 			@ModelAttribute("tilist") TravelImageDTO travelImageDto,
@@ -91,8 +122,6 @@ public class TravelController extends HandlerInterceptorAdapter {
 		if (null != travels && travels.size() > 0) {
 			// travel table에 넣음
 			for (TravelDTO travel : travels) {
-				System.out.println("travel : " + travel.getTitle() + " " + travel.getContent());
-				System.out.println("====");
 				System.out.println("insert : travel");
 				travelService.insertTravel(travel);
 				System.out.println("insert end");
@@ -101,9 +130,6 @@ public class TravelController extends HandlerInterceptorAdapter {
 		if (null != travelDetails && travelDetails.size() > 0) {
 			// traveldetail table에 넣음
 			for (TravelDetailDTO travelDetail : travelDetails) {
-				System.out.println("travelDetail : " + travelDetail.getStartDate() + " " + travelDetail.getStartTime());
-				System.out.println(travelDetail.getEndDate() + " " + travelDetail.getEndTime());
-				System.out.println(travelDetail.getMinPeople() + " " + travelDetail.getMaxPeople());
 				System.out.println("====");
 				System.out.println("insert : detail");
 				travelService.insertTravelDetail(travelDetail);
@@ -124,10 +150,10 @@ public class TravelController extends HandlerInterceptorAdapter {
 		if (null != routes && routes.size() > 0) {
 			// 변수 : 배열의 for문
 			for (TravelRouteDTO route : routes) {
-				System.out.println(route.getLat() + " " + route.getLng() + " " + route.getLocation());
 				System.out.println("====");
 				System.out.println("insert: routes");
 				travelService.insertTravelRoute(route);
+				System.out.println("insert end");
 			}
 		} else {
 			// 장소 선택을 하지 않아 리스트가 비어있는 경우

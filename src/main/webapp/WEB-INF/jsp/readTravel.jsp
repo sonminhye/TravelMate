@@ -20,6 +20,10 @@
 							<td>${row.title }</td>
 						</tr>
 						<tr>
+							<td>유저코드</td>
+							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
+						</tr>
+						<tr>
 							<td>설명</td>
 							<td>${row.content }</td>
 						</tr>
@@ -34,18 +38,22 @@
 					</c:forEach>
 				</c:when>
 			</c:choose>
-	
+
 			<tr>
 				<td>장소</td>
 				<td>
 					<div id="map" style="width: 500px; height: 400px;"></div>
-							<script type="text/javascript"
-				src="//apis.daum.net/maps/maps3.js?apikey=aa223a53480a208175ae1675e33e4193&libraries=services"></script>
-			<script type="text/javascript">
+					<script
+						type="text/javascript"
+						src="//apis.daum.net/maps/maps3.js?apikey=aa223a53480a208175ae1675e33e4193&libraries=services"></script>
+					<c:choose>
+						<c:when test="${fn:length(route) > 0}">
+							<c:forEach items="${route }" var="init" begin="0" end="1">
+								<script type="text/javascript">
 									var count = 0;
 									var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 									mapOption = {
-										center : new daum.maps.LatLng(37.55393836433871, 126.97119796121817), // 지도의 중심좌표
+										center : new daum.maps.LatLng(${init.lat}, ${init.lng}), // 지도의 중심좌표
 										level : 7
 									// 지도의 확대 레벨
 									};
@@ -77,7 +85,9 @@
 										}
 									}
 								</script>
-					<c:choose>
+							</c:forEach>
+						</c:when>
+					</c:choose> <c:choose>
 						<c:when test="${fn:length(route) > 0}">
 							<c:forEach items="${route }" var="routes">
 								<script type="text/javascript">
