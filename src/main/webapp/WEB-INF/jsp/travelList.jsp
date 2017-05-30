@@ -73,8 +73,9 @@
 											</a>
 											<div class="portfolio-caption">
 												<h2>${row.title }</h2>
-												<h4>${row.content }</h4>
-												<p class="text-muted">${row.writeDate }</p>
+												<h4>${row.name }</h4>
+												<p class="text-muted">작성일 : ${row.writeDate }</p>
+												<p>${row.startDate }</p>
 											</div>
 										</div>
 									</c:forEach>
@@ -158,8 +159,9 @@
 											+ "</a>"
 											+ "<div class=" + "portfolio-caption" + ">"
 											+ "<h2>" + this.title + "</h2>"
-											+ "<h4>" + this.content + "</h4>"
-											+ "<p class=" + "text-muted" + ">" + this.writeDate + "</p>"
+											+ "<h4>" + this.name + "</h4>"
+											+ "<p class=" + "text-muted" + ">" + "작성일 : " + this.writeDate + "</p>"
+											+ "<p>" + this.startDate + "</p>"
 											+ "</div>"
 											+ "</div>";
 									}

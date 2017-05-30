@@ -20,7 +20,11 @@
 							<td>${row.title }</td>
 						</tr>
 						<tr>
-							<td>유저코드</td>
+							<td>작성자</td>
+							<td>${row.name }</a></td>
+						</tr>
+						<tr>
+							<td>채팅링크</td>
 							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
 						</tr>
 						<tr>
@@ -87,6 +91,12 @@
 								</script>
 							</c:forEach>
 						</c:when>
+						<c:otherwise>
+							<script type="text/javascript">
+								$("#map").remove();
+							</script>
+							등록된 장소가 없습니다.
+						</c:otherwise>
 					</c:choose> <c:choose>
 						<c:when test="${fn:length(route) > 0}">
 							<c:forEach items="${route }" var="routes">
@@ -96,6 +106,9 @@
 								</script>
 							</c:forEach>
 						</c:when>
+						<c:otherwise>
+							<!-- 아무것도 하지않음 -->
+						</c:otherwise>
 					</c:choose>
 				</td>
 			</tr>
