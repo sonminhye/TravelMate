@@ -26,4 +26,6 @@ public interface TravelService {
 
 	List<Map<String, Object>> selectTravelRoute(int code);
 
+	List<Map<String, Object>> scrollDown(Integer code);
+
 }

@@ -55,4 +55,10 @@ public class TravelDAO extends AbstractDAO{
 		return (List<Map<String, Object>>)selectList("travel.selectTravelRoute", code);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> scrollDown(Integer code) {
+		System.out.println("DAO Call : scrollDown..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelScroll", code);
+	}
+
 }

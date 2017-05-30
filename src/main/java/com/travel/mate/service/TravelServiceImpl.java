@@ -56,4 +56,9 @@ public class TravelServiceImpl implements TravelService {
 	public List<Map<String, Object>> selectTravelRoute(int code) {
 		return travelDAO.selectTravelRoute(code);
 	}
+
+	@Override
+	public List<Map<String, Object>> scrollDown(Integer code) {
+		return travelDAO.scrollDown(code);
+	}
 }

@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+	String email = "";
+	
+	if(principal != null && principal instanceof MyUser){
+		//code는 PK인 유저코드. 
+		code = ((MyUser)principal).getUserCode();
+	}
+%> 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -31,6 +46,7 @@ function fileCheck(obj) {
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action="doWrite" method="post">
 			<table class="table" width="500">
+			<input type="hidden" name="tlist[0].userCode" class="form-control" value="<%=code%>">
 				<tr>
 					<td>여행이름<font color="red">*</font></td>
 					<td><input name="tlist[0].title" class='form-control' type="text" required></td>
@@ -98,8 +114,8 @@ function fileCheck(obj) {
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부</td>
-					<td><input id="image" name="tilist[0].image" type="file" accept="image/*" onchange="fileCheck(this)"></td>
+					<td>사진첨부<font color="red">*</font></td>
+					<td><input id="image" name="tilist[0].image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>
 			<button type="submit" class="btn btn-default">등록하기</button>

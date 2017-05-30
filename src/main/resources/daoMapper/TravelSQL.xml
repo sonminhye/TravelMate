@@ -2,13 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="travel">
-	
-	<select id="selectTravel" parameterType="hashmap" resultType="hashmap">
+	<!-- 첫 화면에 보여질 6개 -->
+	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
 			SELECT		t.travelCode, t.userCode, t.title, t.content, t.writeDate
 			FROM		travel t
 			ORDER BY	t.writeDate DESC, t.travelCode DESC
 			LIMIT		0, 6
+		]]>
+	</select>
+	
+	<!-- 스크롤을 통해 3개씩 더 가져오기 -->
+	<select id="selectTravelScroll" parameterType="int" resultType="hashmap">
+		<![CDATA[
+			SELECT		t.travelCode, t.userCode, t.title, t.content, t.writeDate
+			FROM		travel t
+			WHERE		t.travelCode <= #{code}
+				AND		t.travelCode > #{code} - 3
+			ORDER BY	t.travelCode DESC, t.writeDate DESC
 		]]>
 	</select>
 	
@@ -36,7 +47,7 @@
 			INSERT	INTO
 				travel (userCode, title, content, writeDate)
 			VALUES
-				(1, #{title}, #{content}, now())
+				(#{userCode}, #{title}, #{content}, now())
 		]]>
 	</insert>
 	
