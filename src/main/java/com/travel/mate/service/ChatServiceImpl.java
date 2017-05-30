@@ -1,6 +1,7 @@
 package com.travel.mate.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public int showChatRoomExist(int senderCode, int receiverCode) {
+	public ChatRoomDTO showChatRoomExist(int senderCode, int receiverCode) {
 		// TODO Auto-generated method stub
 		System.out.println("showChatRoomExist()");
 		
-		int result = 0;
+		ChatRoomDTO result = null;
 		
 		ChatService dao = sqlSession.getMapper(ChatService.class);
 		result = dao.showChatRoomExist(senderCode, receiverCode);
@@ -59,4 +60,21 @@ public class ChatServiceImpl implements ChatService {
 		return result;
 		
 	}
+
+	@Override
+	public ChatRoomDTO addRoom(int senderCode, int receiverCode, String date) {
+		// TODO Auto-generated method stub
+		
+		ChatRoomDTO result = null;
+		
+		ChatService dao = sqlSession.getMapper(ChatService.class);
+		HashMap<String, String> map = new HashMap<String,String>();
+		
+		result = dao.addRoom(senderCode, receiverCode, date);
+		
+		return result;
+		
+	}
+
+	
 }

@@ -13,11 +13,17 @@
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
 		select * , (select userdetail.name from userdetail where message.senderCode = userdetail.userCode) as senderName, (select userdetail.name from userdetail where message.receiverCode = userdetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
 	</select>
-	
-	<select id="checkChatRoomExist" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
-		select * from message where roomCode=#{roomCode} order by sendDate
+
+	<select id="checkChatRoomExist" resultType="com.travel.mate.dto.ChatDTO" parameterType="hashmap">
+		select count(*) 
+		from messageroom 
+		where senderCode=#{senderCode} and receiverCode=#{receiverCode}
 		<!-- insert into messageroom(senderCode, receiverCode, latestdate) select 2,3,now() from dual where not exists (select roomCode from messageroom where senderCode=2 and receiverCode=3) -->
 	</select>
+	
+	<insert id="addChatRoom" parameterType="hashmap" useGeneratedKeys="true" keyProperty="roomCode">
+		insert into messageroom(senderCode, receiverCode, latestdate) values (#{senderCode},#{receiverCode},#{latestDate})
+	</insert>
 	
 </mapper>
 

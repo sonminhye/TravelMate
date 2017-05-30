@@ -3,7 +3,10 @@ package com.travel.mate.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.travel.mate.dto.ChatDTO;
 import com.travel.mate.dto.ChatRoomDTO;
+import com.travel.mate.security.MyUser;
 import com.travel.mate.service.ChatServiceImpl;
 
 @Controller
@@ -30,7 +34,12 @@ public class ChatController {
 	public String chatView(HttpServletRequest request, Model model) {
 		
 		try {
-			String sCode = request.getParameter("scode"); //보내는 이 (자신)
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			Object principal = authentication.getPrincipal();
+			
+			int sCode = ((MyUser)principal).getUserCode();
+			
 			String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
 			String roomCode = request.getParameter("room"); //room Code 
 			String userName = URLDecoder.decode(request.getParameter("name"),"UTF-8");
@@ -63,7 +72,7 @@ public class ChatController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		String id = authentication.getName();
-
+	
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(id);
 		model.addAttribute("list", list);
@@ -73,14 +82,34 @@ public class ChatController {
 	@RequestMapping(value="/checkChatRoom")
 	public String checkChatRoomExist(HttpServletRequest request ,Model model){
 		
-		int senderCode = 2; // 채팅 먼저 거는 쪽
-		int receiverCode = 3; //채팅 메세지 받는 쪽
+		String result="";
+		
+		try {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		
+		int senderCode = ((MyUser)principal).getUserCode();
+		int receiverCode = Integer.parseInt(request.getParameter("userCode"));
+		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
+		Date date;
+		
+			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(new Date().toString());
 		
 		
-		//채팅방이 있는지 보기
-		//없다면 만들고, 룸 번호 건네주기
-		//있으면 룸번호 건네주기
+		if(chatRoom ==null){ //채팅방이 만들어지지 않았다는 얘기
+			chatRoom = chatService.addRoom(senderCode, receiverCode, date.toString());
+		}
 		
+		result = "chat?";
+		result += "scode" + senderCode + "&";
+		result += "scode" + receiverCode + "&";
+		result += "scode" + date.toString() + "&";
+		result += "room" + chatRoom.getRoomCode()+ "&";
+		
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "redirect:/chat";
 	}
 
