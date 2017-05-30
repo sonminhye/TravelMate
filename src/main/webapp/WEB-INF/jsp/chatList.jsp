@@ -50,16 +50,16 @@
 			<c:when test="${dto.myCode==dto.sCode}">
 				<a class="chatlist" href="chat?scode=${dto.myCode}&rcode=${dto.rCode}&name=<%=send%>&room=${dto.roomCode}">
 				<div>
-					<ㅔ>참여자 : ${dto.receive}, ${dto.latestDate}
-						${dto.roomCode} 채팅방 입장하기
+					<p>참여자 : ${dto.receive}, ${dto.latestDate}</p>
+					<p>${dto.roomCode} 채팅방 입장하기</p>
 				</div>
 				</a>
 			</c:when>
 			<c:otherwise>
 				<a class="chatlist" href="chat?scode=${dto.myCode}&rcode=${dto.sCode}&name=<%=receive%>&room=${dto.roomCode}">
 				<div>
-					참여자 : ${dto.send}, ${dto.latestDate}
-						${dto.roomCode} 채팅방 입장하기
+					<p>참여자 : ${dto.send}, ${dto.latestDate}</p>
+					<p>${dto.roomCode} 채팅방 입장하기</p>
 				</div>
 				</a>
 			</c:otherwise>

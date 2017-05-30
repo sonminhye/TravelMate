@@ -76,6 +76,7 @@ public class ChatController {
 		int senderCode = 2; // 채팅 먼저 거는 쪽
 		int receiverCode = 3; //채팅 메세지 받는 쪽
 		
+		
 		//채팅방이 있는지 보기
 		//없다면 만들고, 룸 번호 건네주기
 		//있으면 룸번호 건네주기
@@ -91,8 +92,6 @@ public class ChatController {
 
 	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
 	public String viewMessage(Model model) {
-
-		
 
 		return "viewMeesage";
 	}
