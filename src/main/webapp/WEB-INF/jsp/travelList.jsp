@@ -56,7 +56,7 @@
 			<%=writeButtonStart %><%=writeButtonEnd %>
 				<section id="portfolio" class="bg-light-gray">
 					<div class="container">
-						<div class="row">
+						<div class="row scrollLocation">
 							<c:choose>
 								<c:when test="${fn:length(list) > 0}">
 									<c:forEach items="${list }" var="row">
@@ -123,7 +123,7 @@
 				if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
 					// 3. class가 scroll인 것 중 마지막 요소를 선택, data-tcode를 가져옴
 					// 뿌려진 글의 마지막 코드를 읽어 다음 글을 읽기 위함
-					var lasttcode = $(".scrolling:first").attr("data-tcode");
+					var lasttcode = $(".scrolling:last").attr("data-tcode");
 					// alert(lasttcode);
 					// 4. ajax를 사용해서 해당 코드값을 서버로 보내 3개를 더 읽어온다
 					$.ajax({
@@ -138,14 +138,52 @@
 							travelCode : lasttcode
 						}),
 						success: function(data) { // ajax 성공시 수행할 함수
-							alert(data);
-						},
-						complete: function(data) {
-							console.log(data);
-						}
-					});
-				}
-			}
+							var str = "";
+							// 5. 서버에서 온 데이터가 ""이거나 null인경우 DOM handling..
+							if (data != "") {
+								// 6. 서버에게 온 데이터가 리스트이므로 each문을 사용하여 접근
+								$(data).each(
+									// 7. html 코드만들기
+									function() {
+										console.log(this);
+										str += "<div class=" + "'col-md-4 col-sm-6 portfolio-item listToChange'" + ">"
+											+ "<a href=" + "#this" + " name=" + "title" + " class=" + "portfolio-link" + " data-toggle=" + "modal" + ">"
+											+ "<input type=" + "hidden" + " class=" + "'travelCode scrolling'" + " data-tcode=" + this.travelCode + " value=" + this.travelCode +">"
+											+ "<div class=" + "portfolio-hover" + ">"
+											+ "<div class=" + "portfolio-hover-content" + ">"
+											+ "<i class=" + "'fa fa-plus fa-3x'" + "></i>"
+											+ "</div>"
+											+ "</div>"
+											+ "<img src=" + "img/portfolio/roundicons.png" + " class=" + "img-responsive" + " alt=" + "''" + ">"
+											+ "</a>"
+											+ "<div class=" + "portfolio-caption" + ">"
+											+ "<h2>" + this.title + "</h2>"
+											+ "<h4>" + this.content + "</h4>"
+											+ "<p class=" + "text-muted" + ">" + this.writeDate + "</p>"
+											+ "</div>"
+											+ "</div>";
+									}
+								);
+								// 8. 이전까지 뿌려졌던 데이터 비우고  만든 str을 뿌려준다
+								$(".listToChange").empty();
+								// scrollLocation 안에 뿌려줌(div로 인한 밀리는 현상방지)
+								$(".scrollLocation").append(str);
+								function addEvent() {
+									$("a[name='title']").on("click", function(e) {
+										e.preventDefault();
+										readTravel($(this));
+									});
+								}
+								addEvent();
+								
+							}
+							else {
+								// 서버로부터 받을 데이터 없으면 아무것도 하지않음
+							}
+						} // end success
+					}); // end ajax
+				} // end if (top 좌표 > (글 height - 윈도우 height))
+			} // end if
 		});
 	</script>
 	

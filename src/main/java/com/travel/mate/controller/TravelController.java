@@ -2,11 +2,9 @@ package com.travel.mate.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,39 +31,20 @@ public class TravelController extends HandlerInterceptorAdapter {
 	private TravelService travelService;
 	
 	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView scrollDownPOST(@RequestBody String keys) throws ParseException{
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/scrollDownResult");
+	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException{
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("/travelList");
 		System.out.println(keys);
 		JSONParser jsonParser = new JSONParser();
 		//JSON데이터를 넣어 JSON Object 로 만들어 준다.
         JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
-        System.out.println("테스트중");
-        int code = Integer.parseInt((String) jsonObject.get("travelCode"));        
-		List<Map<String, Object>> scroll = travelService.scrollDown(code);
-		mv.addObject("scroll", scroll);
-		System.out.println("test!!");
-		return mv;
+        int code = Integer.parseInt((String) jsonObject.get("travelCode"));
+		List<Map<String, Object>> scroll = travelService.scrollDown(code - 1);
+//		mv.addObject("scroll", scroll);
+//		return mv;
+		return scroll;
 	}
 	
-	@RequestMapping(value = "/scrollDownResult", method = RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView scrollDownResult(@RequestBody String keys) throws ParseException{
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/scrollDownResult");
-		System.out.println(keys);
-		JSONParser jsonParser = new JSONParser();
-		//JSON데이터를 넣어 JSON Object 로 만들어 준다.
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
-        System.out.println("테스트중");
-        int code = Integer.parseInt((String) jsonObject.get("travelCode"));        
-		List<Map<String, Object>> scroll = travelService.scrollDown(code);
-		mv.addObject("scroll", scroll);
-		System.out.println("test!!");
-		return mv;
-	}
-
 	@RequestMapping(value = "/travelList")
 	public ModelAndView travelList(Map<String, Object> map) {
 		System.out.println("travelList");
