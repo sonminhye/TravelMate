@@ -32,16 +32,17 @@
 			<!-- 첫번째 로그인 시도가 실패할 경우 fail 파라미터를 true로 설정해줌.
 			c:if태그를 통해 파라미터 값을 확인하고 메세지를 출력해줌. -->
 			<c:if test="${not empty param.fail }">
-				<div>
+				<div style="text-align:center; padding-top:60px;">
 					<font color = "red">
-						<p>로그인에 실패했습니다.</p>
-						<p>${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message }</p>
+						<p>로그인에 실패했습니다. ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message }</p>
 					</font>
 					<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
 				</div>
 			</c:if>
 			<hr>
-			<button type="submit" class="btn btn-default">로그인</button>
+			<div style="text-align:center; padding-top:30px; ">
+				<button type="submit" class="btn btn-default" >로그인</button>
+			</div>
 		</form>
 	</div>
 <jsp:include page="footer.jsp"></jsp:include>

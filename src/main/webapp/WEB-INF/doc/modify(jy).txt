@@ -13,9 +13,8 @@ field는 DTO의 이름이어야하며, 이는 곧 테이블의 컬럼명과 같�
 private TravelService travelService;
 부분을 통해 Service를 참조하며, ServiceImpl에 구현한 함수를 부를 수 있게 된다
 
-매우 멍청한 방법인 것 같지만, 해당 글쓰기의 프로세스는 다음과 같다.
+해당 글쓰기의 프로세스는 다음과 같다.
 먼저 travel에 기본정보를 insert, 그 후 traveldetail, travelimage, travelroute에 insert
-(특히, 여기서 travelCode는 max값으로 가져오는 것이 비정상적인 방법이라 생각됨(새로 써지면 travel의 pk를 참조하기 위함인데...나중에라도 다른 방법을 찾아봐야할듯)
 
 이렇게 리스트로 처리하여 controller에서 for문을 돌기 때문에
 mybatis에서 따로 foreach문을 이용할 필요가 없다(travelroute insert하는 경우가 이에 해당)

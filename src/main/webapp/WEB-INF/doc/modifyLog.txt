@@ -52,3 +52,7 @@ src/main/resource/config/spring으로 옮김(web.xml에서 경로 수정)
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+[2017/05/30]
+table 스키마 수정(성별 column char(6), meanpoint default 0, 기타 NotNull 지정)
+수정된 table 생성 sql파일 추가

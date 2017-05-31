@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+	String email = "";
+	
+	if(principal != null && principal instanceof MyUser){
+		//code는 PK인 유저코드. 
+		code = ((MyUser)principal).getUserCode();
+	}
+%> 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,6 +38,70 @@ function fileCheck(obj) {
 		return false;
 	}
 };
+function startDateCheck(obj) {
+	var now = new Date();
+	var uDate = obj.value;
+	var temp = uDate.split("-");
+	var userDate = new Date(Number(temp[0]), Number(temp[1]) - 1, Number(temp[2]));
+	if (userDate > now) {
+		// 날짜 선택 가능
+	}
+	// 오늘이거나 이전
+	else {
+		alert("오늘이거나 오늘보다 이전 날짜는 선택할 수 없습니다");
+		$("#startDate").val("");
+	}
+};
+function endDateCheck(obj) {
+	var sDate = $("#startDate").val();
+	var eDate = obj.value;
+	if (sDate == "" || sDate == null) {
+		alert("시작날짜를 먼저 선택해주세요");
+		$("#endDate").val("");
+	}
+	else {
+		if (sDate >= eDate) {
+			alert("시작날짜이거나 시작날짜보다 이전 날짜는 선택할 수 없습니다");
+			$("#endDate").val("");
+		}
+		else {
+			// 날짜선택가능
+		}
+	}
+};
+function maxPeopleCheck(obj) {
+	var min = $("#minPeople").val();
+	var max = obj.value;
+	if (min == "" || min == null) {
+		alert("최소인원을 먼저 선택해주세요");
+		$("#maxPeople").val("");
+	}
+	else {
+		if (max < min) {
+			alert("최대인원은 최소인원보다 작을 수 없습니다");
+			$("#maxPeople").val("");
+		}
+		else {
+			// 인원선택가능
+		}
+	}
+};
+function minPeopleCheck(obj) {
+	var min = obj.value;
+	var max = $("#maxPeople").val();
+	if (max == "" || max == null ) {
+		// 아무것도 하지 않음
+	}
+	else {
+		if (max < min) {
+			alert("최소인원은 최대인원보다 클 수 없습니다")
+			$("#minPeople").val("");
+		}
+		else {
+			// max 값 입력되어 있고, min <= max 이므로 입력가능
+		}
+	}
+}
 </script>
 </head>
 <body>
@@ -31,6 +110,7 @@ function fileCheck(obj) {
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action="doWrite" method="post">
 			<table class="table" width="500">
+			<input type="hidden" name="tlist[0].userCode" class="form-control" value="<%=code%>">
 				<tr>
 					<td>여행이름<font color="red">*</font></td>
 					<td><input name="tlist[0].title" class='form-control' type="text" required></td>
@@ -44,7 +124,7 @@ function fileCheck(obj) {
 					<td>시작날짜<font color="red">*</font></td>
 					<td>
 						<div class='input-group date'>
-							<input id="startDate" name="tdlist[0].startDate" class="form-control" type="date" required> <span
+							<input onchange="startDateCheck(this);" id="startDate" name="tdlist[0].startDate" class="form-control" type="date" required> <span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -59,7 +139,7 @@ function fileCheck(obj) {
 					<td>종료날짜<font color="red">*</font></td>
 					<td>
 						<div class='input-group date'>
-							<input id="endDate" name="tdlist[0].endDate" class="form-control" type="date" required> <span
+							<input onchange="endDateCheck(this);" id="endDate" name="tdlist[0].endDate" class="form-control" type="date" required> <span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -75,7 +155,7 @@ function fileCheck(obj) {
 					<td>최소인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
+							<input onchange="minPeopleCheck(this);" id="minPeople" name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>
 				</tr>
@@ -83,7 +163,7 @@ function fileCheck(obj) {
 					<td>최대인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
+							<input onchange="maxPeopleCheck(this);" id="maxPeople" name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>				
 				</tr>
@@ -98,8 +178,8 @@ function fileCheck(obj) {
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부</td>
-					<td><input id="image" name="tilist[0].image" type="file" accept="image/*" onchange="fileCheck(this)"></td>
+					<td>사진첨부<font color="red">*</font></td>
+					<td><input id="image" name="tilist[0].image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>
 			<button type="submit" class="btn btn-default">등록하기</button>
@@ -108,18 +188,10 @@ function fileCheck(obj) {
 	<jsp:include page="footer.jsp"></jsp:include>
 	<script src="js/datetimepicker/jquery.timepicker.js"></script>
 	<link rel="stylesheet" href="js/datetimepicker/jquery.timepicker.css">
-	<script src="js/datetimepicker/lib/bootstrap-datepicker.js"></script>
 	<link rel="stylesheet"
 		href="js/datetimepicker/lib/bootstrap-datepicker.css">
 	<script type="text/javascript">
 		$(document).ready(function() {
-			// date
-			$('#startDate').datepicker({
-				format : "yyyy-mm-dd"
-			});
-			$('#endDate').datepicker({
-				format : "yyyy-mm-dd"
-			});
 			// time
 			$('#startTime').timepicker({
 				'scrollDefault' : 'now',

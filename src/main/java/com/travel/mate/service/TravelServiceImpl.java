@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.travel.mate.dao.TravelDAO;
+import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
@@ -55,5 +56,31 @@ public class TravelServiceImpl implements TravelService {
 	@Override
 	public List<Map<String, Object>> selectTravelRoute(int code) {
 		return travelDAO.selectTravelRoute(code);
+	}
+
+	@Override
+	public List<Map<String, Object>> scrollDown(Integer code) {
+		return travelDAO.scrollDown(code);
+	}
+
+	@Override
+	public void insertTravelApply(ApplyDTO apply) {
+		travelDAO.insertTravelApply(apply);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTravelApply(ApplyDTO applyDto) {
+		return travelDAO.selectTravelApply(applyDto);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTravelApplyCount(ApplyDTO applyDto) {
+		return travelDAO.selectTravelApplyCount(applyDto);
+	}
+
+	@Override
+	public void deleteTravelApply(ApplyDTO apply) {
+		travelDAO.deleteTravelApply(apply);
+		
 	}
 }
