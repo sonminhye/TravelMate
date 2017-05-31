@@ -1,6 +1,7 @@
 package com.travel.mate.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.travel.mate.dao.UserDAO;
+import com.travel.mate.dto.LanguageDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	//회원가입
-	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO){
+	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, List<LanguageDTO> langs){
 		System.out.println("doSignup Service");
 		int userCode = 0;
 		
@@ -47,8 +49,15 @@ public class UserServiceImpl implements UserService {
 		System.out.println("userCode : " + userCode);   //확인용출력
 		
 		userDetailDTO.setUserCode(userCode);            //PK userCode값 입력
+		for(LanguageDTO lang : langs){
+			lang.setUserCode(userCode);
+		}
+		
 		userDAO.insertUserDetail(userDetailDTO);
+		userDAO.insertLanguageList(langs);
+		
 	}
+
 
 	@Override
 	public UserDetailDTO showDetailList(int userCode) {
@@ -58,6 +67,11 @@ public class UserServiceImpl implements UserService {
 
 
 
+
+	public int checkSignup(String id) {
+		
+		return userDAO.selectUserId(id);
+	}
 
 
 }
