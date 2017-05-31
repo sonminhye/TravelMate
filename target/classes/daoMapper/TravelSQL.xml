@@ -25,9 +25,9 @@
 			FROM
 						(
 						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-						FROM		travel t, userdetail ud
+						FROM		travel t, userDetail ud
 						WHERE		t.userCode = ud.userCode
-						) ts, traveldetail td
+						) ts, travelDetail td
 			WHERE		ts.travelCode = td.travelCode
 			ORDER BY	ts.writeDate DESC, ts.travelCode DESC
 			LIMIT		0, 6
@@ -40,11 +40,11 @@
 			SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
 			FROM		(
 						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-						FROM		travel t, userdetail ud
+						FROM		travel t, userDetail ud
 						WHERE		t.userCode = ud.userCode
 							AND		t.travelCode <= #{code}
 							AND		t.travelCode > #{code} - 3
-						) ts, traveldetail td
+						) ts, travelDetail td
 			WHERE		ts.travelCode = td.travelCode
 			ORDER BY	ts.travelCode DESC, ts.writeDate DESC
 		]]>
@@ -56,10 +56,10 @@
 			SELECT	tr.travelCode, tr.userCode, tr.title, tr.content, tr.writeDate, tr.startDate, tr.startTime, tr.endDate, tr.endTime, tr.minPeople, tr.maxPeople, ud.name
 			FROM	(
 					SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople
-					FROM	travel t, traveldetail td
+					FROM	travel t, travelDetail td
 					WHERE	t.travelCode = td.travelCode
 						AND	t.travelCode = #{code}
-					) tr, userdetail ud
+					) tr, userDetail ud
 			WHERE	tr.userCode = ud.userCode
 				
 		]]>
@@ -69,7 +69,7 @@
 	<select id="selectTravelRoute" parameterType="int" resultType="hashmap">
 		<![CDATA[
 			SELECT		tr.lat, tr.lng, tr.location
-			FROM		travel t, travelroute tr
+			FROM		travel t, travelRoute tr
 			WHERE		t.travelCode = tr.travelCode
 				AND		t.travelCode = #{code}
 			ORDER BY	tr.location ASC
@@ -88,7 +88,7 @@
 	<insert id="insertTravelDetail" parameterType="com.travel.mate.dto.TravelDetailDTO">
 		<![CDATA[
 			INSERT	INTO
-				traveldetail (travelCode, startDate, startTime, endDate, endTime, minPeople, maxPeople)
+				travelDetail (travelCode, startDate, startTime, endDate, endTime, minPeople, maxPeople)
 			VALUES
 				(#{travelCode}, #{startDate}, #{startTime}, #{endDate}, #{endTime}, #{minPeople}, #{maxPeople})
 		]]>
@@ -97,7 +97,7 @@
 	<insert id="insertTravelRoute" parameterType="com.travel.mate.dto.TravelRouteDTO">
 		<![CDATA[
 			INSERT	INTO
-				travelroute (travelCode, lat, lng, location)
+				travelRoute (travelCode, lat, lng, location)
 			VALUES
 				(#{travelCode}, #{lat}, #{lng}, #{location})
 		]]>
@@ -106,7 +106,7 @@
 	<insert id="insertTravelImage" parameterType="com.travel.mate.dto.TravelImageDTO">
 		<![CDATA[
 			INSERT	INTO
-				travelimage (travelCode, image)
+				travelImage (travelCode, image)
 			VALUES
 				(#{travelCode}, #{image})
 		]]>
