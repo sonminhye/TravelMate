@@ -119,12 +119,19 @@ public class TravelController extends HandlerInterceptorAdapter {
 		if ((null != travels && travels.size() > 0)
 				&& (null != travelDetails && travelDetails.size() > 0)
 				&& (null != travelImages && travelImages.size() > 0)) {
-			// travel table에 넣음
+			// travel table에 넣음 + apply table에 넣음
 			for (TravelDTO travel : travels) {
 				System.out.println("insert : travel");
 				travelService.insertTravel(travel);
 				// travelCode general
 				travelCode = travel.getTravelCode();
+				System.out.println("insert end");
+				
+				System.out.println("insert : apply");
+				ApplyDTO apply = new ApplyDTO();
+				apply.setTravelCode(travelCode);
+				apply.setUserCode(travel.getUserCode());
+				travelService.insertTravelApply(apply);
 				System.out.println("insert end");
 			}
 			// traveldetail table에 넣음
@@ -134,7 +141,6 @@ public class TravelController extends HandlerInterceptorAdapter {
 				// travelCode setting
 				travelDetail.setTravelCode(travelCode);
 				travelService.insertTravelDetail(travelDetail);
-				System.out.println(travelDetail.getTravelCode());
 				System.out.println("insert end");
 			}
 			// travelimage table에 넣음
