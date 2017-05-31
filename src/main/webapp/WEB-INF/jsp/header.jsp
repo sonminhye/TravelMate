@@ -48,8 +48,8 @@
 	var lastKeyword = '';
 	var loopSendKeyword = false;
 	
-	var idCheck = document.getElementByName(idCheck).value;
-	var passwordCheck = document.getElementByName(passwordCheck).value;
+	var idCheck = 0;
+	var passwordCheck = 0;
 
 	
 	function checkEmail() {
@@ -276,8 +276,8 @@
 					
 					<!-- 입력 여부 체크하기위한 hidden input -->
 					<div class="formCheck">
-				        <input name="idCheck" class="idCheck" type="hidden" value='0'>
-				        <input name="passwordCheck" class="passwordCheck" type="hidden" value='0'>
+				        <input name="idCheck" id="idCheck" class="idCheck" type="hidden" value='0'>
+				        <input name="passwordCheck" id="passwordCheck" class="passwordCheck" type="hidden" value='0'>
 				    </div>
 				</div>
 			</div>
