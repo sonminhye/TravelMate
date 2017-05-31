@@ -1,5 +1,6 @@
 package com.travel.mate.controller;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,17 +37,29 @@ public class UserController {
 	
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
 	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO,
-						 @ModelAttribute List<LanguageDTO> langDTOList, Model model) {
+						 @ModelAttribute("langDTOList") LanguageDTO languageDTO, Model model) {
 		System.out.println("signup controller");
-		//값확인용
+		
+		List<LanguageDTO> langs = languageDTO.getLangDTOList();
+		//선택되지 않은 언어는 null값이므로 이를 list에서 제거해 주는 작업
+		for(Iterator<LanguageDTO> it = langs.iterator(); it.hasNext();){
+			LanguageDTO lang = it.next();
+			
+			if(lang.getAbleLang() == null){
+				it.remove();
+			}
+		}//end for
+		
+		///확인용 값 출력//
 		System.out.println(userDTO.toString());
 		System.out.println(userDetailDTO.toString());
-		
-		userService.doSignup(userDTO, userDetailDTO, langDTOList);
-			
-		for(LanguageDTO dto : langDTOList){
-			System.out.println("리스트값 : " + dto.getAbleLang());
+		for(LanguageDTO dto: langs){
+			System.out.println("langList"+dto.getUserCode() +" : " + dto.getAbleLang());
 		}
+        /////////
+		
+		userService.doSignup(userDTO, userDetailDTO, langs);
+				
 		return "signIn"; //회원가입 후 로그인 페이지로
 	}
 	

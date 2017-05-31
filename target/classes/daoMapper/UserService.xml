@@ -23,6 +23,16 @@
 				(#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
+	<insert id="insertLanguageList" parameterType="java.util.List">
+		
+			INSERT INTO 
+				languagelist (userCode, ableLang)
+			VALUES
+			<foreach collection="list" item="item" separator=",">
+				(#{item.userCode}, #{item.ableLang})
+			</foreach>
+		
+	</insert>
 	<select id="selectUserId" resultType="int">
 		<![CDATA[
 			SELECT count(*) 

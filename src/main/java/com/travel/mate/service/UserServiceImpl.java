@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	//회원가입
-	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, List<LanguageDTO> langDTOList){
+	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, List<LanguageDTO> langs){
 		System.out.println("doSignup Service");
 		int userCode = 0;
 		
@@ -49,8 +49,12 @@ public class UserServiceImpl implements UserService {
 		System.out.println("userCode : " + userCode);   //확인용출력
 		
 		userDetailDTO.setUserCode(userCode);            //PK userCode값 입력
-		userDAO.insertUserDetail(userDetailDTO);
+		for(LanguageDTO lang : langs){
+			lang.setUserCode(userCode);
+		}
 		
+		userDAO.insertUserDetail(userDetailDTO);
+		userDAO.insertLanguageList(langs);
 		
 	}
 

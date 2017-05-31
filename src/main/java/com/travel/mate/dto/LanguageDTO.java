@@ -12,6 +12,11 @@ public class LanguageDTO {
 		
 	}
 	
+	public LanguageDTO(List<LanguageDTO> langDTOList){
+		this.langDTOList = langDTOList;
+	}
+	
+	
 	public LanguageDTO(int userCode, String ableLang) {
 		super();
 		this.userCode = userCode;
