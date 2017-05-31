@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
@@ -30,21 +31,19 @@ public class TravelController extends HandlerInterceptorAdapter {
 	@Resource(name = "TravelService")
 	private TravelService travelService;
 	
+	// ajax scroll event
 	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
 	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException{
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("/travelList");
 		System.out.println(keys);
 		JSONParser jsonParser = new JSONParser();
 		//JSON데이터를 넣어 JSON Object 로 만들어 준다.
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
-        int code = Integer.parseInt((String) jsonObject.get("travelCode"));
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
+		int code = Integer.parseInt((String) jsonObject.get("travelCode"));
 		List<Map<String, Object>> scroll = travelService.scrollDown(code - 1);
-//		mv.addObject("scroll", scroll);
-//		return mv;
 		return scroll;
 	}
 	
+	// 첫 화면 6개
 	@RequestMapping(value = "/travelList")
 	public ModelAndView travelList(Map<String, Object> map) {
 		System.out.println("travelList");
@@ -56,28 +55,44 @@ public class TravelController extends HandlerInterceptorAdapter {
 		return mv;
 	}
 
+	// 리스트 이미지를 클릭하여 해당 글에 대한 정보 읽기
 	@RequestMapping(value = "/readTravel")
 	public ModelAndView readTravel(TravelDTO travelDto) {
 		System.out.println("readTravel");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		// 여행(게시물)의 번호를 가져온다
-		int code = travelDto.getTravelCode();
-
-		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(code);
-		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(code);
+		int tcode = travelDto.getTravelCode();
+		
+		// 유저 코드
+		int ucode = travelDto.getUserCode();
+		System.out.println("user code : " + ucode);
+		
+		ApplyDTO applyDto = new ApplyDTO();
+		applyDto.setTravelCode(tcode);
+		applyDto.setUserCode(ucode);
+		
+		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(tcode);
+		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(tcode);
+		
+		// 신청 버튼 or 취소버튼을 위함
+		List<Map<String, Object>> listApply = travelService.selectTravelApply(applyDto);
+		
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
-
+		
+		mv.addObject("applyList", listApply);
 		return mv;
 	}
 
+	// 여행 글쓰기를 눌렀을 때
 	@RequestMapping(value = "/writeTravel")
-	public String writeTravel(Model model) {
+	public String writeTravel() {
 		// writeTravel.jsp로 이동
 		return "writeTravel";
 	}
-
+	
+	// 글쓰기를 등록할 때
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
 	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
 	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
@@ -88,73 +103,103 @@ public class TravelController extends HandlerInterceptorAdapter {
 		/*
 		 * DTO의 method를 콜하는 것에서 주의! jsp파일의 list명과 DTO 내의 객체이름이 같아야함
 		 */
-		System.out.println(travelRouteDto);
+		
 		List<TravelDTO> travels = travelDto.getTlist();
 		List<TravelDetailDTO> travelDetails = travelDetailDto.getTdlist();
 		List<TravelImageDTO> travelImages = travelImageDto.getTilist();
 		List<TravelRouteDTO> routes = travelRouteDto.getTrlist();
 
+		// travelCode
+		int travelCode = 0;
+		
 		// 다시 표시될 페이지 주소 세팅
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/travelList");
 
-		if (null != travels && travels.size() > 0) {
+		if ((null != travels && travels.size() > 0)
+				&& (null != travelDetails && travelDetails.size() > 0)
+				&& (null != travelImages && travelImages.size() > 0)) {
 			// travel table에 넣음
 			for (TravelDTO travel : travels) {
 				System.out.println("insert : travel");
 				travelService.insertTravel(travel);
+				// travelCode general
+				travelCode = travel.getTravelCode();
 				System.out.println("insert end");
 			}
-		}
-		if (null != travelDetails && travelDetails.size() > 0) {
 			// traveldetail table에 넣음
 			for (TravelDetailDTO travelDetail : travelDetails) {
 				System.out.println("====");
 				System.out.println("insert : detail");
+				// travelCode setting
+				travelDetail.setTravelCode(travelCode);
 				travelService.insertTravelDetail(travelDetail);
+				System.out.println(travelDetail.getTravelCode());
 				System.out.println("insert end");
 			}
-		}
-		if (null != travelImages && travelImages.size() > 0) {
 			// travelimage table에 넣음
 			for (TravelImageDTO travelImage : travelImages) {
-				System.out.println("travelImage : " + travelImage.getImage());
 				System.out.println("====");
 				System.out.println("insert : image");
+				// travelCode setting
+				travelImage.setTravelCode(travelCode);
 				travelService.insertTravelImage(travelImage);
 				System.out.println("insert end");
 			}
 		}
-		// 좌표 리스트에 있는 것을 모두 출력
+		// 장소 지정을 하나 이상 했다면 route table에 insert
 		if (null != routes && routes.size() > 0) {
-			// 변수 : 배열의 for문
 			for (TravelRouteDTO route : routes) {
 				System.out.println("====");
 				System.out.println("insert: routes");
+				// travelCode setting
+				route.setTravelCode(travelCode);
 				travelService.insertTravelRoute(route);
 				System.out.println("insert end");
 			}
-		} else {
-			// 장소 선택을 하지 않아 리스트가 비어있는 경우
+		} 
+		else {
+			// 장소 선택을 하지 않아 리스트가 비어있는 경우, insert 하지 않음
 			System.out.println("장소 선택 x");
 		}
-		// ModelAndView(Object view, String modelName, Object modelObject) 렌더링 할
-		// View와 View에 전달할 객체의 이름과 값
-		// ModelAndView(String viewName, String modelName, Object modelObject) :
-		// ViewResolver에 전달할 View 이름과 View에 전달할 객체의 이름과 값
 		return mv;
 	}
 
-	@RequestMapping(value = "/joinTravel", method = RequestMethod.POST)
-	public String joinTravel(Model model) {
-
-		return "showTravel";
+	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
+	public ModelAndView doApply(@ModelAttribute("alist") ApplyDTO applylDto) {
+		List<ApplyDTO> applys = applylDto.getAlist();
+		ModelAndView mv = new ModelAndView();
+		// 신청 후 mypage로 던짐
+		// 일단 테스트용으로 main페이지
+		mv.setViewName("/main");
+		
+		if ((null != applys && applys.size() > 0)) {
+			for (ApplyDTO apply : applys) {
+				System.out.println("apply insert ready");
+				travelService.insertTravelApply(apply);
+				System.out.println("apply insert complete");
+			}
+		}
+		
+		return mv;
 	}
 
-	@RequestMapping(value = "/cancelTravel", method = RequestMethod.POST)
-	public String cancelTravel(Model model) {
-
-		return "showTravelContent";
+	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)
+	public ModelAndView doCancel(@ModelAttribute("alist") ApplyDTO applylDto) {
+		List<ApplyDTO> applys = applylDto.getAlist();
+		ModelAndView mv = new ModelAndView();
+		// 신청 후 mypage로 던짐
+		// 일단 테스트용으로 main페이지
+		mv.setViewName("/main");
+		
+		if ((null != applys && applys.size() > 0)) {
+			for (ApplyDTO apply : applys) {
+				System.out.println("apply delete ready");
+				travelService.deleteTravelApply(apply);
+				System.out.println("apply delete complete");
+			}
+		}
+		return mv;
 	}
 
 }

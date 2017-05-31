@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractDAO;
+import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
@@ -59,6 +60,27 @@ public class TravelDAO extends AbstractDAO{
 	public List<Map<String, Object>> scrollDown(Integer code) {
 		System.out.println("DAO Call : scrollDown..");
 		return (List<Map<String, Object>>)selectList("travel.selectTravelScroll", code);
+	}
+
+	public void insertTravelApply(ApplyDTO apply) {
+		System.out.println("DAO Call : insertTravelApply..");
+		insert("travel.insertTravelApply", apply);
+	}
+
+	public List<Map<String, Object>> selectTravelApply(ApplyDTO applyDto) {
+		System.out.println("DAO Call : selectTravelApply..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelApply", applyDto);
+	}
+
+	public List<Map<String, Object>> selectTravelApplyCount(ApplyDTO applyDto) {
+		System.out.println("DAO Call : selectTravelApplyCount..");
+		return (List<Map<String, Object>>)selectList("travel.selectTravelApplyCount", applyDto);
+	}
+
+	public void deleteTravelApply(ApplyDTO apply) {
+		System.out.println("DAO Call : deleteTravelApply..");
+		delete("travel.deleteTravelApply", apply);
+		
 	}
 
 }

@@ -34,12 +34,12 @@
 	<%
 		String writeButtonStart = null;
 		String writeButtonEnd = null;
-		// 로그인 x
+		// 로그인
 		if (code > 0) {
 			writeButtonStart = "<a href='writeTravel' style='float: right;'><button type='button' class='btn btn-primary btn-lg btn-info'>여행 등록하기";
 			writeButtonEnd ="</button></a>";
 		}
-		// 로그인
+		// 로그인 x
 		else {
 			writeButtonStart = "";
 			writeButtonEnd = "";
@@ -64,6 +64,7 @@
 										<div class="col-md-4 col-sm-6 portfolio-item">
 											<a href="#this" name="title" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
+												<input type="hidden" class="userCode" value=<%=code %>>
 												<div class="portfolio-hover">
 													<div class="portfolio-hover-content">
 														<i class="fa fa-plus fa-3x"></i>
@@ -75,7 +76,7 @@
 												<h2>${row.title }</h2>
 												<h4>${row.name }</h4>
 												<p class="text-muted">작성일 : ${row.writeDate }</p>
-												<p>${row.startDate }</p>
+												<p>시작일 : ${row.startDate }</p>
 											</div>
 										</div>
 									</c:forEach>
@@ -88,7 +89,7 @@
 							</c:choose>
 
 							<script type="text/javascript">
-								$(document).ready(function() {
+								$(document).ready(function () {
 									$("a[name='title']").on("click", function(e) {
 										e.preventDefault();
 										readTravel($(this));
@@ -98,6 +99,7 @@
 									var comSubmit = new ComSubmit();
 									comSubmit.setUrl("<c:url value='/readTravel' />");
 									comSubmit.addParam("travelCode", obj.parent().find(".travelCode").val());
+									comSubmit.addParam("userCode", obj.parent().find(".userCode").val());
 									comSubmit.submit();
 								}
 							</script>
@@ -118,8 +120,7 @@
 			var currentScrollTop = $(window).scrollTop();
 			// 스크롤 다운
 			if (currentScrollTop - lastScrollTop > 0) {
-				console.log("scorll down");
-				
+				// console.log("scorll down");
 				// 2. 현재 스크롤의 top 좌표 > (글을 불러올 화면 height - 윈도우 height) 인 순간
 				if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
 					// 3. class가 scroll인 것 중 마지막 요소를 선택, data-tcode를 가져옴
@@ -146,7 +147,7 @@
 								$(data).each(
 									// 7. html 코드만들기
 									function() {
-										console.log(this);
+										// console.log(this);
 										str += "<div class=" + "'col-md-4 col-sm-6 portfolio-item listToChange'" + ">"
 											+ "<a href=" + "#this" + " name=" + "title" + " class=" + "portfolio-link" + " data-toggle=" + "modal" + ">"
 											+ "<input type=" + "hidden" + " class=" + "'travelCode scrolling'" + " data-tcode=" + this.travelCode + " value=" + this.travelCode +">"
@@ -161,13 +162,13 @@
 											+ "<h2>" + this.title + "</h2>"
 											+ "<h4>" + this.name + "</h4>"
 											+ "<p class=" + "text-muted" + ">" + "작성일 : " + this.writeDate + "</p>"
-											+ "<p>" + this.startDate + "</p>"
+											+ "<p>" + "시작일 : " + this.startDate + "</p>"
 											+ "</div>"
 											+ "</div>";
 									}
 								);
 								// 8. 이전까지 뿌려졌던 데이터 비우고  만든 str을 뿌려준다
-								$(".listToChange").empty();
+								// $(".listToChange").empty();
 								// scrollLocation 안에 뿌려줌(div로 인한 밀리는 현상방지)
 								$(".scrollLocation").append(str);
 								function addEvent() {

@@ -2,13 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="travel">
+
+	<!-- 해당 게시물의 신청인원 출력 -->
+	<select id="selectTravelApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
+		<![CDATA[
+			SELECT	ta.travelCode, ta.userCode
+			FROM
+					(
+					SELECT	t.travelCode, a.userCode
+					FROM	travel t, apply a
+					WHERE	t.travelCode = a.travelCode
+					) ta
+			WHERE ta.travelCode = #{travelCode}
+				AND ta.userCode = #{userCode}
+		]]>
+	</select>
+
 	<!-- 첫 화면에 보여질 6개 -->
 	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
-			SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-			FROM		travel t, userdetail ud
-			WHERE		t.userCode = ud.userCode
-			ORDER BY	t.writeDate DESC, t.travelCode DESC
+			SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+			FROM
+						(
+						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
+						FROM		travel t, userdetail ud
+						WHERE		t.userCode = ud.userCode
+						) ts, traveldetail td
+			WHERE		ts.travelCode = td.travelCode
+			ORDER BY	ts.writeDate DESC, ts.travelCode DESC
 			LIMIT		0, 6
 		]]>
 	</select>
@@ -16,16 +37,20 @@
 	<!-- 스크롤을 통해 3개씩 더 가져오기 -->
 	<select id="selectTravelScroll" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-			FROM		travel t, userdetail ud
-			WHERE		t.userCode = ud.userCode
-				AND		t.travelCode <= #{code}
-				AND		t.travelCode > #{code} - 3
-			ORDER BY	t.travelCode DESC, t.writeDate DESC
+			SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+			FROM		(
+						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
+						FROM		travel t, userdetail ud
+						WHERE		t.userCode = ud.userCode
+							AND		t.travelCode <= #{code}
+							AND		t.travelCode > #{code} - 3
+						) ts, traveldetail td
+			WHERE		ts.travelCode = td.travelCode
+			ORDER BY	ts.travelCode DESC, ts.writeDate DESC
 		]]>
 	</select>
 	
-	<!-- 여행 정보 보기 -->
+	<!-- 여행 정보 읽기 -->
 	<select id="selectTravelDetail" parameterType="int" resultType="hashmap">
 		<![CDATA[
 			SELECT	tr.travelCode, tr.userCode, tr.title, tr.content, tr.writeDate, tr.startDate, tr.startTime, tr.endDate, tr.endTime, tr.minPeople, tr.maxPeople, ud.name
@@ -51,7 +76,7 @@
 		]]>
 	</select>
 
-	<insert id="insertTravel" parameterType="com.travel.mate.dto.TravelDTO">
+	<insert id="insertTravel" parameterType="com.travel.mate.dto.TravelDTO" useGeneratedKeys="true" keyProperty="travelCode">
 		<![CDATA[
 			INSERT	INTO
 				travel (userCode, title, content, writeDate)
@@ -65,7 +90,7 @@
 			INSERT	INTO
 				traveldetail (travelCode, startDate, startTime, endDate, endTime, minPeople, maxPeople)
 			VALUES
-				((SELECT MAX(travelCode) FROM travel), #{startDate}, #{startTime}, #{endDate}, #{endTime}, #{minPeople}, #{maxPeople})
+				(#{travelCode}, #{startDate}, #{startTime}, #{endDate}, #{endTime}, #{minPeople}, #{maxPeople})
 		]]>
 	</insert>
 
@@ -74,7 +99,7 @@
 			INSERT	INTO
 				travelroute (travelCode, lat, lng, location)
 			VALUES
-				((SELECT MAX(travelCode) FROM travel), #{lat}, #{lng}, #{location})
+				(#{travelCode}, #{lat}, #{lng}, #{location})
 		]]>
 	</insert>
 	
@@ -83,8 +108,26 @@
 			INSERT	INTO
 				travelimage (travelCode, image)
 			VALUES
-				((SELECT MAX(travelCode) FROM travel), #{image})
+				(#{travelCode}, #{image})
 		]]>
 	</insert>
+	
+	<insert id="insertTravelApply" parameterType="com.travel.mate.dto.ApplyDTO">
+		<![CDATA[
+			INSERT	INTO
+				apply (travelCode, userCode)
+			VALUES
+				(#{travelCode}, #{userCode})
+		]]>
+	</insert>
+	
+	<delete id="deleteTravelApply" parameterType="com.travel.mate.dto.ApplyDTO">
+		<![CDATA[
+			DELETE
+			FROM	apply
+			WHERE	travelCode = #{travelCode}
+				AND	userCode = #{userCode}
+		]]>
+	</delete>
 </mapper>
 
