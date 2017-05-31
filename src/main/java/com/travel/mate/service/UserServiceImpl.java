@@ -50,5 +50,14 @@ public class UserServiceImpl implements UserService {
 		userDAO.insertUserDetail(userDetailDTO);
 	}
 
+	@Override
+	public UserDetailDTO showDetailList(int userCode) {
+		// TODO Auto-generated method stub
+		return userDAO.selectDetailList(userCode);
+	}
+
+
+
+
 
 }

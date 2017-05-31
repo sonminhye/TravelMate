@@ -28,4 +28,8 @@ public class UserDAO extends AbstractDAO{
 		
 		insert("user.insertUserDetail", userDetailDTO);
 	}
+	
+	public UserDetailDTO selectDetailList(int userCode){
+		return (UserDetailDTO) selectOne("user.showDetailList", userCode);
+	}
 }

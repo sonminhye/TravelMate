@@ -3,48 +3,38 @@ package com.travel.mate.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.annotation.Resource;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.travel.mate.dao.ChatDAO;
+import com.travel.mate.dao.UserDAO;
 import com.travel.mate.dto.ChatDTO;
 import com.travel.mate.dto.ChatRoomDTO;
 import com.travel.mate.dto.UserDTO;
 
 @Repository
 public class ChatServiceImpl implements ChatService {
-	
-	@Autowired
-	private SqlSession sqlSession;
+
+	@Resource(name = "ChatDAO")
+	private ChatDAO chatDAO;
 
 	@Override
-	public ArrayList<ChatRoomDTO> showChatRooms(String id) {
+	public ArrayList<ChatRoomDTO> showChatRooms(int userCode) {
 		// TODO Auto-generated method stub
 		System.out.println("showChatList()");
-		
-		ArrayList<ChatRoomDTO> result = new ArrayList<ChatRoomDTO>();
-		
-		ChatService dao = sqlSession.getMapper(ChatService.class);
-		result = dao.showChatRooms(id);
-		
-		return result;
+		//채팅방 목록을 불러오는 함수
+		return chatDAO.showChatRooms(userCode);
 	}
 
 	@Override
 	public ArrayList<ChatDTO> showChats(int roomCode) {
 		// TODO Auto-generated method stub
 		System.out.println("showChats()");
-		
-		ArrayList<ChatDTO> result = new ArrayList<ChatDTO>();
-		
-		ChatService dao = sqlSession.getMapper(ChatService.class);
-		result = dao.showChats(roomCode);
-		for(int i = 0 ; i < result.size(); i++){
-			ChatDTO dto = result.get(i);
-			System.out.println(dto.getSenderName() + " : " + dto.getContent());
-		}
-		return result;
+		// 채팅 결과들 목록 나열하고 싶을 때 이곳에서 for 문을 돌리면 됌
+		return chatDAO.showChats(roomCode);
 	}
 
 	@Override
@@ -52,29 +42,23 @@ public class ChatServiceImpl implements ChatService {
 		// TODO Auto-generated method stub
 		System.out.println("showChatRoomExist()");
 		
-		ChatRoomDTO result = null;
 		
-		ChatService dao = sqlSession.getMapper(ChatService.class);
-		result = dao.showChatRoomExist(senderCode, receiverCode);
+		ChatRoomDTO chatRoom = new ChatRoomDTO();
+		chatRoom.setsenderCode(senderCode);
+		chatRoom.setreceiverCode(receiverCode);
 		
-		return result;
-		
+		return chatDAO.showChatRoomExist(chatRoom);
 	}
 
 	@Override
-	public ChatRoomDTO addRoom(int senderCode, int receiverCode, String date) {
+	public ChatRoomDTO addRoom(int senderCode, int receiverCode, String latestdate) {
 		// TODO Auto-generated method stub
-		
-		ChatRoomDTO result = null;
-		
-		ChatService dao = sqlSession.getMapper(ChatService.class);
-		HashMap<String, String> map = new HashMap<String,String>();
-		
-		result = dao.addRoom(senderCode, receiverCode, date);
-		
-		return result;
-		
-	}
+		ChatRoomDTO chatRoom = new ChatRoomDTO();
 
-	
+		chatRoom.setsenderCode(senderCode);
+		chatRoom.setreceiverCode(receiverCode);
+		chatRoom.setLatestDate(latestdate);
+
+		return chatDAO.addRoom(chatRoom);
+	}
 }

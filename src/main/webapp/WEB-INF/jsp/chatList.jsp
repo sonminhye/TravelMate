@@ -47,8 +47,8 @@
 			receive = URLEncoder.encode(receive,"UTF-8");
 		%>
 		<c:choose>
-			<c:when test="${dto.myCode==dto.sCode}">
-				<a class="chatlist" href="chat?rcode=${dto.rCode}&name=<%=send%>&room=${dto.roomCode}">
+			<c:when test="${myCode==dto.senderCode}">
+				<a class="chatlist" href="chat?rcode=${dto.receiverCode}&room=${dto.roomCode}">
 				<div>
 					<p>참여자 : ${dto.receive}, ${dto.latestDate}</p>
 					<p>${dto.roomCode} 채팅방 입장하기</p>
@@ -56,7 +56,7 @@
 				</a>
 			</c:when>
 			<c:otherwise>
-				<a class="chatlist" href="chat?rcode=${dto.sCode}&name=<%=receive%>&room=${dto.roomCode}">
+				<a class="chatlist" href="chat?rcode=${dto.senderCode}&room=${dto.roomCode}">
 				<div>
 					<p>참여자 : ${dto.send}, ${dto.latestDate}</p>
 					<p>${dto.roomCode} 채팅방 입장하기</p>

@@ -8,5 +8,6 @@ import com.travel.mate.dto.UserDetailDTO;
 
 public interface UserService {
 	public ArrayList<UserDTO> showList();
+	public UserDetailDTO showDetailList(int userCode);
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO);
 }

@@ -2,27 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.travel.mate.service.ChatService">
-	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="String" >
-		select * from (select sender.roomCode, sender.name as send,sender.userCode as sCode, receiver.name as receive ,receiver.userCode as rCode , sender.latestDate, (select userCode from user where id=#{id}) as myCode  from 
-		(select * from userdetail join messageroom where userdetail.userCode = messageroom.senderCode) as sender join
-		(select * from userdetail join messageroom where userdetail.userCode = messageroom.receiverCode) as receiver
-		where sender.roomCode = receiver.roomCode) as result where sCode = myCode or rCode = myCode;
+<mapper namespace="chat">
+	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
+		select sender.roomCode,  sender.senderCode, sender.receiverCode, sender.latestDate, sender.name as send, receiver.name as receive 
+		from
+		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.senderCode) as sender join
+		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.receiverCode) as receiver
+		where sender.roomCode = receiver.roomCode and sender.senderCode = #{userCode} or sender.receiverCode = #{userCode} 
+		group by sender.roomCode
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
-		select * , (select userdetail.name from userdetail where message.senderCode = userdetail.userCode) as senderName, (select userdetail.name from userdetail where message.receiverCode = userdetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
+		select * , (select userDetail.name from userDetail where message.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where message.receiverCode = userDetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
 	</select>
 
-	<select id="checkChatRoomExist" resultType="com.travel.mate.dto.ChatDTO" parameterType="hashmap">
-		select count(*) 
-		from messageroom 
-		where senderCode=#{senderCode} and receiverCode=#{receiverCode}
-		<!-- insert into messageroom(senderCode, receiverCode, latestdate) select 2,3,now() from dual where not exists (select roomCode from messageroom where senderCode=2 and receiverCode=3) -->
+
+	<select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
+		select *
+		from messageRoom 
+		where ( senderCode=#{senderCode} and receiverCode=#{receiverCode} ) or (senderCode=#{receiverCode} and receiverCode = #{senderCode})
 	</select>
 	
-	<insert id="addChatRoom" parameterType="hashmap" useGeneratedKeys="true" keyProperty="roomCode">
-		insert into messageroom(senderCode, receiverCode, latestdate) values (#{senderCode},#{receiverCode},#{latestDate})
+	
+	<insert id="addChatRoom" parameterType="com.travel.mate.dto.ChatRoomDTO" useGeneratedKeys="true" keyProperty="roomCode">
+		insert into messageRoom(senderCode, receiverCode, latestdate) values (#{senderCode},#{receiverCode},#{latestDate})
 	</insert>
 	
 </mapper>
