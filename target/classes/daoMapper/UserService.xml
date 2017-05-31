@@ -23,6 +23,13 @@
 				(#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
+
+	<select id="showDetailList" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
+		<![CDATA[
+			SELECT * FROM userDetail where userCode = #{userCode}
+		]]>
+	</select>
+
 	<insert id="insertLanguageList" parameterType="java.util.List">
 		
 			INSERT INTO 
@@ -41,5 +48,6 @@
 			WHERE  id=#{param1}
 		]]>
 	</select>
+
 </mapper>
 
