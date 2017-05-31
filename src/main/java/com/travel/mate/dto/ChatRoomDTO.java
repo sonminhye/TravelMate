@@ -2,44 +2,71 @@ package com.travel.mate.dto;
 
 public class ChatRoomDTO {
 	int roomCode;
+	String send;
 	int senderCode;
+	String receive;
 	int receiverCode;
-	String latestDate;
-	
-	public ChatRoomDTO(){
-		
+	String latestdate;
+
+	public ChatRoomDTO() {
+
 	}
-	
-	public ChatRoomDTO(int roomCode, int senderCode, int receiverCode, String latestDate) {
+
+	public ChatRoomDTO(int roomCode, String send, int sendereceiverCode, String receive, int receiverCode, String latestdate) {
 		super();
 		this.roomCode = roomCode;
-		this.senderCode = senderCode;
+		this.send = send;
+		this.senderCode = sendereceiverCode;
+		this.receive = receive;
 		this.receiverCode = receiverCode;
-		this.latestDate = latestDate;
+		this.latestdate = latestdate;
 	}
+
 	public int getRoomCode() {
 		return roomCode;
 	}
+
 	public void setRoomCode(int roomCode) {
 		this.roomCode = roomCode;
 	}
-	public int getSenderCode() {
+
+	public String getSend() {
+		return send;
+	}
+
+	public void setSend(String send) {
+		this.send = send;
+	}
+
+	public int getsenderCode() {
 		return senderCode;
 	}
-	public void setSenderCode(int senderCode) {
+
+	public void setsenderCode(int senderCode) {
 		this.senderCode = senderCode;
 	}
-	public int getReceiverCode() {
+
+	public String getReceive() {
+		return receive;
+	}
+
+	public void setReceive(String receive) {
+		this.receive = receive;
+	}
+
+	public int getreceiverCode() {
 		return receiverCode;
 	}
-	public void setReceiverCode(int receiverCode) {
+
+	public void setreceiverCode(int receiverCode) {
 		this.receiverCode = receiverCode;
 	}
+
 	public String getLatestDate() {
-		return latestDate;
+		return latestdate;
 	}
-	public void setLatestDate(String latestDate) {
-		this.latestDate = latestDate;
+
+	public void setLatestDate(String latestdate) {
+		this.latestdate = latestdate;
 	}
-	
-}	
+}

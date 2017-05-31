@@ -58,9 +58,20 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+
+	@Override
+	public UserDetailDTO showDetailList(int userCode) {
+		// TODO Auto-generated method stub
+		return userDAO.selectDetailList(userCode);
+	}
+
+
+
+
 	public int checkSignup(String id) {
 		
 		return userDAO.selectUserId(id);
 	}
+
 
 }

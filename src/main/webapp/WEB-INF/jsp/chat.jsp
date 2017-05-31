@@ -4,101 +4,192 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<link rel="stylesheet" href="css/chat.css">
-<title>ì±„íŒ…ì°½</title>
+<!-- <link rel="stylesheet" href="css/chat.css">-->
+
+<title>Ã¤ÆÃ¹æ</title>
+<script type="text/javascript">
+	
+</script>
 </head>
 <body>
+
 	<jsp:include page="header.jsp"></jsp:include>
-	<div style="margin-top: 120px;">
-			<div id="msgcontainer">
-				<div id="msgdisplay">
-					<c:forEach items="${list}" var="dto">
-						<c:choose>
-							<c:when test="${dto.senderCode==name}">
-								<li class="arrow_box">
-							</c:when>
-							<c:otherwise>
-								<li class="arrow_box_oth">
-							</c:otherwise>
-						</c:choose>
-						<span class="${dto.senderCode}">${dto.content}</span>
-						</li>
-					</c:forEach>
+	<!-- ºÎÆ®½ºÆ®·¦ -->
+	<link rel="stylesheet" href="css/chatboot.css">
+	<div class="chat_window">
+		<div class="top_menu">
+			<div class="title">Chat</div>
+		</div>
+		<div>
+			<ul class="messages">
 
+				<c:forEach items="${list }" var="dto">
+					<c:choose>
+						<c:when test="${dto.senderCode==scode }">
+							<li class="message right appeared">
+						</c:when>
+						<c:otherwise>
+							<li class="message left appeared">
+						</c:otherwise>
+					</c:choose>
+					<div class="avatar">${dto.senderName }</div>
+					<div class="text_wrapper">
+						<div class="text">${dto.content}</div>
+					</div>
+					</li>
+				</c:forEach>
+
+			</ul>
+			<div class="bottom_wrapper clearfix">
+				<div class="message_input_wrapper">
+				<form>
+					<input class="message_input" placeholder="¸Ş¼¼Áö¸¦ ÀÔ·ÂÇÏ¼¼¿ä" />
 				</div>
-				<div>
-					<form>
-						<input size="35" id="msg" /> <input id="sendbtn" type="submit"
-							value="Send" />
-					</form>
+				<div class="send_message">
+					<div class="icon"></div>
+					<div class="text">Send</div>
 				</div>
+				</form>
 			</div>
-	
-	</div>
+		</div>
 
-	<script type="text/javascript">
-		var socket = io('http://localhost:3000');
-		var room = '${room}';
-		var nickname = '${name}'; //ìœ ë‹ˆí¬í•œ ì´ë¦„ìœ¼ë¡œ í‘œí˜„í•´ì•¼ í•¨. ë‚˜ì¤‘ì— ê³„ì •ìœ¼ë¡œ í•˜ë˜ê°€ ì•„ì´ë””ë¡œ í•´ì•¼ë  ë“¯
+		<div class="message_template">
+			<li class="message">
+				<div class="avatar"></div>
+				<div class="text_wrapper">
+					<div class="text"></div>
+				</div>
+			</li>
+		</div>
+</div>
+		<script type="text/javascript">
+			$messages = $('.messages');
+			$messages.animate({
+				scrollTop : $messages.prop('scrollHeight')
+			}, 100);
+			$('.message_input').focus();
+		</script>
+		<script type="text/javascript">
+			
+			var socket = io('http://localhost:3000');
+			var room = '${room}';
+			var nickname = '${name}';
+			var rcode = '${rcode}';
+			var scode = '${scode}';
+			var Message;
+			var getMessageText, message_side, sendMessage;
+			message_side = 'right';
+			var nick = encodeURI(nickname);
 
-		//ì‹¤ì œë¡œ êµ¬í˜„í•  ë•ŒëŠ”, í˜ì´ì§€ì— ì €ì¥ë˜ì–´ìˆëŠ” ë‚˜ì˜ ê³„ì •ì •ë³´ í˜¹ì€ ì•„ì´ë””ê°’ì´ nickname ì´ ë˜ë„ë¡ í•¨
-		socket.emit('join', {
-			nickname : nickname,
-			room : room
-		}); // ì ‘ì† ì´ë²¤íŠ¸
+			//nick name, ¹æÁ¤º¸ µî Á¤º¸¸¦ ¼­¹ö¿¡ º¸³¿
+			socket.emit('join', {
+				nickname : nick,
+				room : room,
+				scode : scode,
+				rcode : rcode
+			}); // Á¢¼Ó ÀÌº¥Æ®
 
-		$('#msg').focus();
+			//³»°¡ ÀÔÀå
+			socket.on('welcome', function(data) {
+				var nick = decodeURI(data.nickname);
+				$('.messages').append(
+						$('<li class="noti">').text(nick + '´Ô È¯¿µÇÕ´Ï´Ù'));
+			});
 
-		//ë‚´ê°€ ì…ì¥
-		socket.on('welcome',
-				function(data) {
-					$('#msgdisplay').append(
-							$('<li class="noti">').text(nickname + ''));
+			//³»°¡ ÀÔÀå
+			socket.on('join', function(data) {
+				var nick = decodeURI(data.nickname);
+				$('.messages').append(
+						$('<li class="noti">').text(nick + '´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù'));
+			});
+
+			//¸Ş¼¼Áö ¼ö½Å ºÎºĞ
+			socket.on('msg', function(data) {
+				var nick = decodeURI(data.nickname);
+				appendMessage(data);
+			});
+
+			socket.on('left', function(data) { //ÀÌ ºÎºĞÀº ³ªÁß¿¡ ¿Â¶óÀÎ È¤Àº ºñ¿Â¶óÀÎ ½ÄÀ¸·Î °íÃÄÁàµµ µÉ µí
+				var nick = decodeURI(data.nickname);
+				$('.messages').append(
+						$('<li class="noti">').text(nick + '´ÔÀÌ ÅğÀåÇÏ¼Ì½À´Ï´Ù'));
+			});
+			
+			appendMessage = function(data) {
+				var $messages, message;
+				var text = data.msg;
+				
+				var nick = decodeURI(data.nickname);
+				if(nick==nickname) message_side='right';
+				else message_side='left';
+				
+				$messages = $('.messages');
+				message = new Message({
+					text : text,
+					message_side : message_side,
+					nick : nick
 				});
+				
+				message.draw();
+				return $messages.animate({
+					scrollTop : $messages.prop('scrollHeight')
+				}, 300);
+			};
+			
+			
+			Message = function(arg) {
+				
+				this.text = arg.text, this.message_side = arg.message_side;
+				this.nick = arg.nick;
+				
+				this.draw = function(_this) {
+					return function() {
+						var $message;
+						$message = $($('.message_template').clone().html());
+						$message.addClass(_this.message_side).find('.text')
+								.html(_this.text);
+						$('.messages').append($message);
+						$message.find('.avatar').append(_this.nick);
 
-		// ì˜¨ ë©”ì„¸ì§€
-		$('form').submit(
-				function() {
+						//appeard ´Â º¸ÀÌ°í ¾Èº¸ÀÌ°Ô ÇØÁÖ´Â Å¬·¡½º
+						return setTimeout(function() {
+							return $message.addClass('appeared');
+						}, 0);
+					};
+				}(this)};
 
-					var date = (new Date()).toISOString().substring(0, 19)
-							.replace('T', ' ');
-
-					socket.emit('msg', {
-						name : $("#name").val(),
-						room : $("#room").val(),
-						msg : $("#msg").val(),
-						date : date
-					});
-
-					$('#msg').val('');
-					$('#msg').focus();
-					return false; // submit ì·¨ì†Œ
+			//¹öÆ°À» Å¬¸¯ÇßÀ» ¶§ (¸¶¿ì½º Å¬¸¯)
+			$('.send_message').click(function(e) {
+				var date = (new Date()).toISOString().substring(0, 19)
+				.replace('T', ' ');
+				var msg = $(".message_input").val();
+				socket.emit('msg', {
+					msg : msg,
+					date : date
 				});
-
-		//ë©”ì„¸ì§€ ìˆ˜ì‹  ë¶€ë¶„
-		socket.on('msg', function(data) {
-			var span = $('<span class="nickname">').text(data.nickname);
-			var li;
-
-			if (data.nickname == nickname) {
-				li = $('<li class="arrow_box">');
-			} else {
-				li = $('<li class="arrow_box_oth">');
-			}
-
-			li.append(span).append(data.msg);
-			$('#msgdisplay').append(li);
-			$("#msgdisplay").scrollTop($("#msgdisplay").scrollheight());
-
-		});
-
-		socket.on('left', function(data) { //ì´ ë¶€ë¶„ì€ ë‚˜ì¤‘ì— ì˜¨ë¼ì¸ í˜¹ì€ ë¹„ì˜¨ë¼ì¸ ì‹ìœ¼ë¡œ ê³ ì³ì¤˜ë„ ë  ë“¯
-			var nick = data.nickname;
-			$('#msgdisplay').append($('<li class="noti">').text(nick + ''));
-		});
-	</script>
-	<jsp:include page="footer.jsp"></jsp:include>
+				
+				$('.message_input').val('');
+				return false;
+			});
+			
+			//¿£ÅÍ ÃÆÀ» ¶§ (Å°º¸µå)
+			$('form').submit(function(e) {
+				var date = (new Date()).toISOString().substring(0, 19)
+				.replace('T', ' ');
+				var msg = $(".message_input").val();
+				socket.emit('msg', {
+					msg : msg,
+					date : date
+				});
+				
+				$('.message_input').val('');
+				return false;
+			});
+			
+		</script>
+		<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

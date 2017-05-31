@@ -8,13 +8,15 @@ public class ChatDTO {
 	String content;
 	String sendDate;
 	boolean readFlag;
+	String senderName;
+	String receiverName;
 	
 	public ChatDTO(){
 		
 	}
 	
 	public ChatDTO(int messageCode, int roomCode, int senderCode, int receiverCode, String content, String sendDate,
-			boolean readFlag) {
+			boolean readFlag, String senderName, String receiverName) {
 		super();
 		this.messageCode = messageCode;
 		this.roomCode = roomCode;
@@ -23,6 +25,8 @@ public class ChatDTO {
 		this.content = content;
 		this.sendDate = sendDate;
 		this.readFlag = readFlag;
+		this.senderName = senderName;
+		this.receiverName = receiverName;
 	}
 
 	public int getMessageCode() {
@@ -79,6 +83,22 @@ public class ChatDTO {
 
 	public void setReadFlag(boolean readFlag) {
 		this.readFlag = readFlag;
+	}
+
+	public String getSenderName() {
+		return senderName;
+	}
+
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
 	}
 
 }
