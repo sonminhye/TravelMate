@@ -41,7 +41,9 @@
 				</div>
 			</c:if>
 			<hr>
-			<button type="submit" class="btn btn-default">로그인</button>
+			<div style="text-align:center; padding-top:50px; ">
+				<button type="submit" class="btn btn-default" >로그인</button>
+			</div>
 		</form>
 	</div>
 <jsp:include page="footer.jsp"></jsp:include>

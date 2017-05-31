@@ -48,7 +48,7 @@
 	var lastKeyword = '';
 	var loopSendKeyword = false;
 	
-	var accountCheck = document.getElementByName(accountCheck).value;
+	var idCheck = document.getElementByName(idCheck).value;
 	var passwordCheck = document.getElementByName(passwordCheck).value;
 
 	
@@ -85,7 +85,7 @@
 	 if (keyword == '') {
 	  lastKeyword = '';
 	  document.getElementById('checkMsg').style.color = "black";
-	  document.getElementById('checkMsg').innerHTML = "이메일을 입력하세요.";
+	  document.getElementById('checkMsg').innerHTML = "이메일주소를 입력하세요.";
 	 }
 
 	 else if (keyword != lastKeyword) {
@@ -110,27 +110,36 @@
 	   if(resultText==0){
 	    listView.innerHTML = "";
 	    listView.style.color = "blue";
-	    accountCheck = 1; //아이디 입력했음을 체크
+	    idCheck = 1; //아이디 입력했음을 체크
 	   }else{
-	    listView.innerHTML = "이미 등록된 ID 입니다";
+	    listView.innerHTML = "이미 등록된 이메일주소입니다";
 	    listView.style.color = "red";
-	    accountCheck = 2; //중복아이디임을 체크
+	    idCheck = 2; //중복아이디임을 체크
 	   }
 	  } else {
-	   alert("에러 발생: "+httpRequest.status);
+	   alert("에러 발생: "+httpRequest.status + httpRequest.responseText );
 	  }
 	 }
 	}
 
  	function checkSubmit(){
+ 		var idEmptyCheck = document.forms[0].id.value;
+ 		var passcheckCheck = document.forms[0].passwordCheck.value;
 		var nameCheck = document.forms[0].name.value;
-		var univCheck = document.forms[0].univ.value;
+		var ageCheck = document.forms[0].age.value;
+		var sexCheck = document.forms[0].sex.value;
+		var locationCheck = document.forms[0].location.value;
+		var languageCheck = document.forms[0].language.value;
 		
-		if(accountCheck=='2'){
+		if(idEmptyCheck.length==0){
+			alert('이메일 주소를 입력해주세요.');
+			return false;
+		}
+		if(idCheck=='2'){
 			alert('이미 존재하는 아이디 입니다.');
 			return false;
 		}
-		if(accountCheck=='0' || passwordCheck=='0' ){
+		if(idCheck=='0' || passwordCheck=='0' || passcheckCheck.length==0 || nameCheck.length==0 || ageCheck.length==0 || sexCheck.length==0 || locationCheck.length==0 || languageCheck.length==0 ){
 			alert('회원가입 폼을 정확히 채워 주세요.');
 			return false;
 		}else{
@@ -244,15 +253,30 @@
 						</div>
 						
 						<div class="form-group">
-							<label for="language">사용가능한 언어</label>
-							<input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요">
+							<label for="language">사용가능한 언어 </label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].ableLang" value="korean">한국어
+							</label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[1].ableLang" value="english">영어
+							</label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[2].ableLang" value="chinese">중국어
+							</label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[3].ableLang" value="japanese">일본어
+							</label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[4].ableLang" value="spanish">스페인어
+							</label>
+							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
 					
 					<!-- 입력 여부 체크하기위한 hidden input -->
 					<div class="formCheck">
-				        <input name="accountCheck" class="accountCheck" type="hidden" value='0'>
+				        <input name="idCheck" class="idCheck" type="hidden" value='0'>
 				        <input name="passwordCheck" class="passwordCheck" type="hidden" value='0'>
 				    </div>
 				</div>

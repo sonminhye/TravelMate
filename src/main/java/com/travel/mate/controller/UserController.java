@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.travel.mate.dto.LanguageDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.service.UserServiceImpl;
@@ -34,14 +35,18 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO , Model model) {
+	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO,
+						 @ModelAttribute List<LanguageDTO> langDTOList, Model model) {
 		System.out.println("signup controller");
 		//값확인용
 		System.out.println(userDTO.toString());
 		System.out.println(userDetailDTO.toString());
 		
-		userService.doSignup(userDTO, userDetailDTO);
+		userService.doSignup(userDTO, userDetailDTO, langDTOList);
 			
+		for(LanguageDTO dto : langDTOList){
+			System.out.println("리스트값 : " + dto.getAbleLang());
+		}
 		return "signIn"; //회원가입 후 로그인 페이지로
 	}
 	
