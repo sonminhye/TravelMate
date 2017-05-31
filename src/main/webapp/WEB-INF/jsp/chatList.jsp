@@ -3,6 +3,7 @@
 <%@ page import="java.net.URLEncoder" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,7 +34,12 @@
 <body>
 <jsp:include page="header.jsp"></jsp:include>
 	<div style="margin-top:150px;">
-		<c:forEach items="${list}" var="dto">
+		<c:choose>
+			<c:when test="${fn:length(list) <= 0}">
+				채팅방이 존재하지 않습니다.
+			</c:when>
+			<c:otherwise>
+				<c:forEach items="${list}" var="dto">
 		<c:set var="send" value='${dto.send }'/>
 		<c:set var="receive" value='${dto.receive }'/>
 		<%
@@ -65,6 +71,8 @@
 			</c:otherwise>
 		</c:choose>
 		</c:forEach>
+			</c:otherwise>
+		</c:choose>
 	</div>
 <jsp:include page="footer.jsp"></jsp:include>
 </body>
