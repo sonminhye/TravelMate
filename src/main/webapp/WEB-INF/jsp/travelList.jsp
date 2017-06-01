@@ -2,6 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
@@ -77,6 +78,14 @@
 												<h4>${row.name }</h4>
 												<p class="text-muted">작성일 : ${row.writeDate }</p>
 												<p>시작일 : ${row.startDate }</p>
+												
+												<jsp:useBean id="today" class="java.util.Date"></jsp:useBean>
+												<fmt:parseDate var="startday" value="${row.startDate }" pattern="yyyy-MM-dd"/>
+												
+												<fmt:parseNumber value="${today.time / (1000*60*60*24)}" integerOnly="true" var="nowDay"></fmt:parseNumber>
+												<fmt:parseNumber value="${startday.time / (1000*60*60*24)}" integerOnly="true" var="startDay"></fmt:parseNumber>
+												
+												<h3><font color="red">D${(startDay - nowDay + 1)*(-1)}</font></h3>
 											</div>
 										</div>
 									</c:forEach>

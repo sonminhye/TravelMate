@@ -82,6 +82,7 @@
 						<tr>
 							<td>채팅링크</td>
 							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
+							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
 						<tr>
 							<td>설명</td>
@@ -169,12 +170,20 @@
 				</td>
 			</tr>
 		</table>
-		<!-- 신청했다면 취소버튼 그렇지 않으면 신청 버튼 -->
-		<c:choose>
+		<!-- 신청했다면 취소버튼(그전에 글쓴이와 로그인 유저가 같은지 판단) 그렇지 않으면 신청 버튼 -->
+		<c:set var="userCode" value="<%= code %>"></c:set>
+		<c:choose>		
 			<c:when test="${fn:length(applyList) > 0}">
-				<form action="doCancel" method="post">
-					<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
-				</form>
+				<c:choose>
+					<c:when test="${userCode == writerCode}">
+						<p>같은분이군요!</p>
+					</c:when>
+					<c:otherwise>
+						<form action="doCancel" method="post">
+							<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
+						</form>
+					</c:otherwise>
+				</c:choose>
 			</c:when>
 			<c:otherwise>
 				<form action="doApply" method="post">
