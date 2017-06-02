@@ -7,25 +7,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- <link rel="stylesheet" href="css/chat.css">-->
-
 <title>채팅방</title>
-<script type="text/javascript">
-	
-</script>
 </head>
 <body>
 
 	<jsp:include page="header.jsp"></jsp:include>
-	<!-- 부트스트랩 -->
+	
 	<link rel="stylesheet" href="css/chatboot.css">
 	<div class="chat_window">
 		<div class="top_menu">
 			<div class="title">Chat</div>
 		</div>
 		<div>
+			<!-- 메세지 뷰 -->
 			<ul class="messages">
-
 				<c:forEach items="${list }" var="dto">
 					<c:choose>
 						<c:when test="${dto.senderCode==scode }">
@@ -41,7 +36,6 @@
 					</div>
 					</li>
 				</c:forEach>
-
 			</ul>
 			<div class="bottom_wrapper clearfix">
 				<div class="message_input_wrapper">
@@ -56,6 +50,7 @@
 			</div>
 		</div>
 
+		<!-- 메세지 양식 -->
 		<div class="message_template">
 			<li class="message">
 				<div class="avatar"></div>
@@ -65,42 +60,40 @@
 			</li>
 		</div>
 </div>
-		<script type="text/javascript">
-			$messages = $('.messages');
-			$messages.animate({
-				scrollTop : $messages.prop('scrollHeight')
-			}, 100);
-			$('.message_input').focus();
-		</script>
-		<script type="text/javascript">
-			
+
+<script type="text/javascript">
 			var socket = io('http://localhost:3000');
 			var room = '${room}';
 			var nickname = '${name}';
 			var rcode = '${rcode}';
 			var scode = '${scode}';
 			var Message;
-			var getMessageText, message_side, sendMessage;
-			message_side = 'right';
-			var nick = encodeURI(nickname);
-
+			var getMessageText, message_side, sendMessage, scrollTop;
+			var message_side = 'right';
+			
+			//scrollTop();
+			
+			var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
+			
 			//nick name, 방정보 등 정보를 서버에 보냄
 			socket.emit('join', {
 				nickname : nick,
 				room : room,
 				scode : scode,
 				rcode : rcode
-			}); // 접속 이벤트
-
-			//내가 입장
+			});
+			
+			//내가 입장했을 때, 환영메세지가 서버로부터 오는 부분
 			socket.on('welcome', function(data) {
 				var nick = decodeURI(data.nickname);
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님 환영합니다'));
+				scrollTop();
+				
 			});
-
-			//내가 입장
-			socket.on('join', function(data) {
+			
+			//누군가 입장했을 때, 알려주는 부분
+			socket.on('join', function(data) {	
 				var nick = decodeURI(data.nickname);
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 입장하셨습니다'));
@@ -111,22 +104,26 @@
 				var nick = decodeURI(data.nickname);
 				appendMessage(data);
 			});
-
+			
 			socket.on('left', function(data) { //이 부분은 나중에 온라인 혹은 비온라인 식으로 고쳐줘도 될 듯
 				var nick = decodeURI(data.nickname);
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 퇴장하셨습니다'));
+				scrollTop();
 			});
 			
 			appendMessage = function(data) {
+				
 				var $messages, message;
 				var text = data.msg;
-				
 				var nick = decodeURI(data.nickname);
+				
 				if(nick==nickname) message_side='right';
 				else message_side='left';
 				
 				$messages = $('.messages');
+				
+				//메세지 객체 생성
 				message = new Message({
 					text : text,
 					message_side : message_side,
@@ -134,26 +131,36 @@
 				});
 				
 				message.draw();
-				return $messages.animate({
+				return scrollTop();
+			};
+			
+			//스크롤 자동 새로고침 구현부분
+			scrollTop = function(){
+				var $messages = $('.messages');
+				$messages.animate({
 					scrollTop : $messages.prop('scrollHeight')
 				}, 300);
 			};
 			
-			
+			//메세지 클래스
 			Message = function(arg) {
-				
+				//받은 변수로 부터 클래스 객체들을 초기화,
 				this.text = arg.text, this.message_side = arg.message_side;
 				this.nick = arg.nick;
-				
 				this.draw = function(_this) {
 					return function() {
 						var $message;
+						//메세지 템플릿을 복사
 						$message = $($('.message_template').clone().html());
+						
+						//text 클래스를 찾아서 메세지 오른쪽/왼쪽 정해주기
 						$message.addClass(_this.message_side).find('.text')
 								.html(_this.text);
-						$('.messages').append($message);
+						//avatar 클래스 찾아서 닉네임 써주기
 						$message.find('.avatar').append(_this.nick);
-
+						
+						$('.messages').append($message);
+						
 						//appeard 는 보이고 안보이게 해주는 클래스
 						return setTimeout(function() {
 							return $message.addClass('appeared');
@@ -163,9 +170,12 @@
 
 			//버튼을 클릭했을 때 (마우스 클릭)
 			$('.send_message').click(function(e) {
+				
+				//date 형식
 				var date = (new Date()).toISOString().substring(0, 19)
 				.replace('T', ' ');
 				var msg = $(".message_input").val();
+				
 				socket.emit('msg', {
 					msg : msg,
 					date : date
@@ -177,8 +187,10 @@
 			
 			//엔터 쳤을 때 (키보드)
 			$('form').submit(function(e) {
+				
 				var date = (new Date()).toISOString().substring(0, 19)
 				.replace('T', ' ');
+				
 				var msg = $(".message_input").val();
 				socket.emit('msg', {
 					msg : msg,
@@ -188,8 +200,9 @@
 				$('.message_input').val('');
 				return false;
 			});
-			
-		</script>
+</script>
+
 		<jsp:include page="footer.jsp"></jsp:include>
+		
 </body>
 </html>

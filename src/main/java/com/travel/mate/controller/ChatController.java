@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.travel.mate.dao.UserDAO;
 import com.travel.mate.dto.ChatDTO;
@@ -39,20 +40,14 @@ public class ChatController {
 	Authentication auth;
 	
 	//채팅창 뷰
-	@RequestMapping(value = "/chat", method = RequestMethod.GET)
+	@RequestMapping(value = "/chat", method = RequestMethod.POST)
 	public String chatView(HttpServletRequest request, Model model) {
 		
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = auth.getPrincipal();
-		
-		int userCode = ((MyUser)principal).getUserCode();
-		System.out.println(" 내 코드 : " + userCode);
+		int userCode = getUserCode(); //밑에 정의해준 userCode 를 받아오는 함수를 호출
 		UserDetailDTO userDetail = userService.showDetailList(userCode);
 		String name = userDetail.getName();
 		String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
 		String roomCode = request.getParameter("room"); //room Code 
-		
-		System.out.println("내 이름: " + name);
 		
 		model.addAttribute("rcode", rCode);
 		model.addAttribute("scode", userCode);
@@ -70,13 +65,11 @@ public class ChatController {
 	@RequestMapping(value = "/chatList")
 	public String chatListview(Model model) {
 	
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal =  auth.getPrincipal();
-		int myCode = ((MyUser)principal).getUserCode();
+		int userCode = getUserCode();
 		//채팅방의 리스트를 불러오는 부분
-		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(((MyUser)principal).getUserCode());
+		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
 		model.addAttribute("list", list);
-		model.addAttribute("myCode", myCode);
+		model.addAttribute("myCode", userCode);
 		
 		return "chatList";
 	}
@@ -86,20 +79,16 @@ public class ChatController {
 		
 		String result="";
 		
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal =  auth.getPrincipal();
-		int senderCode = ((MyUser)principal).getUserCode(); //senderCode
+		int senderCode = getUserCode(); //나의 코드
 		int receiverCode = Integer.parseInt(request.getParameter("userCode")); //receiverCode(상대방)
-				
-		Date date = new Date();
+		
 		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = fm.format(date);
+		String currentTime = fm.format(new Date());
 		
-		System.out.println("넣으려는 항목들" + senderCode + "," + receiverCode + "," + currentTime.toString());
-		
+		//두 유저간의 채팅방이 있는지 여부를 구해오는 함수
 		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
 		
-		if(chatRoom ==null){ //채팅방이 만들어지지 않았다는 얘기
+		if(chatRoom ==null){ //채팅방이 없을 때
 			chatRoom = chatService.addRoom(senderCode, receiverCode, currentTime);
 		}
 		
@@ -109,11 +98,11 @@ public class ChatController {
 		return result;
 	}
 	
-	@RequestMapping(value="/chattema")
-	public String chatThemeTest(Model model){
+	//유저의 코드를 받아오는 함수
+	public int getUserCode(){
 		
-		
-		return "chattema";
+		auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal =  auth.getPrincipal();
+		return ((MyUser)principal).getUserCode();
 	}
-
 }
