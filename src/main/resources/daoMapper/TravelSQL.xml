@@ -4,17 +4,23 @@
 <mapper namespace="travel">
 
 	<!-- 해당 게시물의 신청인원 출력 -->
-	<select id="selectTravelApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
+	<select id="selectTravelApplyCount" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
-			SELECT	ta.travelCode, ta.userCode
-			FROM
-					(
-					SELECT	t.travelCode, a.userCode
-					FROM	travel t, apply a
-					WHERE	t.travelCode = a.travelCode
-					) ta
-			WHERE ta.travelCode = #{travelCode}
-				AND ta.userCode = #{userCode}
+			SELECT		a.userCode
+			FROM		travel t, apply a
+			WHERE		t.travelCode = a.travelCode
+				AND		t.travelCode = #{travelCode}
+		]]>
+	</select>
+
+	<!-- 해당 게시물을 신청했었는지 -->
+	<select id="selectTravelApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
+		<![CDATA[		
+			SELECT	t.travelCode, a.userCode
+			FROM	travel t, apply a
+			WHERE	t.travelCode = a.travelCode
+				AND t.travelCode = #{travelCode}
+				AND a.userCode = #{userCode}
 		]]>
 	</select>
 

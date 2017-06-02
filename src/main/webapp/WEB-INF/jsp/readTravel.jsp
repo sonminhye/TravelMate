@@ -93,8 +93,9 @@
 							<td>${row.startDate } ${row.startTime } ~ ${row.endDate } ${row.endTime }</td>
 						</tr>
 						<tr>
-							<td>최소인원/최대인원</td>
-							<td>${row.minPeople }/${row.maxPeople }</td>
+							<td>최소인원/최대인원/신청인원</td>
+							<td>${row.minPeople }/${row.maxPeople }/${fn:length(applyCount) }</td>
+							<c:set var="maxPeople" value="${row.maxPeople }"></c:set>
 						</tr>
 					</c:forEach>
 				</c:when>
@@ -186,9 +187,16 @@
 				</c:choose>
 			</c:when>
 			<c:otherwise>
-				<form action="doApply" method="post">
-					<%=applyButtonStart %><%=applyButtonEnd %>
-				</form>
+				<c:choose>
+					<c:when test="${fn:length(applyCount) != maxPeople }">
+						<form action="doApply" method="post">
+							<%=applyButtonStart %><%=applyButtonEnd %>
+						</form>
+					</c:when>
+					<c:otherwise>
+						<p>신청 인원이 최대 인원입니다</p>
+					</c:otherwise>
+				</c:choose>
 			</c:otherwise>
 		</c:choose>
 	</div>

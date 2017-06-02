@@ -77,11 +77,13 @@ public class TravelController extends HandlerInterceptorAdapter {
 		
 		// 신청 버튼 or 취소버튼을 위함
 		List<Map<String, Object>> listApply = travelService.selectTravelApply(applyDto);
+		List<Map<String, Object>> listApplyCount = travelService.selectTravelApplyCount(applyDto);
 		
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
 		
 		mv.addObject("applyList", listApply);
+		mv.addObject("applyCount", listApplyCount);
 		return mv;
 	}
 
