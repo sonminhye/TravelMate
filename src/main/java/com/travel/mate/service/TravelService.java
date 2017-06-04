@@ -12,29 +12,23 @@ import com.travel.mate.dto.TravelImageDTO;
 import com.travel.mate.dto.TravelRouteDTO;
 
 public interface TravelService {
-	
-	void insertTravel(TravelDTO travel) throws Exception;
+	/* 여행등록 */
+	void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelImageDTO travelImageDto, TravelRouteDTO travelRouteDto);
 
-	void insertTravelDetail(TravelDetailDTO travelDetail);
-
-	void insertTravelImage(TravelImageDTO travelImage);
-	
-	void insertTravelRoute(TravelRouteDTO travelRoute);
-
+	/* 여행리스트 및 읽기 */
 	List<Map<String, Object>> selectTravel(Map<String, Object> map);
+	List<Map<String, Object>> selectTravelDetail(TravelDTO travelDto);
+	List<Map<String, Object>> selectTravelRoute(TravelDTO travelDto);
 
-	List<Map<String, Object>> selectTravelDetail(int code);
-
-	List<Map<String, Object>> selectTravelRoute(int code);
-
+	/* 스크롤 */
 	List<Map<String, Object>> scrollDown(Integer code);
 
-	void insertTravelApply(ApplyDTO apply);
-
-	List<Map<String, Object>> selectTravelApply(ApplyDTO applyDto);
-
-	List<Map<String, Object>> selectTravelApplyCount(ApplyDTO applyDto);
-
-	void deleteTravelApply(ApplyDTO apply);
+	/* 신청 */
+	void insertTravelApply(ApplyDTO applyDto);
+	/* 신청취소 */
+	void deleteTravelApply(ApplyDTO applyDto);
+	/* 신청한 사람 및 인원 수 */
+	List<Map<String, Object>> selectTravelApply(TravelDTO travelDto);
+	List<Map<String, Object>> selectTravelApplyCount(TravelDTO travelDto);
 
 }
