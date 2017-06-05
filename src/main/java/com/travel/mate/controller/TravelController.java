@@ -22,12 +22,15 @@ import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
 import com.travel.mate.dto.TravelRouteDTO;
 import com.travel.mate.service.TravelService;
+import com.travel.mate.service.ReviewService;
 
 @Controller
 public class TravelController {
 
 	@Resource(name = "TravelService")
 	private TravelService travelService;
+	@Resource(name = "ReviewService")
+	private ReviewService reviewService;
 	
 	// ajax scroll event
 	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
@@ -66,11 +69,23 @@ public class TravelController {
 		List<Map<String, Object>> listApply = travelService.selectTravelApply(travelDto);
 		List<Map<String, Object>> listApplyCount = travelService.selectTravelApplyCount(travelDto);
 		
+		// review
+		// 작성된 review list
+		List<Map<String, Object>> listReview = reviewService.selectReviewAll(travelDto);
+		// review 쓸 수 있는 지
+		List<Map<String, Object>> listReviewWriteCheck = reviewService.selectReviewWriteCheck(travelDto);
+		// review 썼는지 안썼는지
+		List<Map<String, Object>> listReviewWrite = reviewService.selectReviewWrite(travelDto);
+		
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
 		
 		mv.addObject("applyList", listApply);
 		mv.addObject("applyCount", listApplyCount);
+		
+		mv.addObject("reviewList", listReview);
+		mv.addObject("reviewWriteCheck", listReviewWriteCheck);
+		mv.addObject("reviewWrite", listReviewWrite);
 		return mv;
 	}
 
