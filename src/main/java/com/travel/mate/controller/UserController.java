@@ -7,6 +7,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,9 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
+	
 	//TEST용//////////////
 	@RequestMapping(value = "/testList", method = RequestMethod.GET)
 	public String showList(Model model) {
@@ -39,6 +43,10 @@ public class UserController {
 	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO,
 						 @ModelAttribute("langDTOList") LanguageDTO languageDTO, Model model) {
 		System.out.println("signup controller");
+		
+		//암호화
+		String bCryptStr = passwordEncoder.encode(userDTO.getPassword());
+		userDTO.setPassword(bCryptStr);
 		
 		List<LanguageDTO> langs = languageDTO.getLangDTOList();
 		//선택되지 않은 언어는 null값이므로 이를 list에서 제거해 주는 작업
