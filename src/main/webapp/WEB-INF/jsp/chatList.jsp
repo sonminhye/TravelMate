@@ -4,10 +4,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %> 
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+	String email = "";
+	
+	if(principal != null && principal instanceof MyUser){
+		//code는 PK인 유저코드. 
+		code = ((MyUser)principal).getUserCode();
+		email = ((MyUser)principal).getUsername();
+	}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <style>
 .chatlist {
 	text-decoration: none;
@@ -75,15 +91,17 @@
 								<div>
 									<p>참여자 : ${dto.receive}, ${dto.latestDate}</p>
 									<p>${dto.roomCode}채팅방 입장하기</p>
+									<p id="${dto.roomCode }"></p>
 								</div>
 							</a>
 						</c:when>
 						<c:otherwise>
-							<a class="chatlist"
+							<a class="chatlist" id="'${dto.roomCode}'"
 								onclick="goChat('${dto.senderCode}','${dto.roomCode }');">
 								<div>
 									<p>참여자 : ${dto.send}, ${dto.latestDate}</p>
 									<p>${dto.roomCode}채팅방 입장하기</p>
+									<p id="${dto.roomCode }"></p>
 								</div>
 							</a>
 						</c:otherwise>
@@ -92,6 +110,35 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
+	
+	<script type="text/javascript">
+	
+		var socket = io('http://localhost:3000');
+		var userCode = '<%=code%>';
+		var roomList = '${list}';
+		
+		//nick name, 방정보 등 정보를 서버에 보냄
+		socket.emit('joinAllRooms', {
+			userCode : userCode,
+			roomList : roomList
+		});
+			
+		//메세지 수신 부분
+		socket.on('msg', function(data) {
+			appendMessage(data);
+		});
+		
+		appendMessage = function(data) {
+			var text = data.msg;
+			var p = document.getElementById(data.roomCode);
+			if(p.innerHTML!="")
+				p.innerHTML = parseInt(p.innerHTML) + 1;
+			else
+				p.innerHTML = 1;
+			console.log(text);
+		};
+		
+	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,7 +13,18 @@
 <title>채팅방</title>
 </head>
 <body>
-
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+	String email = "";
+	
+	if(principal != null && principal instanceof MyUser){
+		//code는 PK인 유저코드. 
+		code = ((MyUser)principal).getUserCode();
+		email = ((MyUser)principal).getUsername();
+	}
+%>
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<link rel="stylesheet" href="css/chatboot.css">
@@ -62,7 +76,7 @@
 </div>
 
 <script type="text/javascript">
-			var socket = io('http://localhost:3000');
+			var socket = io('http://localhost:3000',{query: 'userID=<%=email%>&userCode=<%=code%>'});
 			var room = '${room}';
 			var nickname = '${name}';
 			var rcode = '${rcode}';
@@ -71,8 +85,7 @@
 			var getMessageText, message_side, sendMessage, scrollTop;
 			var message_side = 'right';
 			
-			//scrollTop();
-			
+		
 			var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
 			
 			//nick name, 방정보 등 정보를 서버에 보냄
