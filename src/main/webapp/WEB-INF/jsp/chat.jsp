@@ -119,8 +119,13 @@
 				var nick = decodeURI(data.nickname);
 				inchatRoom = true;
 				
+				//실제 채팅방에 들어오면 읽는다고 생각해야 할 것 그러므로 class 를 read 상태로 바꿔준다.
+				$('.messages').find('.unread').attr('class','read');
+				
+				//입장하셨습니다 부분은 나중에 삭제해 줄 것임.
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 입장하셨습니다'));
+				scrollTop();
 			});
 
 			//메세지 수신 부분
