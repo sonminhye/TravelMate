@@ -1,5 +1,6 @@
 package com.travel.mate.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import com.travel.mate.dto.TravelRouteDTO;
 
 public interface TravelService {
 	/* 여행등록 */
-	void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request);
+	void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws IllegalStateException, IOException;
 
 	/* 여행리스트 및 읽기 */
 	List<Map<String, Object>> selectTravel(Map<String, Object> map);

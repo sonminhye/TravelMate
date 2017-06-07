@@ -8,9 +8,10 @@ public class TravelRouteDTO {
 	double lat;
 	double lng;
 	String location;
-	
+	int locOrder;
+
 	List<TravelRouteDTO> trlist;
-	
+
 	public int getTravelRouteCode() {
 		return travelRouteCode;
 	}
@@ -49,6 +50,14 @@ public class TravelRouteDTO {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public int getLocOrder() {
+		return locOrder;
+	}
+
+	public void setLocOrder(int locOrder) {
+		this.locOrder = locOrder;
 	}
 
 	public List<TravelRouteDTO> getTrlist() {

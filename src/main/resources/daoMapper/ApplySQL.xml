@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="apply">
+
+	<!-- 해당 게시물에 작성된 리뷰 출력 -->
+	<select id="selectApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
+		<![CDATA[
+			SELECT	a.applyCode
+			FROM	apply a
+			WHERE	a.travelCode = #{travelCode}
+				AND	a.userCode = #{userCode}
+		]]>
+	</select>
+	
+</mapper>
+

@@ -27,15 +27,20 @@
 	<!-- 첫 화면에 보여질 6개 -->
 	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
-			SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+			SELECT	tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
 			FROM
-						(
-						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-						FROM		travel t, userDetail ud
-						WHERE		t.userCode = ud.userCode
-						) ts, travelDetail td
-			WHERE		ts.travelCode = td.travelCode
-			ORDER BY	ts.writeDate DESC, ts.travelCode DESC
+				(
+				SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+				FROM
+							(
+							SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
+							FROM		travel t, userDetail ud
+							WHERE		t.userCode = ud.userCode
+							) ts, travelDetail td
+				WHERE		ts.travelCode = td.travelCode
+				) tt, travelImage ti
+			WHERE tt.travelCode = ti.travelCode
+			ORDER BY	tt.writeDate DESC, tt.travelCode DESC
 			LIMIT		0, 6
 		]]>
 	</select>
@@ -74,11 +79,11 @@
 	<!-- 여행 루트 출력 -->
 	<select id="selectTravelRoute" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT		tr.lat, tr.lng, tr.location
+			SELECT		tr.lat, tr.lng, tr.location, tr.locOrder
 			FROM		travel t, travelRoute tr
 			WHERE		t.travelCode = tr.travelCode
 				AND		t.travelCode = #{code}
-			ORDER BY	tr.location ASC
+			ORDER BY	tr.locOrder ASC
 		]]>
 	</select>
 
@@ -103,9 +108,9 @@
 	<insert id="insertTravelRoute" parameterType="com.travel.mate.dto.TravelRouteDTO">
 		<![CDATA[
 			INSERT	INTO
-				travelRoute (travelCode, lat, lng, location)
+				travelRoute (travelCode, lat, lng, location, locOrder)
 			VALUES
-				(#{travelCode}, #{lat}, #{lng}, #{location})
+				(#{travelCode}, #{lat}, #{lng}, #{location}, #{locOrder})
 		]]>
 	</insert>
 	

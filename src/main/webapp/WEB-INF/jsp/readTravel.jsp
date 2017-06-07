@@ -243,9 +243,9 @@
 								</c:when>
 								<c:otherwise>
 									<form action="doWriteReview" method="post">
-										<input type="hidden" name="rlist[0].travelCode" value="<%=travelCode %>">
-										<textarea name="rlist[0].content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
-										<input type="hidden" name="rlist[0].userCode" value="<%=code %>">
+										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
+										<textarea name="content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
+										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
 								</c:otherwise>
