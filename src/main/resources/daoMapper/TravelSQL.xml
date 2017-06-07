@@ -15,7 +15,7 @@
 
 	<!-- 해당 게시물을 신청했었는지 -->
 	<select id="selectTravelApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
-		<![CDATA[		
+		<![CDATA[
 			SELECT	t.travelCode, a.userCode
 			FROM	travel t, apply a
 			WHERE	t.travelCode = a.travelCode

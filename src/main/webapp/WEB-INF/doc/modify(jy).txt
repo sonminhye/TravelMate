@@ -18,3 +18,15 @@ private TravelService travelService;
 
 이렇게 리스트로 처리하여 controller에서 for문을 돌기 때문에
 mybatis에서 따로 foreach문을 이용할 필요가 없다(travelroute insert하는 경우가 이에 해당)
+
+====[2017/06/05]====
+<jsp:useBean id="today" class="java.util.Date"></jsp:useBean>
+<fmt:parseDate var="startday" value="${row.startDate }" pattern="yyyy-MM-dd"/>
+
+<fmt:parseNumber value="${today.time / (1000*60*60*24)}" integerOnly="true" var="nowDay"></fmt:parseNumber>
+<fmt:parseNumber value="${startday.time / (1000*60*60*24)}" integerOnly="true" var="startDay"></fmt:parseNumber>
+
+<h3><font color="red">D${(startDay - nowDay + 1)*(-1)}</font></h3>
+
+--> javascript로 변경
+(ajax 통신으로 jsp script인 jstl을 사용할 수 없었기 때문에 변경)
