@@ -7,12 +7,13 @@ public class ChatRoomDTO {
 	String receive;
 	int receiverCode;
 	String latestdate;
-
+	int unread;
+	
 	public ChatRoomDTO() {
 
 	}
 
-	public ChatRoomDTO(int roomCode, String send, int sendereceiverCode, String receive, int receiverCode, String latestdate) {
+	public ChatRoomDTO(int roomCode, String send, int sendereceiverCode, String receive, int receiverCode, String latestdate, int unread) {
 		super();
 		this.roomCode = roomCode;
 		this.send = send;
@@ -20,6 +21,7 @@ public class ChatRoomDTO {
 		this.receive = receive;
 		this.receiverCode = receiverCode;
 		this.latestdate = latestdate;
+		this.unread = unread;
 	}
 
 	public int getRoomCode() {
@@ -69,4 +71,13 @@ public class ChatRoomDTO {
 	public void setLatestDate(String latestdate) {
 		this.latestdate = latestdate;
 	}
+
+	public int getUnread() {
+		return unread;
+	}
+
+	public void setUnread(int unread) {
+		this.unread = unread;
+	}
+	
 }

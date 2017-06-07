@@ -750,3 +750,12 @@ img::-moz-selection {
 body {
   webkit-tap-highlight-color: #fed136;
 }
+
+.unreadMsg{
+	position:absolute;
+	width:10px;
+	height:10px;
+	right:5px;
+	top:1px;
+	color:white;
+}

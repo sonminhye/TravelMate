@@ -9,31 +9,27 @@
 	</select>
 	<insert id="insertUser" parameterType="com.travel.mate.dto.UserDTO" useGeneratedKeys="true" keyProperty="userCode">
 		<![CDATA[
-			INSERT INTO 
-				user(id, password)
-			VALUES
-				(#{id}, #{password})
+			INSERT INTO   user(id, password)
+			VALUES        (#{id}, #{password})
 		]]>
 	</insert>
 	<insert id="insertUserDetail" parameterType="com.travel.mate.dto.UserDetailDTO">
 		<![CDATA[
-			INSERT INTO 
-				userDetail(userCode, name, age, sex, location)
-			VALUES
-				(#{userCode}, #{name}, #{age}, #{sex}, #{location})
+			INSERT INTO   userDetail(userCode, name, age, sex, location)
+			VALUES        (#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
 	<insert id="insertUserAuthority" parameterType="map">
 		<![CDATA[
-			INSERT INTO 
-				userAuthority(userCode, authority)
-			VALUES
-				(#{userCode}, #{authority})
+			INSERT INTO   userAuthority(userCode, authority)
+			VALUES        (#{userCode}, #{authority})
 		]]>
 	</insert>
-	<select id="showDetailList" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
+	<select id="selectUserDetail" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
 		<![CDATA[
-			SELECT * FROM userDetail where userCode = #{userCode}
+			SELECT * 
+			FROM   userDetail 
+			WHERE  userCode = #{userCode}
 		]]>
 	</select>
 

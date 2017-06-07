@@ -26,6 +26,8 @@
     <meta name="author" content="">
 
     <title>Header</title>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
  
@@ -189,6 +191,7 @@
 	                </li>
 	                <li>
 	                	<a class="page-scroll" href="chatList">Message</a>
+	                	<div class="unreadMsg"></div>
 	                </li>
                 </sec:authorize>
                 </ul>
@@ -315,6 +318,34 @@
 			</div>
 		</div>
 	</div>
- 
+ 	<script type="text/javascript">
+	 	var socket = io('http://localhost:3000');
+	 	var userCode = '<%=code%>';
+	
+	 	// nick name 정보를 서버에 보냄
+	 	socket.emit('joinAllRooms', {
+	 		userCode : userCode,
+	 	});
+	
+	 	// 메세지 수신 부분
+	 	socket.on('msg', function(data) {
+	 		if(data.scode != userCode)
+	 			appendCount(data);
+	 	});
+	
+	 	// 읽지않은 메세지 개수 늘려주기
+	 	appendCount = function(data) {
+	 		console.log("count 증가!");
+	 		var text = data.msg;
+	 		var unread = $('.unreadMsg');
+	 		
+	 		if (unread.html() != "") {
+	 			unread.html(parseInt(unread.html()) + 1);
+	 		} else {
+	 			unread.html(1);
+	 		}
+	
+	 	};
+ 	</script>
 </body>
 </html>
