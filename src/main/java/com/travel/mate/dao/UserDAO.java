@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractDAO;
-import com.travel.mate.dto.LanguageDTO;
+import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 
@@ -33,11 +33,11 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserAuthority", param);
 	}
 	
-	public UserDetailDTO selectDetailList(int userCode){
-		return (UserDetailDTO) selectOne("user.showDetailList", userCode);
+	public UserDetailDTO selectUserDetail(int userCode){
+		return (UserDetailDTO) selectOne("user.selectUserDetail", userCode);
 	}
 
-	public void insertUserLanguage(List<LanguageDTO> langs){
+	public void insertUserLanguage(List<UserLanguageDTO> langs){
 		System.out.println("DAO에서 insertLanguageList를 콜했습니다");
 		insert("user.insertUserLanguage", langs);
 	}

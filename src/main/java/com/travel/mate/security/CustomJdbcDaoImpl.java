@@ -32,7 +32,7 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 	        }
 
 	        MyUser user = (MyUser)users.get(0); // contains no GrantedAuthority[]
-
+	        
 	        Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
 
 	        if (getEnableAuthorities()) {
@@ -46,6 +46,7 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 	        List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>(dbAuthsSet);
 
 	        addCustomAuthorities(user.getUsername(), dbAuths);
+	        user.setAuthorities(dbAuths);
 
 	        if (dbAuths.size() == 0) {
 	            logger.debug("User '" + username + "' has no authorities and will be treated as 'not found'");
@@ -66,7 +67,8 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
                 int userCode = rs.getInt(1);
                 String id = rs.getString(2);
                 String password = rs.getString(3);
-                return new MyUser(userCode, id, password, AuthorityUtils.NO_AUTHORITIES);
+                boolean enabled = rs.getBoolean(4);
+                return new MyUser(userCode, id, password, enabled, AuthorityUtils.NO_AUTHORITIES);
             }
 
         });
@@ -77,7 +79,7 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
     protected List<GrantedAuthority> loadUserAuthorities(String username) {
         return getJdbcTemplate().query(getAuthoritiesByUsernameQuery(), new String[] {username}, new RowMapper<GrantedAuthority>() {
             public GrantedAuthority mapRow(ResultSet rs, int rowNum) throws SQLException {
-                String roleName = getRolePrefix() + rs.getString(2);
+                String roleName = rs.getString(2);
 
                 return new SimpleGrantedAuthority(roleName);
             }

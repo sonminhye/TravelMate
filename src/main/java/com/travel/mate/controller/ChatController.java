@@ -43,8 +43,10 @@ public class ChatController {
 	@RequestMapping(value = "/chat", method = RequestMethod.POST)
 	public String chatView(HttpServletRequest request, Model model) {
 		
+
 		int userCode = getUserCode(); //밑에 정의해준 userCode 를 받아오는 함수를 호출
-		UserDetailDTO userDetail = userService.showDetailList(userCode);
+		UserDetailDTO userDetail = userService.showUserDetail(userCode);
+
 		String name = userDetail.getName();
 		String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
 		String roomCode = request.getParameter("room"); //room Code 

@@ -1,34 +1,16 @@
 package com.travel.mate.dto;
 
-import java.util.List;
-
 public class LanguageDTO {
-	private int userCode;
 	private int languageCode;
+	private String language;
 	
-	private List<LanguageDTO> langDTOList;
-
 	public LanguageDTO(){
 		
 	}
-	
-	public LanguageDTO(List<LanguageDTO> langDTOList){
-		this.langDTOList = langDTOList;
-	}
-	
-	
-	public LanguageDTO(int userCode, int languageCode) {
+	public LanguageDTO(int languageCode, String language) {
 		super();
-		this.userCode = userCode;
 		this.languageCode = languageCode;
-	}
-
-	public int getUserCode() {
-		return userCode;
-	}
-
-	public void setUserCode(int userCode) {
-		this.userCode = userCode;
+		this.language = language;
 	}
 
 
@@ -40,12 +22,12 @@ public class LanguageDTO {
 		this.languageCode = languageCode;
 	}
 
-	public List<LanguageDTO> getLangDTOList() {
-		return langDTOList;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setLangDTOList(List<LanguageDTO> langDTOList) {
-		this.langDTOList = langDTOList;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
 	
