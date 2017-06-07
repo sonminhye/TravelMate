@@ -15,7 +15,7 @@
         <div class="container">
             <div class="intro-text">
                 <div class="intro-lead-in">여행루트를 만들어보세요!</div>
-                <div class="intro-heading">Travle Mate</div>
+                <div class="intro-heading">Travel Mate</div>
                 <a href="travelList" class="page-scroll btn btn-xl">여행 보러가기</a>
             </div>
         </div>

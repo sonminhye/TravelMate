@@ -29,13 +29,17 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserDetail", userDetailDTO);
 	}
 	
+	public void insertUserAuthority(Map<String, Object> param){
+		insert("user.insertUserAuthority", param);
+	}
+	
 	public UserDetailDTO selectDetailList(int userCode){
 		return (UserDetailDTO) selectOne("user.showDetailList", userCode);
 	}
 
-	public void insertLanguageList(List<LanguageDTO> langs){
+	public void insertUserLanguage(List<LanguageDTO> langs){
 		System.out.println("DAO에서 insertLanguageList를 콜했습니다");
-		insert("user.insertLanguageList", langs);
+		insert("user.insertUserLanguage", langs);
 	}
 	
 	public int selectUserId(String id){
