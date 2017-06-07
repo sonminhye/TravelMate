@@ -43,6 +43,10 @@
 .chatlist div:hover {
 	background-color: #fed935;
 }
+
+.unread{
+	color:red;
+}
 </style>
 
 <title>채팅방 리스트 출력</title>
@@ -57,20 +61,6 @@
 			</c:when>
 			<c:otherwise>
 				<c:forEach items="${list}" var="dto">
-					<c:set var="send" value='${dto.send }' />
-					<c:set var="receive" value='${dto.receive }' />
-
-					<%
-						String send = (String) pageContext.getAttribute("send");
-						String receive = (String) pageContext.getAttribute("receive");
-
-						session.setAttribute("send", send);
-						session.setAttribute("receive", receive);
-
-						send = URLEncoder.encode(send, "UTF-8");
-						receive = URLEncoder.encode(receive, "UTF-8");
-					%>
-
 					<!-- 리스트의 parameter를 post 형식으로 보내주기 위한 form -->
 					<form name="hiddenForm" id="hiddenForm" action="chat" method="POST">
 						<input type="hidden" name="rcode" value=""/> 
@@ -91,7 +81,7 @@
 								<div>
 									<p>참여자 : ${dto.receive}, ${dto.latestDate}</p>
 									<p>${dto.roomCode}채팅방 입장하기</p>
-									<p id="${dto.roomCode }"></p>
+									<p class="unread" id="${dto.roomCode }">${dto.unread }</p>
 								</div>
 							</a>
 						</c:when>
@@ -101,7 +91,7 @@
 								<div>
 									<p>참여자 : ${dto.send}, ${dto.latestDate}</p>
 									<p>${dto.roomCode}채팅방 입장하기</p>
-									<p id="${dto.roomCode }"></p>
+									<p class="unread" id="${dto.roomCode }">${dto.unread }</p>
 								</div>
 							</a>
 						</c:otherwise>
@@ -128,6 +118,7 @@
 			appendMessage(data);
 		});
 		
+		//읽지않은 메세지 개수 늘려주기
 		appendMessage = function(data) {
 			var text = data.msg;
 			var p = document.getElementById(data.roomCode);

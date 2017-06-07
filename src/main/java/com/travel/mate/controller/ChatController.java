@@ -54,6 +54,9 @@ public class ChatController {
 		model.addAttribute("name", name);
 		model.addAttribute("room", roomCode);
 		
+		//읽지않은 메세지가 있다면 읽음 표시
+		chatService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
+		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
 		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
 		model.addAttribute("list", list);
@@ -68,6 +71,10 @@ public class ChatController {
 		int userCode = getUserCode();
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
+		
+		//생각해보니 채팅창마다 안읽은 메세지 개수를 불러와야 하는 것 같은데...
+		//int count = chatService.checkUnReadMessage(userCode);
+		
 		model.addAttribute("list", list);
 		model.addAttribute("myCode", userCode);
 		
@@ -97,6 +104,7 @@ public class ChatController {
 		result += "room=" + chatRoom.getRoomCode();
 		return result;
 	}
+	
 	
 	//유저의 코드를 받아오는 함수
 	public int getUserCode(){

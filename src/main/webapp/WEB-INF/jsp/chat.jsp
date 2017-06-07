@@ -47,6 +47,9 @@
 					<div class="avatar">${dto.senderName }</div>
 					<div class="text_wrapper">
 						<div class="text">${dto.content}</div>
+						<div class="read">
+							${dto.readFlag }
+						</div>
 					</div>
 					</li>
 				</c:forEach>
@@ -76,6 +79,7 @@
 </div>
 
 <script type="text/javascript">
+
 			var socket = io('http://localhost:3000',{query: 'userID=<%=email%>&userCode=<%=code%>'});
 			var room = '${room}';
 			var nickname = '${name}';
@@ -84,7 +88,6 @@
 			var Message;
 			var getMessageText, message_side, sendMessage, scrollTop;
 			var message_side = 'right';
-			
 		
 			var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
 			
@@ -126,7 +129,7 @@
 			});
 			
 			appendMessage = function(data) {
-				
+
 				var $messages, message;
 				var text = data.msg;
 				var nick = decodeURI(data.nickname);
