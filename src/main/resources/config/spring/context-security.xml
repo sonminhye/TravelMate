@@ -12,8 +12,12 @@
         <security:intercept-url pattern="/travelList" access="hasRole('ROLE_USER')" />
         <security:intercept-url pattern="/readTravel" access="hasRole('ROLE_USER')" />
  	    <security:intercept-url pattern="/main" access="permitAll" />
-        <security:intercept-url pattern="/**" access="permitAll" />
- 
+        <security:intercept-url pattern="/**" access="permitAll" /> 
+<!--   <security:intercept-url pattern="/signIn" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <security:intercept-url pattern="/travelList" access="ROLE_USER" />
+        <security:intercept-url pattern="/readTravel" access="ROLE_USER" />
+ 	    <security:intercept-url pattern="/main" access="permitAll" />
+        <security:intercept-url pattern="/**" access="permitAll" /> -->
  		<security:form-login 
  			login-page="/signIn"
  			default-target-url="/main"
@@ -28,7 +32,7 @@
           
     <security:authentication-manager>
         <security:authentication-provider user-service-ref="customJdbcDaoImpl">
-        <security:password-encoder ref="bcryptPasswordEncoder"/>
+       		 <security:password-encoder ref="bcryptPasswordEncoder"/>
      <!--        <security:jdbc-user-service data-source-ref="dataSource" 
             users-by-username-query="select id, password, enabled from user where id=?"
             authorities-by-username-query="select id,authority from user where id=?"/>
@@ -41,7 +45,7 @@
     	<property name="dataSource" ref="dataSource"/>
     	<property name="rolePrefix" value=""/>
     	<property name="usersByUsernameQuery" value="SELECT userCode, id, password FROM user WHERE id=?"/>
-    	<property name="authoritiesByUsernameQuery" value="SELECT id, authority FROM user WHERE id=? "/>
+    	<property name="authoritiesByUsernameQuery" value="SELECT usercode, authority FROM userauthority WHERE usercode=(SELECT usercode FROM user WHERE id=?) "/>
     	<property name="enableGroups" value="false"/>
     	
     

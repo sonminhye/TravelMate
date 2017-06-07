@@ -29,6 +29,10 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserDetail", userDetailDTO);
 	}
 	
+	public void insertUserAuthority(Map<String, Object> param){
+		insert("user.insertUserAuthority", param);
+	}
+	
 	public UserDetailDTO selectDetailList(int userCode){
 		return (UserDetailDTO) selectOne("user.showDetailList", userCode);
 	}

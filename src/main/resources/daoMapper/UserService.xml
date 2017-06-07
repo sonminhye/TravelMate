@@ -10,9 +10,9 @@
 	<insert id="insertUser" parameterType="com.travel.mate.dto.UserDTO" useGeneratedKeys="true" keyProperty="userCode">
 		<![CDATA[
 			INSERT INTO 
-				user(id, password, authority)
+				user(id, password)
 			VALUES
-				(#{id}, #{password}, #{authority})
+				(#{id}, #{password})
 		]]>
 	</insert>
 	<insert id="insertUserDetail" parameterType="com.travel.mate.dto.UserDetailDTO">
@@ -23,7 +23,14 @@
 				(#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
-
+	<insert id="insertUserAuthority" parameterType="map">
+		<![CDATA[
+			INSERT INTO 
+				userAuthority(userCode, authority)
+			VALUES
+				(#{userCode}, #{authority})
+		]]>
+	</insert>
 	<select id="showDetailList" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
 		<![CDATA[
 			SELECT * FROM userDetail where userCode = #{userCode}
