@@ -12,7 +12,7 @@ public interface UserService {
 	public ArrayList<UserDTO> showList();
 
 	public UserDetailDTO showDetailList(int userCode);
-	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, List<LanguageDTO> langs);
+	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<LanguageDTO> langs);
 	public int checkSignup(String id);
 
 }

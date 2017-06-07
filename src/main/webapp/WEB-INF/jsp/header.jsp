@@ -258,19 +258,19 @@
 						<div class="form-group">
 							<label for="language">사용가능한 언어 </label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].ableLang" value="korean">한국어
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].languageCode" value="1">한국어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox2" name="langDTOList[1].ableLang" value="english">영어
+							  <input type="checkbox" id="inlineCheckbox2" name="langDTOList[1].languageCode" value="2">영어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox3" name="langDTOList[2].ableLang" value="chinese">중국어
+							  <input type="checkbox" id="inlineCheckbox3" name="langDTOList[2].languageCode" value="3">중국어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox4" name="langDTOList[3].ableLang" value="japanese">일본어
+							  <input type="checkbox" id="inlineCheckbox4" name="langDTOList[3].languageCode" value="4">일본어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].ableLang" value="spanish">스페인어
+							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].languageCode" value="5">스페인어
 							</label>
 							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>

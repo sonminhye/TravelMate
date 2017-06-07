@@ -1,7 +1,9 @@
 package com.travel.mate.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	//회원가입
-	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, List<LanguageDTO> langs){
+	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<LanguageDTO> langs){
 		System.out.println("doSignup Service");
 		int userCode = 0;
 		
@@ -53,8 +55,13 @@ public class UserServiceImpl implements UserService {
 			lang.setUserCode(userCode);
 		}
 		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("userCode", userCode);
+		param.put("authority", authority);
+
 		userDAO.insertUserDetail(userDetailDTO);
-		userDAO.insertLanguageList(langs);
+		userDAO.insertUserAuthority(param);
+		userDAO.insertUserLanguage(langs);
 		
 	}
 

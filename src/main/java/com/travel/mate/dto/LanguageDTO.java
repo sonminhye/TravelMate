@@ -4,7 +4,7 @@ import java.util.List;
 
 public class LanguageDTO {
 	private int userCode;
-	private String ableLang;
+	private int languageCode;
 	
 	private List<LanguageDTO> langDTOList;
 
@@ -17,10 +17,10 @@ public class LanguageDTO {
 	}
 	
 	
-	public LanguageDTO(int userCode, String ableLang) {
+	public LanguageDTO(int userCode, int languageCode) {
 		super();
 		this.userCode = userCode;
-		this.ableLang = ableLang;
+		this.languageCode = languageCode;
 	}
 
 	public int getUserCode() {
@@ -31,12 +31,13 @@ public class LanguageDTO {
 		this.userCode = userCode;
 	}
 
-	public String getAbleLang() {
-		return ableLang;
+
+	public int getLanguageCode() {
+		return languageCode;
 	}
 
-	public void setAbleLang(String ableLang) {
-		this.ableLang = ableLang;
+	public void setLanguageCode(int languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public List<LanguageDTO> getLangDTOList() {

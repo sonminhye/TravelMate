@@ -7,11 +7,13 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.travel.mate.dto.LanguageDTO;
@@ -23,6 +25,9 @@ import com.travel.mate.service.UserServiceImpl;
 public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	//TEST용//////////////
 	@RequestMapping(value = "/testList", method = RequestMethod.GET)
@@ -37,15 +42,20 @@ public class UserController {
 	
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
 	public String signUp(@ModelAttribute UserDTO userDTO ,@ModelAttribute UserDetailDTO userDetailDTO,
+						 @RequestParam("authority") String authority,
 						 @ModelAttribute("langDTOList") LanguageDTO languageDTO, Model model) {
 		System.out.println("signup controller");
+		
+		//암호화
+		String bCryptStr = passwordEncoder.encode(userDTO.getPassword());
+		userDTO.setPassword(bCryptStr);
 		
 		List<LanguageDTO> langs = languageDTO.getLangDTOList();
 		//선택되지 않은 언어는 null값이므로 이를 list에서 제거해 주는 작업
 		for(Iterator<LanguageDTO> it = langs.iterator(); it.hasNext();){
 			LanguageDTO lang = it.next();
 			
-			if(lang.getAbleLang() == null){
+			if(lang.getLanguageCode() == 0){
 				it.remove();
 			}
 		}//end for
@@ -54,11 +64,11 @@ public class UserController {
 		System.out.println(userDTO.toString());
 		System.out.println(userDetailDTO.toString());
 		for(LanguageDTO dto: langs){
-			System.out.println("langList"+dto.getUserCode() +" : " + dto.getAbleLang());
+			System.out.println("langList"+dto.getUserCode() +" : " + dto.getLanguageCode());
 		}
         /////////
 		
-		userService.doSignup(userDTO, userDetailDTO, langs);
+		userService.doSignup(userDTO, userDetailDTO, authority, langs);
 				
 		return "signIn"; //회원가입 후 로그인 페이지로
 	}
