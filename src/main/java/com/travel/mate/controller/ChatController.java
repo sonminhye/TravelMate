@@ -47,7 +47,7 @@ public class ChatController {
 		
 		int userCode = ((MyUser)principal).getUserCode();
 		System.out.println(" 내 코드 : " + userCode);
-		UserDetailDTO userDetail = userService.showDetailList(userCode);
+		UserDetailDTO userDetail = userService.showUserDetail(userCode);
 		String name = userDetail.getName();
 		String rCode = request.getParameter("rcode"); // 받는 이 (상대방)
 		String roomCode = request.getParameter("room"); //room Code 

@@ -9,8 +9,8 @@
  
     <security:http auto-config="true" use-expressions="true">
         <security:intercept-url pattern="/signIn" access="isAnonymous()" />
-        <security:intercept-url pattern="/travelList" access="hasRole('ROLE_USER')" />
-        <security:intercept-url pattern="/readTravel" access="hasRole('ROLE_USER')" />
+        <security:intercept-url pattern="/travelList" access="permitAll" />
+        <security:intercept-url pattern="/readTravel" access="permitAll" />
  	    <security:intercept-url pattern="/main" access="permitAll" />
         <security:intercept-url pattern="/**" access="permitAll" /> 
 <!--   <security:intercept-url pattern="/signIn" access="IS_AUTHENTICATED_ANONYMOUSLY" />
