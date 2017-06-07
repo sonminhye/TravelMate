@@ -253,7 +253,7 @@ ALTER TABLE securedResource
 
 -- 보안리소스권한
 CREATE TABLE securedResourceAuthority (
-	resourceCode INT UNSIGNED NOT NULL DEFAULT NULL COMMENT '리소스번호', -- 리소스번호
+	resourceCode INT UNSIGNED NOT NULL COMMENT '리소스번호', -- 리소스번호
 	authority    VARCHAR(50)  NOT NULL COMMENT '권한' -- 권한
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '보안리소스권한';
@@ -534,4 +534,4 @@ INSERT INTO language (languageCode, language) VALUES (1, 'korean');
 INSERT INTO language (languageCode, language) VALUES (2, 'english');
 INSERT INTO language (languageCode, language) VALUES (3, 'chinese');
 INSERT INTO language (languageCode, language) VALUES (4, 'japanese');
-INSERT INTO language (languageCode, language) VALUES (5, 'spanish');		
+INSERT INTO language (languageCode, language) VALUES (5, 'spanish');

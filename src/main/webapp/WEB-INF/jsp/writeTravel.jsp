@@ -116,6 +116,36 @@ function minPeopleCheck(obj) {
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
+	
+	<script>
+	$(document).ready(function() {
+		$("#search").click(function() {
+			var keyWord = $("#keyWord").val();
+			keyWord = encodeURIComponent(keyWord);
+			
+			var url = "https://apis.daum.net/local/v1/search/keyword.json?apikey=aa223a53480a208175ae1675e33e4193&query="+keyWord;
+			
+			$.getJSON(url + "&callback?", function(json) {
+				var items = json.channel.item;
+				
+				$.each(items, function(i, it) {
+					var latitude = it.latitude;
+					var longitude = it.logitude;
+					
+					if ( i==0 ) {
+						var container = document.getElementById("map");
+						var options = {
+							center: new daum.maps.LatLng(latitude, longitude),
+							level: 3
+						};
+						var map = new daum.maps.Map(container, options);
+					}
+				});
+			})
+		});
+		$("#keyWord").val("");
+	});
+	</script>
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action="doWrite" method="post" enctype="multipart/form-data">
@@ -184,6 +214,10 @@ function minPeopleCheck(obj) {
 							type="text/javascript"
 							src="//apis.daum.net/maps/maps3.js?apikey=aa223a53480a208175ae1675e33e4193&libraries=services"></script>
 						<script type="text/javascript" src=./js/writeMap.js></script>
+						<div>
+							<input type="keyWord" placeholder="search">
+							<div id="search">검색</div>
+						</div>
 						<div id="add"></div>
 					</td>
 				</tr>
