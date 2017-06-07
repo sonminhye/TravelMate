@@ -3,10 +3,20 @@ package com.travel.mate.dto;
 import java.util.List;
 
 public class ApplyDTO {
+	int applyCode;
 	int travelCode;
 	int userCode;
 	
 	List<ApplyDTO> alist;
+
+	
+	public int getApplyCode() {
+		return applyCode;
+	}
+
+	public void setApplyCode(int applyCode) {
+		this.applyCode = applyCode;
+	}
 
 	public int getTravelCode() {
 		return travelCode;

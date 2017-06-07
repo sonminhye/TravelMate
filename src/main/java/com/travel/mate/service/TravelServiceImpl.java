@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.travel.mate.dao.TravelDAO;
 import com.travel.mate.dto.ApplyDTO;
@@ -25,19 +27,29 @@ public class TravelServiceImpl implements TravelService {
 
 	// 글쓰기
 	@Override
-	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelImageDTO travelImageDto, TravelRouteDTO travelRouteDto) {
+	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) {
 		// 좌표 여러개(리스트) 얻은 후
 		// DTO의 method를 콜하는 것에서 주의! jsp파일의 list명과 DTO 내의 객체이름이 같아야함
 		List<TravelDTO> travels = travelDto.getTlist();
 		List<TravelDetailDTO> travelDetails = travelDetailDto.getTdlist();
-		List<TravelImageDTO> travelImages = travelImageDto.getTilist();
 		List<TravelRouteDTO> routes = travelRouteDto.getTrlist();
+		
+		
+		System.out.println("image test");
+		MultipartFile f = request.getFile("image");
+		String filename = f.getOriginalFilename();
+		System.out.println(filename);
+		
+		System.out.println("test end!");
+		
+		
+		
+		
 		
 		int travelCode = 0;
 		
 		if ((null != travels && travels.size() > 0)
-				&& (null != travelDetails && travelDetails.size() > 0)
-				&& (null != travelImages && travelImages.size() > 0)) {
+				&& (null != travelDetails && travelDetails.size() > 0)) {
 			// insert.. travel table & apply table 
 			for (TravelDTO travel : travels) {
 				travelDAO.insertTravel(travel);
@@ -55,12 +67,12 @@ public class TravelServiceImpl implements TravelService {
 				travelDetail.setTravelCode(travelCode);
 				travelDAO.insertTravelDetail(travelDetail);
 			}
-			// insert.. travelImage table
-			for (TravelImageDTO travelImage : travelImages) {
-				// travelCode setting
-				travelImage.setTravelCode(travelCode);
-				travelDAO.insertTravelImage(travelImage);
-			}
+//			// insert.. travelImage table
+//			for (TravelImageDTO travelImage : travelImages) {
+//				// travelCode setting
+//				travelImage.setTravelCode(travelCode);
+//				travelDAO.insertTravelImage(travelImage);
+//			}
 		}
 		
 		// insert.. travelRoute table

@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.travel.mate.dto.ApplyDTO;
@@ -101,14 +104,13 @@ public class TravelController {
 	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
 	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
 			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
-			@ModelAttribute("tilist") TravelImageDTO travelImageDto,
-			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto) throws Exception {
-
+			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto,
+			MultipartHttpServletRequest request) throws Exception {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/travelList");
 
-		travelService.insertTravel(travelDto, travelDetailDto, travelImageDto, travelRouteDto);
+		travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
 		return mv;
 	}
 

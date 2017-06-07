@@ -3,12 +3,21 @@ package com.travel.mate.dto;
 import java.util.List;
 
 public class TravelRouteDTO {
+	int travelRouteCode;
 	int travelCode;
 	double lat;
 	double lng;
 	String location;
 	
 	List<TravelRouteDTO> trlist;
+	
+	public int getTravelRouteCode() {
+		return travelRouteCode;
+	}
+
+	public void setTravelRouteCode(int travelRouteCode) {
+		this.travelRouteCode = travelRouteCode;
+	}
 
 	public int getTravelCode() {
 		return travelCode;
