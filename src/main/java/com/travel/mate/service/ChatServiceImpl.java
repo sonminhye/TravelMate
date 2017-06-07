@@ -61,4 +61,24 @@ public class ChatServiceImpl implements ChatService {
 
 		return chatDAO.addRoom(chatRoom);
 	}
+
+	@Override
+	public int checkUnReadMessage(int userCode) {
+		// TODO Auto-generated method stub
+		
+		return chatDAO.checkUnReadMessage(userCode);
+	}
+
+	@Override
+	public void changeUnReadMessage(int roomCode, int userCode) {
+		// TODO Auto-generated method stub
+		ChatDTO chat = new ChatDTO();
+		
+		chat.setRoomCode(roomCode);
+		chat.setReceiverCode(userCode);
+	
+		chatDAO.changeUnReadMessage(chat);
+	}
+	
+	
 }

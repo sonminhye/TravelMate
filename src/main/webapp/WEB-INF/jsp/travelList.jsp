@@ -2,6 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
@@ -20,10 +21,10 @@
 %>
 <html>
 <head>
-<title>Home</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="<c:url value='/js/travelCommon.js'/>" charset="utf-8"></script>
+	<title>여행 목록</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="<c:url value='/js/travelCommon.js'/>" charset="utf-8"></script>
+	<script src="<c:url value='/js/calculateDay.js'/>" charset="utf-8"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
@@ -77,6 +78,12 @@
 												<h4>${row.name }</h4>
 												<p class="text-muted">작성일 : ${row.writeDate }</p>
 												<p>시작일 : ${row.startDate }</p>
+												<h4 id="${row.travelCode }"></h4>
+												<!-- D-Day 계산 -->
+												<script type="text/javascript">
+													var between = getDiffDay("${row.startDate}", getToday());
+													$("#${row.travelCode}").html(between);
+												</script>
 											</div>
 										</div>
 									</c:forEach>
@@ -141,6 +148,7 @@
 						}),
 						success: function(data) { // ajax 성공시 수행할 함수
 							var str = "";
+							var ddayResult = "";
 							// 5. 서버에서 온 데이터가 ""이거나 null인경우 DOM handling..
 							if (data != "") {
 								// 6. 서버에게 온 데이터가 리스트이므로 each문을 사용하여 접근
@@ -148,9 +156,12 @@
 									// 7. html 코드만들기
 									function() {
 										// console.log(this);
+										ddayResult = getDiffDay(this.startDate, getToday());
+										
 										str += "<div class=" + "'col-md-4 col-sm-6 portfolio-item listToChange'" + ">"
 											+ "<a href=" + "#this" + " name=" + "title" + " class=" + "portfolio-link" + " data-toggle=" + "modal" + ">"
 											+ "<input type=" + "hidden" + " class=" + "'travelCode scrolling'" + " data-tcode=" + this.travelCode + " value=" + this.travelCode +">"
+											+ "<input type=" + "hidden" + " class=" + "'userCode'" + " value=" + <%=code %> + ">"
 											+ "<div class=" + "portfolio-hover" + ">"
 											+ "<div class=" + "portfolio-hover-content" + ">"
 											+ "<i class=" + "'fa fa-plus fa-3x'" + "></i>"
@@ -163,8 +174,10 @@
 											+ "<h4>" + this.name + "</h4>"
 											+ "<p class=" + "text-muted" + ">" + "작성일 : " + this.writeDate + "</p>"
 											+ "<p>" + "시작일 : " + this.startDate + "</p>"
+											+ "<h4 id=" + this.travelCode + ">" + ddayResult + "</h4>"
 											+ "</div>"
 											+ "</div>";
+										
 									}
 								);
 								// 8. 이전까지 뿌려졌던 데이터 비우고  만든 str을 뿌려준다

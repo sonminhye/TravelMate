@@ -12,4 +12,6 @@ public interface ChatService {
 	public ArrayList<ChatDTO> showChats(int roomCode);
 	public ChatRoomDTO showChatRoomExist(int senderCode, int receiverCode);
 	public ChatRoomDTO addRoom(int senderCode, int receiverCode, String date);
+	public int checkUnReadMessage(int userCode);
+	public void changeUnReadMessage(int roomCode, int userCode);
 }

@@ -26,6 +26,8 @@
     <meta name="author" content="">
 
     <title>Header</title>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
  
@@ -48,8 +50,8 @@
 	var lastKeyword = '';
 	var loopSendKeyword = false;
 	
-	var idCheck = document.getElementByName(idCheck).value;
-	var passwordCheck = document.getElementByName(passwordCheck).value;
+	var idCheck = 0;
+	var passwordCheck = 0;
 
 	
 	function checkEmail() {
@@ -189,6 +191,7 @@
 	                </li>
 	                <li>
 	                	<a class="page-scroll" href="chatList">Message</a>
+	                	<div class="unreadMsg"></div>
 	                </li>
                 </sec:authorize>
                 </ul>
@@ -255,19 +258,19 @@
 						<div class="form-group">
 							<label for="language">사용가능한 언어 </label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].ableLang" value="korean">한국어
+							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].languageCode" value="1">한국어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox2" name="langDTOList[1].ableLang" value="english">영어
+							  <input type="checkbox" id="inlineCheckbox2" name="langDTOList[1].languageCode" value="2">영어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox3" name="langDTOList[2].ableLang" value="chinese">중국어
+							  <input type="checkbox" id="inlineCheckbox3" name="langDTOList[2].languageCode" value="3">중국어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox4" name="langDTOList[3].ableLang" value="japanese">일본어
+							  <input type="checkbox" id="inlineCheckbox4" name="langDTOList[3].languageCode" value="4">일본어
 							</label>
 							<label class="checkbox-inline">
-							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].ableLang" value="spanish">스페인어
+							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].languageCode" value="5">스페인어
 							</label>
 							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>
@@ -276,8 +279,8 @@
 					
 					<!-- 입력 여부 체크하기위한 hidden input -->
 					<div class="formCheck">
-				        <input name="idCheck" class="idCheck" type="hidden" value='0'>
-				        <input name="passwordCheck" class="passwordCheck" type="hidden" value='0'>
+				        <input name="idCheck" id="idCheck" class="idCheck" type="hidden" value='0'>
+				        <input name="passwordCheck" id="passwordCheck" class="passwordCheck" type="hidden" value='0'>
 				    </div>
 				</div>
 			</div>
@@ -315,6 +318,34 @@
 			</div>
 		</div>
 	</div>
- 
+ 	<script type="text/javascript">
+	 	var socket = io('http://localhost:3000');
+	 	var userCode = '<%=code%>';
+	
+	 	// nick name 정보를 서버에 보냄
+	 	socket.emit('joinAllRooms', {
+	 		userCode : userCode,
+	 	});
+	
+	 	// 메세지 수신 부분
+	 	socket.on('msg', function(data) {
+	 		if(data.scode != userCode)
+	 			appendCount(data);
+	 	});
+	
+	 	// 읽지않은 메세지 개수 늘려주기
+	 	appendCount = function(data) {
+	 		console.log("count 증가!");
+	 		var text = data.msg;
+	 		var unread = $('.unreadMsg');
+	 		
+	 		if (unread.html() != "") {
+	 			unread.html(parseInt(unread.html()) + 1);
+	 		} else {
+	 			unread.html(1);
+	 		}
+	
+	 	};
+ 	</script>
 </body>
 </html>

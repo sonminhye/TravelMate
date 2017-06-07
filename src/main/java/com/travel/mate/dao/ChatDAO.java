@@ -38,6 +38,17 @@ public class ChatDAO extends AbstractDAO{
 		System.out.println("전 : "+ chatRoom.getRoomCode());
 		insert("chat.addChatRoom", chatRoom);
 		System.out.println("후 : "+ chatRoom.getRoomCode());
+		
 		return chatRoom;
+	}
+	
+	public int checkUnReadMessage(int userCode) {
+		// TODO Auto-generated method stub
+		return (Integer) selectOne("chat.checkUnReadMessage", userCode);
+	}
+
+	public void changeUnReadMessage(ChatDTO chat) {
+		// TODO Auto-generated method stub
+		update("chat.changeUnReadMessage", chat);
 	}
 }

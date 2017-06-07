@@ -2,6 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
@@ -22,7 +23,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>여행 보기</title>
 </head>
 <body>
 
@@ -82,6 +83,7 @@
 						<tr>
 							<td>채팅링크</td>
 							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
+							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
 						<tr>
 							<td>설명</td>
@@ -90,10 +92,12 @@
 						<tr>
 							<td>시간</td>
 							<td>${row.startDate } ${row.startTime } ~ ${row.endDate } ${row.endTime }</td>
+							<c:set var="startDate" value="${row.startDate }"></c:set>
 						</tr>
 						<tr>
-							<td>최소인원/최대인원</td>
-							<td>${row.minPeople }/${row.maxPeople }</td>
+							<td>최소인원/최대인원/신청인원</td>
+							<td>${row.minPeople }/${row.maxPeople }/${fn:length(applyCount) }</td>
+							<c:set var="maxPeople" value="${row.maxPeople }"></c:set>
 						</tr>
 					</c:forEach>
 				</c:when>
@@ -169,19 +173,94 @@
 				</td>
 			</tr>
 		</table>
-		<!-- 신청했다면 취소버튼 그렇지 않으면 신청 버튼 -->
+		<!-- 여행 시작일이 오늘보다 크다면, 신청가능 -->
+		<!-- 신청가능하다면, 여행신청했는지에 따라 버튼 생성 -->
+		<c:set var="userCode" value="<%= code %>"></c:set>
+		
+		<jsp:useBean id="now" class="java.util.Date" />
+		<fmt:formatDate var="toDay" value="${now }" pattern="yyyy-MM-dd"/>
+		
 		<c:choose>
-			<c:when test="${fn:length(applyList) > 0}">
-				<form action="doCancel" method="post">
-					<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
-				</form>
+			<c:when test="${toDay < startDate }">
+				<c:choose>
+					<c:when test="${fn:length(applyList) > 0}">
+						<c:choose>
+							<c:when test="${userCode == writerCode}">
+								<p>글쓴이는 자동적으로 신청되며, 글수정 및 삭제 기능은 예정 없음</p>
+							</c:when>
+							<c:otherwise>
+								<form action="doCancel" method="post">
+									<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
+								</form>
+							</c:otherwise>
+						</c:choose>
+					</c:when>
+					<c:otherwise>
+						<c:choose>
+							<c:when test="${fn:length(applyCount) != maxPeople }">
+								<form action="doApply" method="post">
+									<%=applyButtonStart %><%=applyButtonEnd %>
+								</form>
+							</c:when>
+							<c:otherwise>
+								<p>신청 인원이 최대 인원입니다.</p>
+							</c:otherwise>
+						</c:choose>
+					</c:otherwise>
+				</c:choose>
 			</c:when>
 			<c:otherwise>
-				<form action="doApply" method="post">
-					<%=applyButtonStart %><%=applyButtonEnd %>
-				</form>
+				<!-- 시작일이 지났으므로 신청 불가 -->
+				<p>시작일이 지나서 신청이 불가능합니다.</p>
 			</c:otherwise>
 		</c:choose>
+		<hr>
+		<!-- review 출력 -->
+		<!-- 작성된 리뷰가 있다면 리뷰를 출력하며, 그렇지 않으면 리뷰가 없음을 출력 -->
+		<!-- 해당 여행을 신청한 사람인지 확인 후, 신청한 사람이라면 여행리뷰를 남길 수 있게함 -->
+		<!-- 단, 리뷰를 남기는 것은 여행이 끝나야하므로 endDate와 비교하며 오늘이 endDate가 지났을 때만 리뷰를 남길 수 있도록 생성 -->
+		<!-- 리뷰는 단 한번만 작성할 수 있다 -->
+		<div id="review">
+		<br><br>
+			<c:choose>
+				<c:when test="${fn:length(reviewList) > 0 }">
+					<c:forEach items="${reviewList }" var="review">
+						<div>${review.name }	${review.content }(${review.writeTime })</div>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div>작성된 리뷰가 없습니다.</div>
+				</c:otherwise>
+			</c:choose>
+			
+			<c:choose>
+				<c:when test="${fn:length(applyList) > 0}">
+					<c:choose>
+						<c:when test="${fn:length(reviewWriteCheck) > 0}">
+							<c:choose>
+								<c:when test="${fn:length(reviewWrite) > 0}">
+									<%-- 이미 리뷰를 작성했습니다. --%>
+								</c:when>
+								<c:otherwise>
+									<form action="doWriteReview" method="post">
+										<input type="hidden" name="rlist[0].travelCode" value="<%=travelCode %>">
+										<textarea name="rlist[0].content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
+										<input type="hidden" name="rlist[0].userCode" value="<%=code %>">
+										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
+									</form>
+								</c:otherwise>
+							</c:choose>
+						</c:when>
+						<c:otherwise>
+							<%-- 여행 마감일이 끝나지 않았으므로 리뷰를 작성할 수 없습니다. --%>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:otherwise>
+					<%-- 신청하지 않았던 여행이므로 리뷰 작성권한이 없습니다. --%>
+				</c:otherwise>
+			</c:choose>	
+		</div>
 	</div>
 
 	<jsp:include page="footer.jsp"></jsp:include>
