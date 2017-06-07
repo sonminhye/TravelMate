@@ -47,13 +47,19 @@
 					<div class="avatar">${dto.senderName }</div>
 					<div class="text_wrapper">
 						<div class="text">${dto.content}</div>
-						<div class="read">
-							${dto.readFlag }
-						</div>
+						<c:choose>
+						<c:when test="${dto.readFlag==false}">
+							<div class="unread">O</div>
+						</c:when>
+						<c:otherwise>
+							<div class="read">O</div>
+						</c:otherwise>
+					</c:choose>
 					</div>
 					</li>
 				</c:forEach>
 			</ul>
+			
 			<div class="bottom_wrapper clearfix">
 				<div class="message_input_wrapper">
 				<form>
@@ -73,14 +79,14 @@
 				<div class="avatar"></div>
 				<div class="text_wrapper">
 					<div class="text"></div>
+					<div class="unread">O</div>
 				</div>
 			</li>
 		</div>
 </div>
 
 <script type="text/javascript">
-
-			var socket = io('http://localhost:3000',{query: 'userID=<%=email%>&userCode=<%=code%>'});
+			
 			var room = '${room}';
 			var nickname = '${name}';
 			var rcode = '${rcode}';
@@ -88,10 +94,11 @@
 			var Message;
 			var getMessageText, message_side, sendMessage, scrollTop;
 			var message_side = 'right';
-		
+			var inchatRoom = false;
 			var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
 			
 			//nick name, 방정보 등 정보를 서버에 보냄
+			//보내면서 내 코드와 룸에서 읽지않은 것이 있다면 읽음 표시를 해줌
 			socket.emit('join', {
 				nickname : nick,
 				room : room,
@@ -105,12 +112,13 @@
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님 환영합니다'));
 				scrollTop();
-				
 			});
 			
 			//누군가 입장했을 때, 알려주는 부분
 			socket.on('join', function(data) {	
 				var nick = decodeURI(data.nickname);
+				inchatRoom = true;
+				
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 입장하셨습니다'));
 			});
@@ -123,17 +131,18 @@
 			
 			socket.on('left', function(data) { //이 부분은 나중에 온라인 혹은 비온라인 식으로 고쳐줘도 될 듯
 				var nick = decodeURI(data.nickname);
+				inchatRoom = false;
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 퇴장하셨습니다'));
 				scrollTop();
 			});
 			
+			
 			appendMessage = function(data) {
-
+				
 				var $messages, message;
 				var text = data.msg;
 				var nick = decodeURI(data.nickname);
-				
 				if(nick==nickname) message_side='right';
 				else message_side='left';
 				

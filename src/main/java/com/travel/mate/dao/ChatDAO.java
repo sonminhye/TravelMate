@@ -38,6 +38,7 @@ public class ChatDAO extends AbstractDAO{
 		System.out.println("전 : "+ chatRoom.getRoomCode());
 		insert("chat.addChatRoom", chatRoom);
 		System.out.println("후 : "+ chatRoom.getRoomCode());
+		
 		return chatRoom;
 	}
 	

@@ -188,7 +188,6 @@ html{
   background:#269d9d;
 }
 
-
 @media (max-width:767px) {
   .navigation-clean-button .navbar-nav .open .dropdown-menu{
     box-shadow:none;
