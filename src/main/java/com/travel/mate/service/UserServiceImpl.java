@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 		userDAO.insertUserDetail(userDetailDTO);
 		userDAO.insertUserAuthority(param);
-		userDAO.insertLanguageList(langs);
+		userDAO.insertUserLanguage(langs);
 		
 	}
 

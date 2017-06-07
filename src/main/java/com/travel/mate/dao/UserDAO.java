@@ -37,9 +37,9 @@ public class UserDAO extends AbstractDAO{
 		return (UserDetailDTO) selectOne("user.showDetailList", userCode);
 	}
 
-	public void insertLanguageList(List<LanguageDTO> langs){
+	public void insertUserLanguage(List<LanguageDTO> langs){
 		System.out.println("DAO에서 insertLanguageList를 콜했습니다");
-		insert("user.insertLanguageList", langs);
+		insert("user.insertUserLanguage", langs);
 	}
 	
 	public int selectUserId(String id){

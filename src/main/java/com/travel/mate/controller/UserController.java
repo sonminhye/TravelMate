@@ -55,7 +55,7 @@ public class UserController {
 		for(Iterator<LanguageDTO> it = langs.iterator(); it.hasNext();){
 			LanguageDTO lang = it.next();
 			
-			if(lang.getAbleLang() == null){
+			if(lang.getLanguageCode() == 0){
 				it.remove();
 			}
 		}//end for
@@ -64,7 +64,7 @@ public class UserController {
 		System.out.println(userDTO.toString());
 		System.out.println(userDetailDTO.toString());
 		for(LanguageDTO dto: langs){
-			System.out.println("langList"+dto.getUserCode() +" : " + dto.getAbleLang());
+			System.out.println("langList"+dto.getUserCode() +" : " + dto.getLanguageCode());
 		}
         /////////
 		

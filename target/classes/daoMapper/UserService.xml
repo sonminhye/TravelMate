@@ -37,12 +37,12 @@
 		]]>
 	</select>
 
-	<insert id="insertLanguageList" parameterType="java.util.List">
+	<insert id="insertUserLanguage" parameterType="java.util.List">
 			INSERT INTO 
-				languageList (userCode, ableLang)
+				userLanguage (userCode, languageCode)
 			VALUES
 			<foreach collection="list" item="item" separator=",">
-				(#{item.userCode}, #{item.ableLang})
+				(#{item.userCode}, #{item.languageCode})
 			</foreach>
 	</insert>
 	<select id="selectUserId" resultType="int">
