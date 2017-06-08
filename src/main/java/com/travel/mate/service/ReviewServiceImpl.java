@@ -12,6 +12,7 @@ import com.travel.mate.dao.ReviewDAO;
 import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.ReviewDTO;
 import com.travel.mate.dto.TravelDTO;
+import com.travel.mate.dto.TravelEvalDTO;
 
 @Service("ReviewService")
 public class ReviewServiceImpl implements ReviewService {
@@ -43,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void insertReview(ApplyDTO applyDto, String content) {
+	public void insertReview(ApplyDTO applyDto, String content, int point) {
 		List<ApplyDTO> applys = applyDto.getAlist();
 		if ((null != applys && applys.size() > 0)) {
 			for (ApplyDTO apply : applys) {
@@ -59,7 +60,13 @@ public class ReviewServiceImpl implements ReviewService {
 				ReviewDTO reviewDto = new ReviewDTO();
 				reviewDto.setApplyCode(code);
 				reviewDto.setContent(content);
+				
+				TravelEvalDTO travelEvalDto = new TravelEvalDTO();
+				travelEvalDto.setApplyCode(code);
+				travelEvalDto.setPoint(point);
+				
 				reviewDAO.insertReview(reviewDto);
+				reviewDAO.insertPoint(travelEvalDto);
 			}
 		}
 	}

@@ -27,19 +27,19 @@
 	<!-- 첫 화면에 보여질 6개 -->
 	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
-			SELECT	tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
+			SELECT		tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
 			FROM
-				(
-				SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
-				FROM
-							(
-							SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-							FROM		travel t, userDetail ud
-							WHERE		t.userCode = ud.userCode
-							) ts, travelDetail td
-				WHERE		ts.travelCode = td.travelCode
-				) tt, travelImage ti
-			WHERE tt.travelCode = ti.travelCode
+						(
+						SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+						FROM
+									(
+									SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
+									FROM		travel t, userDetail ud
+									WHERE		t.userCode = ud.userCode
+									) ts, travelDetail td
+						WHERE		ts.travelCode = td.travelCode
+						) tt, travelImage ti
+			WHERE		tt.travelCode = ti.travelCode
 			ORDER BY	tt.writeDate DESC, tt.travelCode DESC
 			LIMIT		0, 6
 		]]>
@@ -48,16 +48,20 @@
 	<!-- 스크롤을 통해 3개씩 더 가져오기 -->
 	<select id="selectTravelScroll" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+			SELECT		tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
 			FROM		(
-						SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-						FROM		travel t, userDetail ud
-						WHERE		t.userCode = ud.userCode
-							AND		t.travelCode <= #{code}
-							AND		t.travelCode > #{code} - 3
-						) ts, travelDetail td
-			WHERE		ts.travelCode = td.travelCode
-			ORDER BY	ts.travelCode DESC, ts.writeDate DESC
+						SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
+						FROM		(
+									SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
+									FROM		travel t, userDetail ud
+									WHERE		t.userCode = ud.userCode
+									) ts, travelDetail td
+						WHERE		ts.travelCode = td.travelCode
+							AND		ts.travelCode <= #{code}
+							AND		ts.travelCode > #{code} - 3
+						) tt, travelImage ti
+			WHERE		tt.travelCode = ti.travelCode
+			ORDER BY	tt.travelCode DESC, tt.writeDate DESC
 		]]>
 	</select>
 	

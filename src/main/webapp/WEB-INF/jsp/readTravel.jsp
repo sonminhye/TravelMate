@@ -24,6 +24,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>여행 보기</title>
+<link href="css/starPoint.css" rel="stylesheet">
 </head>
 <body>
 	<c:set value="<%=code %>" var="mCode"></c:set>
@@ -128,22 +129,6 @@
 									// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
 									var markers = [];
 	
-									
-									// 마커를 생성하고 지도위에 표시하는 함수입니다
-									function addMarker(position) {
-									
-										// 마커를 생성합니다
-										var marker = new daum.maps.Marker({
-											position : position
-										});
-									
-										// 마커가 지도 위에 표시되도록 설정합니다
-										marker.setMap(map);
-									
-										// 생성된 마커를 배열에 추가합니다
-										markers.push(marker);
-										// 하단에 좌표 값을 등록
-									}
 									// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 									function setMarkers(map) {
 										for (var i = 0; i < markers.length; i++) {
@@ -159,12 +144,46 @@
 							</script>
 							등록된 장소가 없습니다.
 						</c:otherwise>
-					</c:choose> <c:choose>
+					</c:choose>
+					
+					<script type="text/javascript">
+					
+					// 마커를 생성하고 지도위에 표시하는 함수입니다
+					function addMarker(position, location, locOrder) {
+					
+						// 마커를 생성합니다
+						var marker = new daum.maps.Marker({
+							position : position
+						});
+					
+						// 마커가 지도 위에 표시되도록 설정합니다
+						marker.setMap(map);
+						
+						
+						var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + '번째)' + '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+					    iwPosition = position; //인포윈도우 표시 위치입니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new daum.maps.InfoWindow({
+						    position : iwPosition, 
+						    content : iwContent 
+						});
+						  
+						// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+						infowindow.open(map, marker);
+					
+						// 생성된 마커를 배열에 추가합니다
+						markers.push(marker);
+						// 하단에 좌표 값을 등록
+					}
+					</script>
+					
+					<c:choose>
 						<c:when test="${fn:length(route) > 0}">
 							<c:forEach items="${route }" var="routes">
 								<script type="text/javascript">
 								// 마커 하나를 지도위에 표시합니다
-									addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}));
+									addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}), '${routes.location}', ${routes.locOrder});
 								</script>
 							</c:forEach>
 						</c:when>
@@ -245,6 +264,14 @@
 								</c:when>
 								<c:otherwise>
 									<form action="doWriteReview" method="post">
+										<p class="star_rating">
+										    <a href="#this" id="point1">★</a>
+										    <a href="#this" id="point2">★</a>
+										    <a href="#this" id="point3">★</a>
+										    <a href="#this" id="point4">★</a>
+										    <a href="#this" id="point5">★</a>
+										</p>
+										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
 										<textarea name="content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
 										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
@@ -264,6 +291,8 @@
 			</c:choose>	
 		</div>
 	</div>
+	
+	<script type="text/javascript" src="<c:url value='/js/starPoint.js'/>"></script>
 
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>

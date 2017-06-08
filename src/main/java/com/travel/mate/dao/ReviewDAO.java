@@ -6,6 +6,7 @@ import java.util.Map;
 import com.travel.mate.common.dao.AbstractDAO;
 import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.ReviewDTO;
+import com.travel.mate.dto.TravelEvalDTO;
 
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +30,10 @@ public class ReviewDAO extends AbstractDAO {
 
 	public void insertReview(ReviewDTO review) {
 		insert("review.insertReview", review);
+	}
+
+	public void insertPoint(TravelEvalDTO travelEvalDto) {
+		insert("review.insertTravelEval", travelEvalDto);	
 	}
 
 }
