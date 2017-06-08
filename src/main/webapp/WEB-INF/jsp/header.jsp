@@ -326,10 +326,11 @@
 	 	socket.emit('joinAllRooms', {
 	 		userCode : userCode,
 	 	});
-	
+	 	
 	 	// 메세지 수신 부분
 	 	socket.on('msg', function(data) {
-	 		if(data.scode != userCode)
+	 		//내가 보낸 메세지가 아니고, 현재 읽지 않은 메세지일 경우에만 1 증가
+	 		if(data.scode != userCode && data.readFlag==0)
 	 			appendCount(data);
 	 	});
 	

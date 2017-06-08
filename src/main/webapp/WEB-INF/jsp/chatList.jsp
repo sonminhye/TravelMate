@@ -108,7 +108,8 @@
 		
 		// 메세지 수신 부분
 		socket.on('msg', function(data) {
-			appendCountByRoom(data);
+			if(data.readFlag==0) // 내가 읽고있는 메세지가 아니라면
+				appendCountByRoom(data); // 숫자 늘려주기
 		});
 
 		// 읽지않은 메세지 개수 늘려주기

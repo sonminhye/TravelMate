@@ -23,7 +23,7 @@
 		where roomCode = (select roomCode from roomUser where userCode=#{receiverCode} or userCode=#{senderCode})
 	</select> -->
 	
-	<select id="showChatRoomExist2" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
+	<select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
 		select *
 		from messageRoom 
 		where ( senderCode=#{senderCode} and receiverCode=#{receiverCode} ) or (senderCode=#{receiverCode} and receiverCode = #{senderCode})

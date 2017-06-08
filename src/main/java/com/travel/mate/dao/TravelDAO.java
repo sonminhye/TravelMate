@@ -33,8 +33,8 @@ public class TravelDAO extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectTravel(Map<String, Object> map) {
-		return (List<Map<String, Object>>)selectList("travel.selectTravel", map);
+	public List<Map<String, Object>> selectTravel() {
+		return (List<Map<String, Object>>)selectList("travel.selectTravel");
 	}
 
 	@SuppressWarnings("unchecked")

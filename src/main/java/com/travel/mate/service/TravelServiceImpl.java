@@ -43,7 +43,8 @@ public class TravelServiceImpl implements TravelService {
 		int travelCode = 0;
 		
 		if ((null != travels && travels.size() > 0)
-				&& (null != travelDetails && travelDetails.size() > 0)) {
+				&& (null != travelDetails && travelDetails.size() > 0)
+				&& (null != request)) {
 			// insert.. travel table & apply table 
 			for (TravelDTO travel : travels) {
 				travelDAO.insertTravel(travel);
@@ -62,10 +63,8 @@ public class TravelServiceImpl implements TravelService {
 				travelDAO.insertTravelDetail(travelDetail);
 			}
 			
-			System.out.println("image test");
 			MultipartFile f = request.getFile("image");
 			String filename = f.getOriginalFilename();
-			System.out.println(filename);
 			
 			Iterator<String> iterator = request.getFileNames();
 			
@@ -85,20 +84,13 @@ public class TravelServiceImpl implements TravelService {
 			// 지정한 경로에 파일 저장
 			multipartFile.transferTo(file);
 			
-			System.out.println("image insert query starting..");
-			
+			// 파일명 db에 insert
 			TravelImageDTO travelImage = new TravelImageDTO();
 			
 			travelImage.setImage(storedFileName);
 			travelImage.setTravelCode(travelCode);
 			
-			System.out.println("travelCode & 저장명: " + travelCode + ", " + storedFileName);
-			
 			travelDAO.insertTravelImage(travelImage);
-			
-			System.out.println("image insert query end..");
-			
-			System.out.println("test end!");
 			
 //			// insert.. travelImage table
 //			for (TravelImageDTO travelImage : travelImages) {
@@ -106,6 +98,9 @@ public class TravelServiceImpl implements TravelService {
 //				travelImage.setTravelCode(travelCode);
 //				travelDAO.insertTravelImage(travelImage);
 //			}
+		}
+		else {
+			// err(?)
 		}
 		
 		// insert.. travelRoute table
@@ -124,8 +119,8 @@ public class TravelServiceImpl implements TravelService {
 
 	/* 다음 3개의 method는 글 읽기의 기능 */
 	@Override
-	public List<Map<String, Object>> selectTravel(Map<String, Object> map) {
-		return travelDAO.selectTravel(map);
+	public List<Map<String, Object>> selectTravel() {
+		return travelDAO.selectTravel();
 	}
 	@Override
 	public List<Map<String, Object>> selectTravelDetail(TravelDTO travelDto) {

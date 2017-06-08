@@ -49,10 +49,10 @@
 						<div class="text">${dto.content}</div>
 						<c:choose>
 						<c:when test="${dto.readFlag==false}">
-							<div class="unread">O</div>
+							<div class="unread">읽지않음</div>
 						</c:when>
 						<c:otherwise>
-							<div class="read">O</div>
+							<div class="read"></div>
 						</c:otherwise>
 					</c:choose>
 					</div>
@@ -79,7 +79,7 @@
 				<div class="avatar"></div>
 				<div class="text_wrapper">
 					<div class="text"></div>
-					<div class="unread">O</div>
+					<div class="unread">읽지않음</div>
 				</div>
 			</li>
 		</div>
@@ -109,6 +109,7 @@
 			//내가 입장했을 때, 환영메세지가 서버로부터 오는 부분
 			socket.on('welcome', function(data) {
 				var nick = decodeURI(data.nickname);
+				inchatRoom = data.participate;
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님 환영합니다'));
 				scrollTop();
@@ -119,8 +120,14 @@
 				var nick = decodeURI(data.nickname);
 				inchatRoom = true;
 				
+				//실제 채팅방에 들어오면 읽는다고 생각해야 할 것 그러므로 class 를 read 상태로 바꿔준다.
+				$('.messages').find('.unread').empty();
+				$('.messages').find('.unread').attr('class','read');
+				
+				//입장하셨습니다 부분은 나중에 삭제해 줄 것임.
 				$('.messages').append(
 						$('<li class="noti">').text(nick + '님이 입장하셨습니다'));
+				scrollTop();
 			});
 
 			//메세지 수신 부분
@@ -139,10 +146,11 @@
 			
 			
 			appendMessage = function(data) {
-				
 				var $messages, message;
 				var text = data.msg;
 				var nick = decodeURI(data.nickname);
+				var readFlag = data.readFlag;
+				
 				if(nick==nickname) message_side='right';
 				else message_side='left';
 				
@@ -152,14 +160,15 @@
 				message = new Message({
 					text : text,
 					message_side : message_side,
-					nick : nick
+					nick : nick,
+					readFlag : readFlag
 				});
 				
 				message.draw();
 				return scrollTop();
 			};
 			
-			//스크롤 자동 새로고침 구현부분
+			//스크롤 자동 구현부
 			scrollTop = function(){
 				var $messages = $('.messages');
 				$messages.animate({
@@ -171,7 +180,7 @@
 			Message = function(arg) {
 				//받은 변수로 부터 클래스 객체들을 초기화,
 				this.text = arg.text, this.message_side = arg.message_side;
-				this.nick = arg.nick;
+				this.nick = arg.nick, this.readFlag = arg.readFlag;
 				this.draw = function(_this) {
 					return function() {
 						var $message;
@@ -186,6 +195,11 @@
 						
 						$('.messages').append($message);
 						
+						if(_this.readFlag==1){
+							$('.messages').find('.unread').empty();
+							$('.messages').find('.unread').attr('class','read');
+						}
+						
 						//appeard 는 보이고 안보이게 해주는 클래스
 						return setTimeout(function() {
 							return $message.addClass('appeared');
@@ -196,6 +210,10 @@
 			//버튼을 클릭했을 때 (마우스 클릭)
 			$('.send_message').click(function(e) {
 				
+				var readFlag = 0;
+				if(inchatRoom)
+					readFlag = 1;
+				
 				//date 형식
 				var date = (new Date()).toISOString().substring(0, 19)
 				.replace('T', ' ');
@@ -203,7 +221,8 @@
 				
 				socket.emit('msg', {
 					msg : msg,
-					date : date
+					date : date,
+					readFlag : readFlag
 				});
 				
 				$('.message_input').val('');
@@ -213,13 +232,19 @@
 			//엔터 쳤을 때 (키보드)
 			$('form').submit(function(e) {
 				
+				var readFlag = 0;
+				if(inchatRoom)
+					readFlag = 1;
+				
+				//date 형식
 				var date = (new Date()).toISOString().substring(0, 19)
 				.replace('T', ' ');
-				
 				var msg = $(".message_input").val();
+				
 				socket.emit('msg', {
 					msg : msg,
-					date : date
+					date : date,
+					readFlag : readFlag
 				});
 				
 				$('.message_input').val('');
