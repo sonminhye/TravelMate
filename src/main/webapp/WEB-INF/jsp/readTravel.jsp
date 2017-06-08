@@ -26,7 +26,7 @@
 <title>여행 보기</title>
 </head>
 <body>
-
+	<c:set value="<%=code %>" var="mCode"></c:set>
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
@@ -80,11 +80,13 @@
 							<td>작성자</td>
 							<td>${row.name }</a></td>
 						</tr>
+						<c:if test="${row.userCode!= mCode}">
 						<tr>
 							<td>채팅링크</td>
 							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
 							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
+						</c:if>
 						<tr>
 							<td>설명</td>
 							<td>${row.content }</td>
