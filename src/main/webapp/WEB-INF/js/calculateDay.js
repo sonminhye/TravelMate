@@ -24,10 +24,10 @@ function getDiffDay(sday, now) {
 	var between = (todayObj.getTime() - sObj.getTime()) / (1000 * 60 * 60 * 24);
 	var result = "";
 	if (between > 0) {
-		result = "<font color='blue'>" + "D+" + between + "</font>";
+		result = "D+" + between;
 	}
 	else {
-		result = "<font color='red'>" + "D" + between; + "</font>";
+		result = "D" + between;
 	}
 	return result;
 }

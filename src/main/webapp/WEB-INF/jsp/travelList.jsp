@@ -71,7 +71,7 @@
 														<i class="fa fa-plus fa-3x"></i>
 													</div>
 												</div>
-												<img src="img/portfolio/roundicons.png" class="img-responsive" alt="">
+												<img src="./img/main2.jpg" class="img-responsive" alt="">
 											</a>
 											<div class="portfolio-caption">
 												<h2>${row.title }</h2>

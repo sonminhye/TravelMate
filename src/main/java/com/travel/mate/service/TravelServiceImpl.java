@@ -1,5 +1,8 @@
 package com.travel.mate.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +10,10 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.travel.mate.common.file.CommonUtil;
 import com.travel.mate.dao.TravelDAO;
 import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
@@ -20,24 +26,24 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
+	private static final String filepath = "C://userimg/";
+	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
 
 	// 글쓰기
 	@Override
-	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelImageDTO travelImageDto, TravelRouteDTO travelRouteDto) {
+	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws IllegalStateException, IOException {
 		// 좌표 여러개(리스트) 얻은 후
 		// DTO의 method를 콜하는 것에서 주의! jsp파일의 list명과 DTO 내의 객체이름이 같아야함
 		List<TravelDTO> travels = travelDto.getTlist();
 		List<TravelDetailDTO> travelDetails = travelDetailDto.getTdlist();
-		List<TravelImageDTO> travelImages = travelImageDto.getTilist();
 		List<TravelRouteDTO> routes = travelRouteDto.getTrlist();
 		
 		int travelCode = 0;
 		
 		if ((null != travels && travels.size() > 0)
-				&& (null != travelDetails && travelDetails.size() > 0)
-				&& (null != travelImages && travelImages.size() > 0)) {
+				&& (null != travelDetails && travelDetails.size() > 0)) {
 			// insert.. travel table & apply table 
 			for (TravelDTO travel : travels) {
 				travelDAO.insertTravel(travel);
@@ -55,12 +61,51 @@ public class TravelServiceImpl implements TravelService {
 				travelDetail.setTravelCode(travelCode);
 				travelDAO.insertTravelDetail(travelDetail);
 			}
-			// insert.. travelImage table
-			for (TravelImageDTO travelImage : travelImages) {
-				// travelCode setting
-				travelImage.setTravelCode(travelCode);
-				travelDAO.insertTravelImage(travelImage);
+			
+			System.out.println("image test");
+			MultipartFile f = request.getFile("image");
+			String filename = f.getOriginalFilename();
+			System.out.println(filename);
+			
+			Iterator<String> iterator = request.getFileNames();
+			
+			MultipartFile multipartFile = request.getFile(iterator.next());
+			
+			String storedFileName = null;
+			String temp = null;
+			File file = new File(filepath);
+			if (file.exists() == false) {
+				file.mkdirs();
 			}
+			
+			temp = filename.substring(filename.lastIndexOf("."));
+			storedFileName = CommonUtil.getRandomString() + temp;
+			
+			file = new File(filepath + storedFileName);
+			// 지정한 경로에 파일 저장
+			multipartFile.transferTo(file);
+			
+			System.out.println("image insert query starting..");
+			
+			TravelImageDTO travelImage = new TravelImageDTO();
+			
+			travelImage.setImage(storedFileName);
+			travelImage.setTravelCode(travelCode);
+			
+			System.out.println("travelCode & 저장명: " + travelCode + ", " + storedFileName);
+			
+			travelDAO.insertTravelImage(travelImage);
+			
+			System.out.println("image insert query end..");
+			
+			System.out.println("test end!");
+			
+//			// insert.. travelImage table
+//			for (TravelImageDTO travelImage : travelImages) {
+//				// travelCode setting
+//				travelImage.setTravelCode(travelCode);
+//				travelDAO.insertTravelImage(travelImage);
+//			}
 		}
 		
 		// insert.. travelRoute table

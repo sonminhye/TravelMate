@@ -4,18 +4,16 @@ public class UserDTO {
 	private int userCode;
 	private String id;
 	private String password;
-	private String authority;
 	
 	public UserDTO(){
 		
 	}
 
-	public UserDTO(int userCode, String id, String password, String authority) {
+	public UserDTO(int userCode, String id, String password) {
 		super();
 		this.userCode = userCode;
 		this.id = id;
 		this.password = password;
-		this.authority = authority;
 	}
 
 	public int getUserCode() {
@@ -42,18 +40,10 @@ public class UserDTO {
 		this.password = password;
 	}
 
-	public String getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
 
 	@Override
 	public String toString() {
-		return "UserDTO [userCode=" + userCode + ", id=" + id + ", password=" + password + ", authority=" + authority
-				+ "]";
+		return "UserDTO [userCode=" + userCode + ", id=" + id + ", password=" + password + "]";
 	}
 	
 	

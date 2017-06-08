@@ -6,44 +6,39 @@
 	<insert id="insertReview" parameterType="com.travel.mate.dto.ReviewDTO">
 		<![CDATA[
 			INSERT INTO
-				review (travelCode, userCode, content, writeTime)
-			VALUES
-				(#{travelCode}, #{userCode}, #{content}, now())
+				review (applyCode, content, writeTime)
+			VALUES (#{applyCode}, #{content}, now())
 		]]>
 	</insert>
 	
 	<!-- 해당 게시물에 작성된 리뷰 출력 -->
-	<select id="selectReviewAll" parameterType="com.travel.mate.dto.ReviewDTO" resultType="hashmap">
+	<select id="selectReviewAll" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
 			SELECT		ud.name, rr.content, rr.writeTime
 			FROM		(
-						SELECT		r.userCode, r.content, r.writeTime
-						FROM		review r
-						WHERE		r.travelCode = #{travelCode}
+						SELECT	a.userCode, r.content, r.writeTime
+						FROM	apply a, review r
+						WHERE	a.applyCode = r.applyCode
+							AND	a.travelCode = #{travelCode}
 						) rr, userDetail ud
-			WHERE 		rr.userCode = ud.userCode
+			WHERE		rr.userCode = ud.userCode
 			ORDER BY	rr.writeTime ASC
 		]]>
 	</select>
 	
-	<!-- 해당 게시물에 로그인한 사람이 리뷰 작성했는지 여부 -->
-	<select id="selectReviewWrite" parameterType="com.travel.mate.dto.ReviewDTO" resultType="hashmap">
+	<!-- 로그인한 사람이 해당 게시물에 리뷰 작성했는지 여부 -->
+	<select id="selectReviewWrite" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
-			SELECT	tr.travelCode, tr.userCode
-			FROM	(
-					SELECT	t.travelCode, r.userCode
-					FROM	travel t, review r
-					WHERE	t.travelCode = r.travelCode
-						AND	t.travelCode = #{travelCode}
-						AND	r.userCode = #{userCode}
-					) tr, apply a
-			WHERE	tr.userCode = a.userCode
-				AND	tr.travelCode = a.travelCode
+			SELECT	a.travelCode, a.userCode
+			FROM	apply a, review r
+			WHERE	a.applyCode = r.applyCode
+				AND	a.travelCode = #{travelCode}
+				AND	a.userCode = #{userCode}
 		]]>
 	</select>
 	
 	<!-- 지금 보고 있는 게시물을 로그인한 사람이 신청했었다면 리뷰창을 보이게 하도록 하기 위함-->
-	<select id="selectReviewWriteCheck" parameterType="com.travel.mate.dto.ReviewDTO" resultType="hashmap">
+	<select id="selectReviewWriteCheck" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
 			SELECT	tr.travelCode, a.userCode
 			FROM	(

@@ -43,23 +43,28 @@ function addMarker(position) {
 	var hiddenInput1 = document.createElement('input');
 	var hiddenInput2 = document.createElement('input');
 	var hiddenInput3 = document.createElement('input');
+	var hiddenInput4 = document.createElement('input');
 	var countIdx = count - 1;
 	hiddenInput1.name = "trlist[" + countIdx + "].lat";
 	hiddenInput2.name = "trlist[" + countIdx + "].lng";
 	hiddenInput3.name = "trlist[" + countIdx + "].location";
+	hiddenInput4.name = "trlist[" + countIdx + "].locOrder";
 
 	hiddenInput1.type = "hidden";
 	hiddenInput2.type = "hidden";
 	hiddenInput3.type = "hidden";
+	hiddenInput4.type = "hidden";
 	
 	hiddenInput1.value = posLat;
 	hiddenInput2.value = posLng;
-	hiddenInput3.value = countIdx;
+	hiddenInput3.value = '테스트장소명';
+	hiddenInput4.value = countIdx;
 
 	document.getElementById("add").appendChild(span);
 	document.getElementById(count).appendChild(hiddenInput1);
 	document.getElementById(count).appendChild(hiddenInput2);
 	document.getElementById(count).appendChild(hiddenInput3);
+	document.getElementById(count).appendChild(hiddenInput4);
 	document.getElementById(count).innerHTML += ("<span>"
 			+ count + "</span>번째 장소" + "<button onclick='deleteAction(this);'>X</button>");
 }
@@ -108,8 +113,9 @@ function deleteAction(object) {
 			nu[0].name = "trlist[" + nuIdx + "].lat";
 			nu[1].name = "trlist[" + nuIdx + "].lng";
 			nu[2].name = "trlist[" + nuIdx + "].location";
-			nu[2].value = nuIdx;
-			nu[3].innerHTML = i;
+			nu[3].name = "trlist[" + nuIdx + "].locOrder";
+			nu[3].value = nuIdx;
+			nu[4].innerHTML = i;
 		}
 	}
 	// add 밑에 작성한 좌표 지우고

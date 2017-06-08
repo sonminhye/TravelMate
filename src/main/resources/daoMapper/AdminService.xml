@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+	<select id="selectUserList" resultType="com.travel.mate.dto.UserDTO">
+		<![CDATA[
+			SELECT * FROM user
+		]]>
+	</select>
+	<select id="selectUserDetailList" resultType="com.travel.mate.dto.UserDetailDTO">
+		<![CDATA[
+			SELECT * FROM userDetail
+		]]>
+	</select>
+	<select id="selectLanguageList" resultType="com.travel.mate.dto.LanguageDTO">
+		<![CDATA[
+			SELECT * FROM language
+		]]>
+	</select>
+	<select id="selectUserLanguageList" resultType="com.travel.mate.dto.UserLanguageDTO">
+		<![CDATA[
+			SELECT * FROM userLanguage
+		]]>
+	</select>
+	<select id="selectAuthList" resultType="com.travel.mate.dto.AuthDTO">
+		<![CDATA[
+			SELECT * FROM authority
+		]]>
+	</select>
+	<select id="selectUserAuthList" resultType="com.travel.mate.dto.UserAuthDTO">
+		<![CDATA[
+			SELECT * FROM userAuthority
+		]]>
+	</select>
+	<select id="selectSecuredResourceList" resultType="com.travel.mate.dto.SecuredResourceDTO">
+		<![CDATA[
+			SELECT * FROM securedResource
+		]]>
+	</select>
+	<select id="selectSecuredResourceAuthList" resultType="com.travel.mate.dto.SecuredResourceAuthDTO">
+		<![CDATA[
+			SELECT * FROM securedResourceAuthority
+		]]>
+	</select>
+
+</mapper>

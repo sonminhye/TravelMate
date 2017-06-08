@@ -21,14 +21,16 @@ public class MyUser implements UserDetails{
 	private int userCode;
 	private String id;
 	private String password;
+	private boolean enabled;
 	private Set<GrantedAuthority> authorities; //계정이 가지고 있는 권한 목록
 	
 	
-	public MyUser(int userCode, String id, String password, List<GrantedAuthority> noAuthorities) {
+	public MyUser(int userCode, String id, String password, boolean enabled, List<GrantedAuthority> noAuthorities) {
 		super();
 		this.userCode = userCode;
 		this.id = id;
 		this.password = password;
+		this.enabled = enabled;
 		this.authorities = Collections.unmodifiableSet(sortAuthorities(noAuthorities));
 	}
 
@@ -106,6 +108,11 @@ public class MyUser implements UserDetails{
 		return getId();
 	}
 
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
@@ -129,5 +136,12 @@ public class MyUser implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "확인용!!!!! MyUser [userCode=" + userCode + ", id=" + id + ", authorities=" + authorities + "]";
+	}
+	
+	
 
 }

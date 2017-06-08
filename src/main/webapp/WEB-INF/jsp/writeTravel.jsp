@@ -40,16 +40,26 @@ function fileCheck(obj) {
 };
 function startDateCheck(obj) {
 	var now = new Date();
-	var uDate = obj.value;
-	var temp = uDate.split("-");
-	var userDate = new Date(Number(temp[0]), Number(temp[1]) - 1, Number(temp[2]));
-	if (userDate > now) {
-		// 날짜 선택 가능
-	}
-	// 오늘이거나 이전
-	else {
-		alert("오늘이거나 오늘보다 이전 날짜는 선택할 수 없습니다");
+	var usDate = obj.value;
+	var ueDate = $("#endDate").val();
+	var temps = usDate.split("-");
+	var tempe = ueDate.split("-");
+	var usersDate = new Date(Number(temps[0]), Number(temps[1]) - 1, Number(temps[2]));
+	var usereDate = new Date(Number(tempe[0]), Number(tempe[1]) - 1, Number(tempe[2]));
+	
+	if (usereDate <= usersDate) {
+		alert("시작날짜가 종료날짜와 같거나  늦을 수 없습니다");
 		$("#startDate").val("");
+	}
+	else {
+		if (usersDate > now) {
+			// 날짜 선택 가능
+		}
+		// 오늘이거나 이전
+		else {
+			alert("오늘이거나 오늘보다 이전 날짜는 선택할 수 없습니다");
+			$("#startDate").val("");
+		}	
 	}
 };
 function endDateCheck(obj) {
@@ -108,7 +118,7 @@ function minPeopleCheck(obj) {
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
-		<form action="doWrite" method="post">
+		<form action="doWrite" method="post" enctype="multipart/form-data">
 			<table class="table" width="500">
 			<input type="hidden" name="tlist[0].userCode" class="form-control" value="<%=code%>">
 				<tr>
@@ -179,7 +189,7 @@ function minPeopleCheck(obj) {
 				</tr>
 				<tr>
 					<td>사진첨부<font color="red">*</font></td>
-					<td><input id="image" name="tilist[0].image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
+					<td><input id="image" name="image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>
 			<button type="submit" class="btn btn-default">등록하기</button>
