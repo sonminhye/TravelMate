@@ -30,13 +30,13 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-
+		System.out.println("/ 여기");
 		return "main";
 	}
 	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String header(Locale locale, Model model) {
-
+		System.out.println("/main 여기");
 		return "main";
 	}
 	

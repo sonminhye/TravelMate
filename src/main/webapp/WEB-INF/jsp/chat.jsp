@@ -49,10 +49,10 @@
 						<div class="text">${dto.content}</div>
 						<c:choose>
 						<c:when test="${dto.readFlag==false}">
-							<div class="unread">O</div>
+							<div class="unread">읽지않음</div>
 						</c:when>
 						<c:otherwise>
-							<div class="read">O</div>
+							<div class="read"></div>
 						</c:otherwise>
 					</c:choose>
 					</div>
@@ -79,7 +79,7 @@
 				<div class="avatar"></div>
 				<div class="text_wrapper">
 					<div class="text"></div>
-					<div class="unread">O</div>
+					<div class="unread">읽지않음</div>
 				</div>
 			</li>
 		</div>
@@ -121,6 +121,7 @@
 				inchatRoom = true;
 				
 				//실제 채팅방에 들어오면 읽는다고 생각해야 할 것 그러므로 class 를 read 상태로 바꿔준다.
+				$('.messages').find('.unread').empty();
 				$('.messages').find('.unread').attr('class','read');
 				
 				//입장하셨습니다 부분은 나중에 삭제해 줄 것임.
@@ -194,8 +195,10 @@
 						
 						$('.messages').append($message);
 						
-						if(_this.readFlag==1)
+						if(_this.readFlag==1){
+							$('.messages').find('.unread').empty();
 							$('.messages').find('.unread').attr('class','read');
+						}
 						
 						//appeard 는 보이고 안보이게 해주는 클래스
 						return setTimeout(function() {
@@ -211,7 +214,6 @@
 				if(inchatRoom)
 					readFlag = 1;
 				
-				alert(readFlag);
 				//date 형식
 				var date = (new Date()).toISOString().substring(0, 19)
 				.replace('T', ' ');

@@ -119,12 +119,12 @@ public class ChatController {
 		return result;
 	}
 	
-	
 	//유저의 코드를 받아오는 함수
 	public int getUserCode(){
 		
 		auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal =  auth.getPrincipal();
 		return ((MyUser)principal).getUserCode();
+		
 	}
 }
