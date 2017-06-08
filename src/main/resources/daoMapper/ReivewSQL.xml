@@ -3,6 +3,15 @@
 
 <mapper namespace="review">
 
+	<insert id="insertTravelEval" parameterType="com.travel.mate.dto.TravelEvalDTO">
+		<![CDATA[
+			INSERT INTO
+				travelEval (applyCode, point)
+			VALUES (#{applyCode}, #{point})
+		]]>
+	</insert>
+
+
 	<insert id="insertReview" parameterType="com.travel.mate.dto.ReviewDTO">
 		<![CDATA[
 			INSERT INTO

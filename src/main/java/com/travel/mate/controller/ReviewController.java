@@ -19,11 +19,11 @@ public class ReviewController {
 	private ReviewService reviewService;
 	
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
-	public ModelAndView showTravelForm(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content) {
+	public ModelAndView writeReview(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/main");
 		
-		reviewService.insertReview(applyDto, content);
+		reviewService.insertReview(applyDto, content, point);
 		
 		return mv;
 	}

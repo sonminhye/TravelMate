@@ -15,6 +15,6 @@ public interface ReviewService {
 	
 	List<Map<String, Object>> selectReviewWrite(TravelDTO travelDto);
 
-	void insertReview(ApplyDTO applyDto, String content);
+	void insertReview(ApplyDTO applyDto, String content, int point);
 
 }

@@ -24,6 +24,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>여행 보기</title>
+<link href="css/starPoint.css" rel="stylesheet">
 </head>
 <body>
 
@@ -261,6 +262,14 @@
 								</c:when>
 								<c:otherwise>
 									<form action="doWriteReview" method="post">
+										<p class="star_rating">
+										    <a href="#this" id="point1">★</a>
+										    <a href="#this" id="point2">★</a>
+										    <a href="#this" id="point3">★</a>
+										    <a href="#this" id="point4">★</a>
+										    <a href="#this" id="point5">★</a>
+										</p>
+										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
 										<textarea name="content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
 										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
@@ -280,6 +289,8 @@
 			</c:choose>	
 		</div>
 	</div>
+	
+	<script type="text/javascript" src="<c:url value='/js/starPoint.js'/>"></script>
 
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
