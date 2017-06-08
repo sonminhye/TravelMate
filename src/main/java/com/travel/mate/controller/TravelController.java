@@ -13,16 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
-import com.travel.mate.dto.TravelImageDTO;
 import com.travel.mate.dto.TravelRouteDTO;
 import com.travel.mate.service.TravelService;
 import com.travel.mate.service.ReviewService;
@@ -48,12 +45,12 @@ public class TravelController {
 	
 	// 첫 화면 6개
 	@RequestMapping(value = "/travelList")
-	public ModelAndView travelList(Map<String, Object> map) {
+	public ModelAndView travelList() {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/travelList");
 		
-		List<Map<String, Object>> list = travelService.selectTravel(map);
+		List<Map<String, Object>> list = travelService.selectTravel();
 		mv.addObject("list", list);
 		return mv;
 	}
@@ -120,7 +117,7 @@ public class TravelController {
 		ModelAndView mv = new ModelAndView();
 		// 신청 후 mypage로 던짐
 		// 일단 테스트용으로 main페이지
-		mv.setViewName("/main");
+		mv.setViewName("redirect:/travelList");
 		
 		travelService.insertTravelApply(applyDto);
 		
@@ -133,7 +130,7 @@ public class TravelController {
 		ModelAndView mv = new ModelAndView();
 		// 신청 후 mypage로 던짐
 		// 일단 테스트용으로 main페이지
-		mv.setViewName("/main");
+		mv.setViewName("redirect:/travelList");
 		
 		travelService.deleteTravelApply(applyDto);
 		return mv;

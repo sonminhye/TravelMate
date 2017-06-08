@@ -21,7 +21,7 @@ public class ReviewController {
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
 	public ModelAndView writeReview(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/main");
+		mv.setViewName("redirect:/travelList");
 		
 		reviewService.insertReview(applyDto, content, point);
 		

@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
-import com.travel.mate.dto.TravelImageDTO;
 import com.travel.mate.dto.TravelRouteDTO;
 
 public interface TravelService {
@@ -17,7 +16,7 @@ public interface TravelService {
 	void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws IllegalStateException, IOException;
 
 	/* 여행리스트 및 읽기 */
-	List<Map<String, Object>> selectTravel(Map<String, Object> map);
+	List<Map<String, Object>> selectTravel();
 	List<Map<String, Object>> selectTravelDetail(TravelDTO travelDto);
 	List<Map<String, Object>> selectTravelRoute(TravelDTO travelDto);
 
