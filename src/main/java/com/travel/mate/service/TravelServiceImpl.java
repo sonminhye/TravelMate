@@ -26,7 +26,7 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static final String filepath = "C://userimg/";
+	private static final String filepath = "/userimg/";
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
