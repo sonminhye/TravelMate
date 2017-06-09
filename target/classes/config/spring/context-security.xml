@@ -31,7 +31,7 @@
     	<property name="dataSource" ref="dataSource"/>
     	<property name="rolePrefix" value=""/>
     	<property name="usersByUsernameQuery" value="SELECT userCode, id, password, enabled FROM user WHERE id=?"/>
-    	<property name="authoritiesByUsernameQuery" value="SELECT usercode, authority FROM userauthority WHERE usercode=(SELECT usercode FROM user WHERE id=?) "/>
+    	<property name="authoritiesByUsernameQuery" value="SELECT userCode, authority FROM userAuthority WHERE userCode=(SELECT userCode FROM user WHERE id=?) "/>
     	<property name="enableAuthorities" value="true"/>
     	<property name="enableGroups" value="false"/>
     </bean>
