@@ -9,7 +9,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -30,7 +35,11 @@ public class TravelServiceImpl implements TravelService {
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
-
+	
+	@Autowired
+	PlatformTransactionManager transactionManager;
+	
+	
 	// 글쓰기
 	@Override
 	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws IllegalStateException, IOException {
@@ -42,78 +51,92 @@ public class TravelServiceImpl implements TravelService {
 		
 		int travelCode = 0;
 		
-		if ((null != travels && travels.size() > 0)
-				&& (null != travelDetails && travelDetails.size() > 0)
-				&& (null != request)) {
-			// insert.. travel table & apply table 
-			for (TravelDTO travel : travels) {
-				travelDAO.insertTravel(travel);
-				// travelCode general
-				travelCode = travel.getTravelCode();
-				/* 작성자도 신청한 것으로 처리 */
-				ApplyDTO apply = new ApplyDTO();
-				apply.setTravelCode(travelCode);
-				apply.setUserCode(travel.getUserCode());
-				travelDAO.insertTravelApply(apply);
-			}
-			// insert.. travelDetail table
-			for (TravelDetailDTO travelDetail : travelDetails) {
-				// travelCode setting
-				travelDetail.setTravelCode(travelCode);
-				travelDAO.insertTravelDetail(travelDetail);
-			}
-			
-			MultipartFile f = request.getFile("image");
-			String filename = f.getOriginalFilename();
-			
-			Iterator<String> iterator = request.getFileNames();
-			
-			MultipartFile multipartFile = request.getFile(iterator.next());
-			
-			String storedFileName = null;
-			String temp = null;
-			File file = new File(filepath);
-			if (file.exists() == false) {
-				file.mkdirs();
-			}
-			
-			temp = filename.substring(filename.lastIndexOf("."));
-			storedFileName = CommonUtil.getRandomString() + temp;
-			
-			file = new File(filepath + storedFileName);
-			// 지정한 경로에 파일 저장
-			multipartFile.transferTo(file);
-			
-			// 파일명 db에 insert
-			TravelImageDTO travelImage = new TravelImageDTO();
-			
-			travelImage.setImage(storedFileName);
-			travelImage.setTravelCode(travelCode);
-			
-			travelDAO.insertTravelImage(travelImage);
-			
-//			// insert.. travelImage table
-//			for (TravelImageDTO travelImage : travelImages) {
-//				// travelCode setting
-//				travelImage.setTravelCode(travelCode);
-//				travelDAO.insertTravelImage(travelImage);
-//			}
-		}
-		else {
-			// err(?)
-		}
+		// transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = transactionManager.getTransaction(def);
 		
-		// insert.. travelRoute table
-		if (null != routes && routes.size() > 0) {
-			for (TravelRouteDTO route : routes) {
-				// travelCode setting
-				route.setTravelCode(travelCode);
-				travelDAO.insertTravelRoute(route);
+		try {
+			if ((null != travels && travels.size() > 0)
+					&& (null != travelDetails && travelDetails.size() > 0)
+					&& (null != request)) {
+				// insert.. travel table & apply table 
+				for (TravelDTO travel : travels) {
+					travelDAO.insertTravel(travel);
+					// travelCode general
+					travelCode = travel.getTravelCode();
+					/* 작성자도 신청한 것으로 처리 */
+					ApplyDTO apply = new ApplyDTO();
+					apply.setTravelCode(travelCode);
+					apply.setUserCode(travel.getUserCode());
+					travelDAO.insertTravelApply(apply);
+				}
+				// insert.. travelDetail table
+				for (TravelDetailDTO travelDetail : travelDetails) {
+					// travelCode setting
+					travelDetail.setTravelCode(travelCode);
+					travelDAO.insertTravelDetail(travelDetail);
+				}
+				
+				MultipartFile f = request.getFile("image");
+				String filename = f.getOriginalFilename();
+				
+				Iterator<String> iterator = request.getFileNames();
+				
+				MultipartFile multipartFile = request.getFile(iterator.next());
+				
+				String storedFileName = null;
+				String temp = null;
+				File file = new File(filepath);
+				if (file.exists() == false) {
+					file.mkdirs();
+				}
+				
+				temp = filename.substring(filename.lastIndexOf("."));
+				storedFileName = CommonUtil.getRandomString() + temp;
+				
+				file = new File(filepath + storedFileName);
+				// 지정한 경로에 파일 저장
+				multipartFile.transferTo(file);
+				
+				// 파일명 db에 insert
+				TravelImageDTO travelImage = new TravelImageDTO();
+				
+				travelImage.setImage(storedFileName);
+				travelImage.setTravelCode(travelCode);
+				
+				travelDAO.insertTravelImage(travelImage);
+				
+	//			// insert.. travelImage table
+	//			for (TravelImageDTO travelImage : travelImages) {
+	//				// travelCode setting
+	//				travelImage.setTravelCode(travelCode);
+	//				travelDAO.insertTravelImage(travelImage);
+	//			}
 			}
-		} 
-		// 장소 선택을 하지 않아 리스트가 비어있는 경우, insert 하지 않음
-		else {
-			;
+			else {
+				// err(?)
+			}
+			
+			// insert.. travelRoute table
+			if (null != routes && routes.size() > 0) {
+				for (TravelRouteDTO route : routes) {
+					// travelCode setting
+					route.setTravelCode(travelCode);
+					travelDAO.insertTravelRoute(route);
+				}
+			} 
+			// 장소 선택을 하지 않아 리스트가 비어있는 경우, insert 하지 않음
+			else {
+				;
+			}
+			// 이상 없으면 commit
+			transactionManager.commit(status);
+		}
+		catch (Exception e) {
+			// rollback
+			e.printStackTrace();
+			transactionManager.rollback(status);;
 		}
 	}
 
@@ -172,22 +195,52 @@ public class TravelServiceImpl implements TravelService {
 	// insert.. apply table
 	@Override
 	public void insertTravelApply(ApplyDTO applyDto) {
-		List<ApplyDTO> applys = applyDto.getAlist();
-		if ((null != applys && applys.size() > 0)) {
-			for (ApplyDTO apply : applys) {
-				travelDAO.insertTravelApply(apply);
+		
+		// transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			List<ApplyDTO> applys = applyDto.getAlist();
+			if ((null != applys && applys.size() > 0)) {
+				for (ApplyDTO apply : applys) {
+					travelDAO.insertTravelApply(apply);
+				}
 			}
+			// 이상 없으면 commit
+			transactionManager.commit(status);
+		}
+		catch (Exception e) {
+			// rollback
+			e.printStackTrace();
+			transactionManager.rollback(status);
 		}
 	}
 	
 	// delete.. apply table
 	@Override
 	public void deleteTravelApply(ApplyDTO applyDto) {
-		List<ApplyDTO> applys = applyDto.getAlist();
-		if ((null != applys && applys.size() > 0)) {
-			for (ApplyDTO apply : applys) {
-				travelDAO.deleteTravelApply(apply);
+		
+		// transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			List<ApplyDTO> applys = applyDto.getAlist();
+			if ((null != applys && applys.size() > 0)) {
+				for (ApplyDTO apply : applys) {
+					travelDAO.deleteTravelApply(apply);
+				}
 			}
+			// 이상 없으면 commit
+			transactionManager.commit(status);
+		}
+		catch (Exception e) {
+			// rollback
+			e.printStackTrace();
+			transactionManager.rollback(status);			
 		}
 	}
 }
