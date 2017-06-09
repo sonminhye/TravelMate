@@ -221,7 +221,7 @@
 						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="id" name="id" onkeydown="checkEmail()" placeholder="이메일을 입력하세요">
+							<input type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
 							<div id="checkMsg"></div>
 						</div>
 						<div class="form-group">
