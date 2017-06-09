@@ -80,12 +80,12 @@
 						<tr>
 							<td>작성자</td>
 							<td>${row.name }</a></td>
+							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
 						<c:if test="${row.userCode!= mCode}">
 						<tr>
 							<td>채팅링크</td>
 							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
-							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
 						</c:if>
 						<tr>

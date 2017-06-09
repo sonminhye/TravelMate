@@ -1,7 +1,6 @@
 package com.travel.mate.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static final String filepath = "/userimg/";
+	private static final String filepath = "usr/local/tomcat7/webapps/TravelMate/userimg/";
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
@@ -42,7 +41,7 @@ public class TravelServiceImpl implements TravelService {
 	
 	// 글쓰기
 	@Override
-	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws IllegalStateException, IOException {
+	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws Exception {
 		// 좌표 여러개(리스트) 얻은 후
 		// DTO의 method를 콜하는 것에서 주의! jsp파일의 list명과 DTO 내의 객체이름이 같아야함
 		List<TravelDTO> travels = travelDto.getTlist();
@@ -63,6 +62,7 @@ public class TravelServiceImpl implements TravelService {
 				// insert.. travel table & apply table 
 				for (TravelDTO travel : travels) {
 					travelDAO.insertTravel(travel);
+
 					// travelCode general
 					travelCode = travel.getTravelCode();
 					/* 작성자도 신청한 것으로 처리 */
@@ -135,8 +135,8 @@ public class TravelServiceImpl implements TravelService {
 		}
 		catch (Exception e) {
 			// rollback
-			e.printStackTrace();
-			transactionManager.rollback(status);;
+			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 
@@ -194,7 +194,7 @@ public class TravelServiceImpl implements TravelService {
 	
 	// insert.. apply table
 	@Override
-	public void insertTravelApply(ApplyDTO applyDto) {
+	public void insertTravelApply(ApplyDTO applyDto) throws Exception {
 		
 		// transaction
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -213,14 +213,14 @@ public class TravelServiceImpl implements TravelService {
 		}
 		catch (Exception e) {
 			// rollback
-			e.printStackTrace();
 			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 	
 	// delete.. apply table
 	@Override
-	public void deleteTravelApply(ApplyDTO applyDto) {
+	public void deleteTravelApply(ApplyDTO applyDto) throws Exception {
 		
 		// transaction
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -239,8 +239,8 @@ public class TravelServiceImpl implements TravelService {
 		}
 		catch (Exception e) {
 			// rollback
-			e.printStackTrace();
-			transactionManager.rollback(status);			
+			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 }

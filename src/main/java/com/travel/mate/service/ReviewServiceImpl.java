@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void insertReview(ApplyDTO applyDto, String content, int point) {
+	public void insertReview(ApplyDTO applyDto, String content, int point) throws Exception {
 		
 		// transaction
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -89,8 +89,8 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		catch (Exception e) {
 			// rollback
-			e.printStackTrace();
 			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 

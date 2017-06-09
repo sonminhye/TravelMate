@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,6 +27,7 @@ import com.travel.mate.service.ReviewService;
 
 @Controller
 public class TravelController {
+	Logger log = Logger.getLogger(this.getClass());
 
 	@Resource(name = "TravelService")
 	private TravelService travelService;
@@ -102,12 +104,18 @@ public class TravelController {
 	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
 			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
 			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto,
-			MultipartHttpServletRequest request) throws Exception {
+			MultipartHttpServletRequest request) {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/travelList");
 
-		travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
+		try {
+			travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
 		return mv;
 	}
 
@@ -115,11 +123,15 @@ public class TravelController {
 	public ModelAndView doApply(@ModelAttribute("alist") ApplyDTO applyDto) {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
-		// 신청 후 mypage로 던짐
-		// 일단 테스트용으로 main페이지
-		mv.setViewName("redirect:/travelList");
 		
-		travelService.insertTravelApply(applyDto);
+		try {
+			travelService.insertTravelApply(applyDto);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
 		
 		return mv;
 	}
@@ -128,11 +140,15 @@ public class TravelController {
 	public ModelAndView doCancel(@ModelAttribute("alist") ApplyDTO applyDto) {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
-		// 신청 후 mypage로 던짐
-		// 일단 테스트용으로 main페이지
-		mv.setViewName("redirect:/travelList");
 		
-		travelService.deleteTravelApply(applyDto);
+		try {
+			travelService.deleteTravelApply(applyDto);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
 		return mv;
 	}
 

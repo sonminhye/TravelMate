@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.travel.mate.dto.ApplyDTO;
-import com.travel.mate.dto.ReviewDTO;
 import com.travel.mate.dto.TravelDTO;
 
 public interface ReviewService {
@@ -15,6 +14,6 @@ public interface ReviewService {
 	
 	List<Map<String, Object>> selectReviewWrite(TravelDTO travelDto);
 
-	void insertReview(ApplyDTO applyDto, String content, int point);
+	void insertReview(ApplyDTO applyDto, String content, int point) throws Exception;
 
 }
