@@ -30,7 +30,9 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static final String filepath = "usr/local/tomcat7/webapps/TravelMate/userimg/";
+
+	
+	private static final String filepath = "/userimg/";
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
@@ -78,6 +80,8 @@ public class TravelServiceImpl implements TravelService {
 					travelDAO.insertTravelDetail(travelDetail);
 				}
 				
+				
+				
 				MultipartFile f = request.getFile("image");
 				String filename = f.getOriginalFilename();
 				
@@ -92,6 +96,8 @@ public class TravelServiceImpl implements TravelService {
 					file.mkdirs();
 				}
 				
+				
+		
 				temp = filename.substring(filename.lastIndexOf("."));
 				storedFileName = CommonUtil.getRandomString() + temp;
 				

@@ -10,12 +10,15 @@
 	Object principal = auth.getPrincipal();
 	int code = 0;
 	String email = "";
-	
+	String unReadCount ="";
 	if(principal != null && principal instanceof MyUser){
 		//code는 PK인 유저코드. 
 		code = ((MyUser)principal).getUserCode();
 		email = ((MyUser)principal).getUsername();
+		unReadCount = request.getAttribute("unReadCount").toString();
 	}
+	
+	
 %>
 
 <html>
@@ -191,7 +194,7 @@
 	                </li>
 	                <li>
 	                	<a class="page-scroll" href="chatList">Message</a>
-	                	<div class="unreadMsg"></div>
+	                	<div class="unreadMsg"><%=unReadCount %></div>
 	                </li>
                 </sec:authorize>
                 </ul>
@@ -319,7 +322,7 @@
 		</div>
 	</div>
  	<script type="text/javascript">
-	 	var socket = io('http://175.115.95.52:3000');
+	 	var socket = io('http://localhost:3000');
 	 	var userCode = '<%=code%>';
 	
 	 	// nick name 정보를 서버에 보냄
