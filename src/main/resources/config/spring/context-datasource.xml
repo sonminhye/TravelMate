@@ -8,13 +8,9 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
 		<property name="url" value="jdbc:mysql://localhost:3306/travel"></property>
 		<property name="username" value="root"></property>
-<<<<<<< HEAD
 		<property name="password" value="mate"></property>
 	</bean>
-=======
-		<property name="password" value="8386"></property>
-	</bean> 
->>>>>>> beee0777eeb2209a20b5647171c126d15e6ce364
+
 
 	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
 		<constructor-arg ref="dataSourceSpied" />
