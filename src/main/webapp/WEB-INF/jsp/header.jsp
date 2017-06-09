@@ -319,7 +319,7 @@
 		</div>
 	</div>
  	<script type="text/javascript">
-	 	var socket = io('http://localhost:3000');
+	 	var socket = io('http://175.115.95.52:3000');
 	 	var userCode = '<%=code%>';
 	
 	 	// nick name 정보를 서버에 보냄
