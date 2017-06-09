@@ -108,8 +108,11 @@
 		
 		// 메세지 수신 부분
 		socket.on('msg', function(data) {
-			if(data.readFlag==0) // 내가 읽고있는 메세지가 아니라면
-				appendCountByRoom(data); // 숫자 늘려주기
+			// 내가 보낸 메세지가 아니며
+			// 상대방이 읽지않은 메세지라면
+			if(data.scode != userCode && data.readFlag==0)
+				//해당 룸의 안읽은 숫자 늘리기
+				appendCountByRoom(data); 
 		});
 
 		// 읽지않은 메세지 개수 늘려주기
