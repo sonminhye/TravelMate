@@ -88,7 +88,8 @@
     <bean id="requestMap" class="com.travel.mate.security.service.UrlResourcesMapFactoryBean" init-method="init">
     	<property name="securedObjectService" ref="securedObjectService" />
     </bean>
-    
+
+
 </beans>
 
 
