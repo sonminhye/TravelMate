@@ -71,7 +71,7 @@
 														<i class="fa fa-plus fa-3x"></i>
 													</div>
 												</div>
-												<img src="./img/main2.jpg" class="img-responsive" alt="">
+												<img src="/userimg/${row.image}" class="img-responsive" alt="">
 											</a>
 											<div class="portfolio-caption">
 												<h2>${row.title }</h2>
@@ -167,7 +167,7 @@
 											+ "<i class=" + "'fa fa-plus fa-3x'" + "></i>"
 											+ "</div>"
 											+ "</div>"
-											+ "<img src=" + this.image + " class=" + "img-responsive" + " alt=" + "''" + ">"
+											+ "<img src='/userimg/" + this.image + "' class=" + "img-responsive" + " alt=" + "''" + ">"
 											+ "</a>"
 											+ "<div class=" + "portfolio-caption" + ">"
 											+ "<h2>" + this.title + "</h2>"

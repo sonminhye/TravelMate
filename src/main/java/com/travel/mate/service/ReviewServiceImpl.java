@@ -5,7 +5,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.travel.mate.dao.ApplyDAO;
 import com.travel.mate.dao.ReviewDAO;
@@ -22,6 +27,9 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	@Resource(name="ApplyDAO")
 	private ApplyDAO applyDAO;
+	
+	@Autowired
+	PlatformTransactionManager transactionManager;
 
 	@Override
 	public List<Map<String, Object>> selectReviewAll(TravelDTO travelDto) {
@@ -45,29 +53,44 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void insertReview(ApplyDTO applyDto, String content, int point) {
-		List<ApplyDTO> applys = applyDto.getAlist();
-		if ((null != applys && applys.size() > 0)) {
-			for (ApplyDTO apply : applys) {
-				// applyCode 얻어와서 리뷰에 넣는다
-				List<Map<String, Object>> applyCode = applyDAO.selectApply(apply);
-//				System.out.println(applyCode);
-				Map<String, Object> aCode = applyCode.get(0);
-//				System.out.println(aCode);
-				// java.lang.Integer cannot be cast to java.lang.String (캐스팅 불가 -> 메소드 사용)
-				String stringCode = String.valueOf(aCode.get("applyCode"));
-//				System.out.println(stringCode);
-				int code = Integer.parseInt(stringCode);
-				ReviewDTO reviewDto = new ReviewDTO();
-				reviewDto.setApplyCode(code);
-				reviewDto.setContent(content);
-				
-				TravelEvalDTO travelEvalDto = new TravelEvalDTO();
-				travelEvalDto.setApplyCode(code);
-				travelEvalDto.setPoint(point);
-				
-				reviewDAO.insertReview(reviewDto);
-				reviewDAO.insertPoint(travelEvalDto);
+		
+		// transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			List<ApplyDTO> applys = applyDto.getAlist();
+			if ((null != applys && applys.size() > 0)) {
+				for (ApplyDTO apply : applys) {
+					// applyCode 얻어와서 리뷰에 넣는다
+					List<Map<String, Object>> applyCode = applyDAO.selectApply(apply);
+	//				System.out.println(applyCode);
+					Map<String, Object> aCode = applyCode.get(0);
+	//				System.out.println(aCode);
+					// java.lang.Integer cannot be cast to java.lang.String (캐스팅 불가 -> 메소드 사용)
+					String stringCode = String.valueOf(aCode.get("applyCode"));
+	//				System.out.println(stringCode);
+					int code = Integer.parseInt(stringCode);
+					ReviewDTO reviewDto = new ReviewDTO();
+					reviewDto.setApplyCode(code);
+					reviewDto.setContent(content);
+					
+					TravelEvalDTO travelEvalDto = new TravelEvalDTO();
+					travelEvalDto.setApplyCode(code);
+					travelEvalDto.setPoint(point);
+					
+					reviewDAO.insertReview(reviewDto);
+					reviewDAO.insertPoint(travelEvalDto);
+				}
 			}
+			// 이상 없으면 commit
+			transactionManager.commit(status);
+		}
+		catch (Exception e) {
+			// rollback
+			e.printStackTrace();
+			transactionManager.rollback(status);
 		}
 	}
 
