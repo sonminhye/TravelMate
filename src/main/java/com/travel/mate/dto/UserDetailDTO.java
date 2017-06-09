@@ -1,11 +1,14 @@
 package com.travel.mate.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserDetailDTO {
 	private int userCode;
-	private String name;
-	private int age;
-	private String sex;
-	private String location;
+	@NotNull(message="5자에서 50자 사이의 값만 가능합니다") private String name;
+	@NotNull private int age;
+	@NotNull private String sex;
+	@NotNull private String location;
 	private float meanPoint;
 	
 	public UserDetailDTO(){
