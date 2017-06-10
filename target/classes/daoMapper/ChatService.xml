@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat">
+	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
+		select sender.roomCode,  sender.senderCode, sender.receiverCode, sender.latestDate, sender.name as send, receiver.name as receive, (select count(*) from message where roomCode=sender.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
+		from
+		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.senderCode) as sender join
+		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.receiverCode) as receiver
+		where sender.roomCode = receiver.roomCode and sender.senderCode = #{userCode} or sender.receiverCode = #{userCode} 
+		group by sender.roomCode
+		order by latestdate desc
+	</select>
+	
+	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
+		select * , (select userDetail.name from userDetail where message.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where message.receiverCode = userDetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
+	</select>
+
+	<!-- <select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
+		select *
+		from messageRoom 
+		where roomCode = (select roomCode from roomUser where userCode=#{receiverCode} or userCode=#{senderCode})
+	</select> -->
+	
+	<select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
+		select *
+		from messageRoom 
+		where ( senderCode=#{senderCode} and receiverCode=#{receiverCode} ) or (senderCode=#{receiverCode} and receiverCode = #{senderCode})
+	</select>
+	
+	
+	<insert id="addChatRoom" parameterType="com.travel.mate.dto.ChatRoomDTO" useGeneratedKeys="true" keyProperty="roomCode">
+		insert into messageRoom(senderCode, receiverCode, latestdate) values (#{senderCode},#{receiverCode},#{latestDate})
+	</insert>
+	
+	<select id="checkUnReadMessage" parameterType="int" resultType="int">
+		select count(*)
+		from message
+		where receiverCode=#{receiverCode} and readFlag=0
+	</select>
+	
+	<update id="changeUnReadMessage" parameterType="com.travel.mate.dto.ChatDTO">
+		update message
+		set readFlag=1
+		where roomCode=#{roomCode} and receiverCode=#{receiverCode}
+	</update>
+
+</mapper>
+

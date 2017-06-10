@@ -1,38 +1,39 @@
 package com.travel.mate.controller;
 
-import java.util.Locale;
+import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.travel.mate.dto.ApplyDTO;
+import com.travel.mate.service.ReviewService;
 
 @Controller
 public class ReviewController {
 	
+	Logger log = Logger.getLogger(this.getClass());
 	
-
-	@RequestMapping(value = "/showReviewForm", method = RequestMethod.GET)
-	public String showReviewForm(Model model) {
-		
-		return "showReviewForm";
-	}
+	@Resource(name = "ReviewService")
+	private ReviewService reviewService;
 	
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
-	public String showTravelForm(Model model) {
+	public ModelAndView writeReview(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
+		ModelAndView mv = new ModelAndView();
 		
-		//사용자가 별점 및 리뷰를 작성
-		//결과적으로 리뷰를 한 후에는, 자신이 단 리뷰를 확인할 수 있어야 하므로 showReview 페이지로 이동
-		//리턴 값을 어떻게 해줄지는 나중에 생각...
-		
-		return "showReview";
-	}
-	
-	@RequestMapping(value = "/showReview", method = RequestMethod.GET)
-	public String showReview(Model model) {
-		
-		return "showReview";
+		try {
+			reviewService.insertReview(applyDto, content, point);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
+		return mv;
 	}
 
-	
 }

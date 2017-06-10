@@ -1,50 +1,155 @@
 package com.travel.mate.controller;
 
-import java.util.Locale;
+import java.util.List;
+import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.travel.mate.dto.ApplyDTO;
+import com.travel.mate.dto.TravelDTO;
+import com.travel.mate.dto.TravelDetailDTO;
+import com.travel.mate.dto.TravelRouteDTO;
+import com.travel.mate.service.TravelService;
+import com.travel.mate.service.ReviewService;
 
 @Controller
 public class TravelController {
+	Logger log = Logger.getLogger(this.getClass());
 
-	@RequestMapping(value = "/showTravelForm", method = RequestMethod.GET)
-	public String showTravelForm(Model model) {
-		System.out.println("showTravelForm");
-		return "showTravelForm";
+	@Resource(name = "TravelService")
+	private TravelService travelService;
+	@Resource(name = "ReviewService")
+	private ReviewService reviewService;
+	
+	// ajax scroll event
+	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
+	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException{
+		JSONParser jsonParser = new JSONParser();
+		// JSON ë°ì´í„°ë¥¼ ë„£ì–´ JSON Object ë¡œ ë§Œë“¤ì–´ ì¤€ë‹¤.
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
+		int code = Integer.parseInt((String) jsonObject.get("travelCode"));
+		List<Map<String, Object>> scroll = travelService.scrollDown(code - 1);
+		return scroll;
 	}
 	
+	// ì²« í™”ë©´ 6ê°œ
+	@RequestMapping(value = "/travelList")
+	public ModelAndView travelList() {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/travelList");
+		
+		List<Map<String, Object>> list = travelService.selectTravel();
+		mv.addObject("list", list);
+		return mv;
+	}
 
-	@RequestMapping(value = "/doWriteTravelForm")
-	public String doWriteTravel(Model model) {
-		System.out.println("doWriteTravelForm");
-		return "showTravelContent";
+	// ë¦¬ìŠ¤íŠ¸ ì´ë¯¸ì§€ë¥¼ í´ë¦­í•˜ì—¬ í•´ë‹¹ ê¸€ì— ëŒ€í•œ ì •ë³´ ì½ê¸°
+	@RequestMapping(value = "/readTravel")
+	public ModelAndView readTravel(TravelDTO travelDto) {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/readTravel");
+		
+		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(travelDto);
+		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(travelDto);
+		
+		// ì‹ ì²­ ë²„íŠ¼ or ì·¨ì†Œë²„íŠ¼ì„ ìœ„í•¨
+		List<Map<String, Object>> listApply = travelService.selectTravelApply(travelDto);
+		List<Map<String, Object>> listApplyCount = travelService.selectTravelApplyCount(travelDto);
+		
+		// review
+		// ì‘ì„±ëœ review list
+		List<Map<String, Object>> listReview = reviewService.selectReviewAll(travelDto);
+		// review ì“¸ ìˆ˜ ìˆëŠ” ì§€
+		List<Map<String, Object>> listReviewWriteCheck = reviewService.selectReviewWriteCheck(travelDto);
+		// review ì¼ëŠ”ì§€ ì•ˆì¼ëŠ”ì§€
+		List<Map<String, Object>> listReviewWrite = reviewService.selectReviewWrite(travelDto);
+		
+		mv.addObject("list", listinfo);
+		mv.addObject("route", listRoute);
+		
+		mv.addObject("applyList", listApply);
+		mv.addObject("applyCount", listApplyCount);
+		
+		mv.addObject("reviewList", listReview);
+		mv.addObject("reviewWriteCheck", listReviewWriteCheck);
+		mv.addObject("reviewWrite", listReviewWrite);
+		return mv;
+	}
+
+	// ì—¬í–‰ ê¸€ì“°ê¸°ë¥¼ ëˆŒë €ì„ ë•Œ
+	@RequestMapping(value = "/writeTravel")
+	public String writeTravel() {
+		// writeTravel.jspë¡œ ì´ë™
+		return "writeTravel";
 	}
 	
+	// ê¸€ì“°ê¸°ë¥¼ ë“±ë¡í•  ë•Œ
+	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
+	// @ModelAttribute("jsp íŒŒì¼ì—ì„œ name="list[idx].field" ì¼ë•Œì˜ list ê°’") / DTO ê°ì²´ì— ë‹´ìŒ / ì‚¬ìš©í•  ë³€ìˆ˜ëª…
+	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
+			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
+			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto,
+			MultipartHttpServletRequest request) {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
 
-	@RequestMapping(value = "/showTravelContent", method = RequestMethod.GET)
-	public String showTravelContent(Model model) {
-		
-		//¿©Çà ¼¼ºÎ ³»¿ëÀ» º¼ ¼ö ÀÖµµ·Ï Á¤º¸¸¦ ´ã¾Æ¿À´Â ÇÔ¼ö
-		
-		return "showTravelContent";
-	}
-	
-
-	@RequestMapping(value = "/joinTravel", method = RequestMethod.POST)
-	public String joinTravel(Model model) {
-		//¿©ÇàÀÚ°¡ ¿©Çà Âü°¡½ÅÃ»
-		
-		return "showTravel";
+		try {
+			travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
+		return mv;
 	}
 
-	@RequestMapping(value = "/cancelTravel", method = RequestMethod.POST)
-	public String cancelTravel(Model model) {
-		//¿©ÇàÀÚ°¡ ¿©Çà Ãë¼Ò½ÅÃ»
+	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
+	public ModelAndView doApply(@ModelAttribute("alist") ApplyDTO applyDto) {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
 		
-		return "showTravelContent";
+		try {
+			travelService.insertTravelApply(applyDto);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
+		
+		return mv;
 	}
-	
+
+	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)
+	public ModelAndView doCancel(@ModelAttribute("alist") ApplyDTO applyDto) {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
+		
+		try {
+			travelService.deleteTravelApply(applyDto);
+			mv.setViewName("redirect:/travelList");
+		}
+		catch (Exception e) {
+			mv.setViewName("/errorPage");
+			log.error(e);
+		}
+		return mv;
+	}
+
 }

@@ -1,0 +1,58 @@
+[2017/05/25]
+travelList.jsp 추가(travelController 등)
+main.jsp -> 여행보러가기 링크 travelList로 수정
+
+mybatis 통해 DB연동
+testList 뷰 작성
+
+[2017/05/27]
+src/main/webapp/WEB-INF/spring 폴더 삭제(root-context.xml / appServlet 아래(datasource/security/servlet-context.xml)
+src/main/resource/config/spring으로 옮김(web.xml에서 경로 수정)
+
+	src/main/resource/config/spring
+		context-datasource.xml	: DB접속과 관련 
+		context-mapper.xml		: SQL query 연결과 관련(daoMapper이하의 .xml로 지정했기 때문에 xml이면 파일명 무관하며 기존의 datasource.xml에서 분리됨)
+		context-security.xml	: spring-security와 관련
+
+	src/main/resource/config/sevlet
+		servlet-context.xml		: servlet과 관련(기존의 파일과 동일, 관리를 위해 옮김)
+
+수정전(web.xml):
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/root-context.xml
+			/WEB-INF/spring/appServlet/security-context.xml
+			/WEB-INF/spring/appServlet/datasource-context.xml
+		</param-value>
+	</context-param>
+	
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+수정후(web.xml):
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:config/spring/context-*.xml</param-value>
+	</context-param>
+	
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:config/servlet/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+[2017/05/30]
+table 스키마 수정(성별 column char(6), meanpoint default 0, 기타 NotNull 지정)
+수정된 table 생성 sql파일 추가

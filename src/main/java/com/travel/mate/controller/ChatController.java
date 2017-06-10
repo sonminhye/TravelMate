@@ -1,31 +1,130 @@
 package com.travel.mate.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.travel.mate.dao.UserDAO;
+import com.travel.mate.dto.ChatDTO;
+import com.travel.mate.dto.ChatRoomDTO;
+import com.travel.mate.dto.UserDetailDTO;
+import com.travel.mate.security.MyUser;
 import com.travel.mate.service.ChatServiceImpl;
+import com.travel.mate.service.UserServiceImpl;
 
 @Controller
 public class ChatController {
+
+	@Autowired
+	ChatServiceImpl chatService;
+
+	@Autowired
+	UserServiceImpl userService;
+
+	Authentication auth;
 	
-	ChatServiceImpl chat;
-	
-	
-	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-	public String sendMessage(Model model) {
+	//ì±„íŒ…ì°½ ë·°
+	@RequestMapping(value = "/chat")
+	public String chatView(HttpServletRequest request, Model model) {
+		String rCode, roomCode;
+		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+        if(flashMap!=null){
+        	Map<String, Integer> map = (HashMap) flashMap.get("param");
+        	rCode = map.get("rcode").toString();
+        	roomCode = map.get("room").toString();
+        }else{
+        	rCode = request.getParameter("rcode"); // ë°›ëŠ” ì´ (ìƒëŒ€ë°©)
+    		roomCode = request.getParameter("room"); //room Code 
+        }
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Ş¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
+		int userCode = getUserCode(); //ë°‘ì— ì •ì˜í•´ì¤€ userCode ë¥¼ ë°›ì•„ì˜¤ëŠ” í•¨ìˆ˜ë¥¼ í˜¸ì¶œ
+		UserDetailDTO userDetail = userService.showUserDetail(userCode);
+		String name = userDetail.getName();
 		
-		return "viewMessage";
+		model.addAttribute("rcode", rCode);
+		model.addAttribute("scode", userCode);
+		model.addAttribute("name", name);
+		model.addAttribute("room", roomCode);
+		
+		System.out.println(roomCode);
+		
+		//ì½ì§€ì•Šì€ ë©”ì„¸ì§€ê°€ ìˆë‹¤ë©´ ì½ìŒ í‘œì‹œ
+		chatService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
+		
+		//í˜„ì¬ ì´ ë°©ì— ì±„íŒ…ë¡œê·¸ê°€ ì €ì¥ë˜ì–´ìˆë‹¤ë©´, ë¶ˆëŸ¬ì˜¤ê¸°
+		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
+		model.addAttribute("list", list);
+		
+		return "chat";
+	}
+
+	//ì±„íŒ…ë°© ë¦¬ìŠ¤íŠ¸ ë·°
+	@RequestMapping(value = "/chatList")
+	public String chatListview(Model model) {
+	
+		int userCode = getUserCode();
+		//ì±„íŒ…ë°©ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ë¶€ë¶„
+		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("myCode", userCode);
+		
+		return "chatList";
 	}
 	
-	@RequestMapping(value = "/viewMessage", method = RequestMethod.GET)
-	public String viewMessage(Model model) {
+	@RequestMapping(value="/checkChatRoom")
+	public String checkChatRoomExist(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 		
-		//ÀÌ°Å °°Àº °æ¿ìµµ, ¿©±â¼­ ¸Ş¼¼Áö¸¦ º¸³½ ÈÄ¿¡, ¾î¶² ÆäÀÌÁö¸¦ »ç¿ëÀÚ¿¡°Ô º¸¿©ÁÙÁö ´Ù½Ã ³íÀÇÇØºÁ¾ß ÇÒ °Í °°À½
+		String result="";
 		
-		return "viewMeesage";
+		int senderCode = getUserCode(); //ë‚˜ì˜ ì½”ë“œ
+		int receiverCode = Integer.parseInt(request.getParameter("userCode")); //receiverCode(ìƒëŒ€ë°©)
+		
+		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String currentTime = fm.format(new Date());
+		
+		//ë‘ ìœ ì €ê°„ì˜ ì±„íŒ…ë°©ì´ ìˆëŠ”ì§€ ì—¬ë¶€ë¥¼ êµ¬í•´ì˜¤ëŠ” í•¨ìˆ˜
+		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
+		
+		if(chatRoom ==null){ //ì±„íŒ…ë°©ì´ ì—†ì„ ë•Œ
+			chatRoom = chatService.addRoom(senderCode, receiverCode, currentTime);
+		}
+		
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		map.put("rcode",receiverCode);
+		map.put("room", chatRoom.getRoomCode());		
+		
+		redirectAttributes.addFlashAttribute("param", map);
+		result = "redirect:chat";
+		return result;
+	}
+	
+	//ìœ ì €ì˜ ì½”ë“œë¥¼ ë°›ì•„ì˜¤ëŠ” í•¨ìˆ˜
+	public int getUserCode(){
+		
+		auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal =  auth.getPrincipal();
+		return ((MyUser)principal).getUserCode();
+		
 	}
 }

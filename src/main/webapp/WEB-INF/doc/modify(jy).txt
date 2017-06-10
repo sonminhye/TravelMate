@@ -1,0 +1,36 @@
+====[2017/05/28]====
+
+Travel 관련된 모든 파일 수정(글쓰기 기능 수정)
+[Controller]
+@ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
+@ModelAttribute("tlist") TravelDTO travelDto의 경우를 보자
+tlist는 jsp파일에서 name이어야한다. 다시 말해 <input name="tlist[idx].field"> 이어야 한다
+여기서 idx는 배열의 인덱스를 의미하며 모두 0으로 처리함
+field는 DTO의 이름이어야하며, 이는 곧 테이블의 컬럼명과 같다
+** 또한 주의할 점은, name="list..."에서 list의 이름이 너무 길면 400 에러가 나기 때문에 적절히 조절해야 한다(이걸 찾느라고 매우 많은시간 소비)
+	
+@Resource(name="TravelService")
+private TravelService travelService;
+부분을 통해 Service를 참조하며, ServiceImpl에 구현한 함수를 부를 수 있게 된다
+
+해당 글쓰기의 프로세스는 다음과 같다.
+먼저 travel에 기본정보를 insert, 그 후 traveldetail, travelimage, travelroute에 insert
+
+이렇게 리스트로 처리하여 controller에서 for문을 돌기 때문에
+mybatis에서 따로 foreach문을 이용할 필요가 없다(travelroute insert하는 경우가 이에 해당)
+
+====[2017/06/05]====
+<jsp:useBean id="today" class="java.util.Date"></jsp:useBean>
+<fmt:parseDate var="startday" value="${row.startDate }" pattern="yyyy-MM-dd"/>
+
+<fmt:parseNumber value="${today.time / (1000*60*60*24)}" integerOnly="true" var="nowDay"></fmt:parseNumber>
+<fmt:parseNumber value="${startday.time / (1000*60*60*24)}" integerOnly="true" var="startDay"></fmt:parseNumber>
+
+<h3><font color="red">D${(startDay - nowDay + 1)*(-1)}</font></h3>
+
+--> javascript로 변경
+(ajax 통신으로 jsp script인 jstl을 사용할 수 없었기 때문에 변경)
+
+
+===[2017/06/07]====
+travelList.jsp (img src 이미지 불러오기 수정필요)
