@@ -59,7 +59,7 @@
 								<c:when test="${fn:length(list) > 0}">
 									<c:forEach items="${list }" var="row">
 									
-										<div class="travel col-md-4 col-sm-6 portfolio-item">
+										<div class="travel col-md-4 col-sm-6 portfolio-item" style="height: 500">
 											<a href="#this" name="img-link" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
 												<input type="hidden" class="userCode" value=<%=code %>>
@@ -68,7 +68,7 @@
 														<i class="fa fa-plus fa-3x"></i>
 													</div>
 												</div>
-												<img src="/userimg/${row.image}" class="img-responsive">
+												<img width="400" src="/userimg/${row.image}" class="img-responsive">
 											</a>
 											<div class="portfolio-caption">
 												<h2 class="travelTitle">${row.title }</h2>
@@ -150,7 +150,6 @@
 								$(data).each(
 									// 7. html 코드만들기
 									function() {
-										// console.log(this);
 										ddayResult = getDiffDay(this.startDate, getToday());
 										
 										str = $(".travel").clone();

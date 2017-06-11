@@ -160,7 +160,7 @@
 						marker.setMap(map);
 						
 						
-						var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + '번째)' + '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + ')' + '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 					    iwPosition = position; //인포윈도우 표시 위치입니다
 
 						// 인포윈도우를 생성합니다
@@ -185,6 +185,7 @@
 								// 마커 하나를 지도위에 표시합니다
 									addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}), '${routes.location}', ${routes.locOrder});
 								</script>
+								${routes.location }(${routes.locOrder + 1}번째)
 							</c:forEach>
 						</c:when>
 						<c:otherwise>
