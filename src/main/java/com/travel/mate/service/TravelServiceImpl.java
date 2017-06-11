@@ -8,6 +8,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -30,7 +33,7 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
-	private static final String filepath = "usr/local/tomcat7/webapps/TravelMate/userimg/";
+	private static final String filepath = "/var/webapps/userimg/";
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
@@ -42,8 +45,7 @@ public class TravelServiceImpl implements TravelService {
 	// 글쓰기
 	@Override
 	public void insertTravel(TravelDTO travelDto, TravelDetailDTO travelDetailDto, TravelRouteDTO travelRouteDto, MultipartHttpServletRequest request) throws Exception {
-		// 좌표 여러개(리스트) 얻은 후
-		// DTO의 method를 콜하는 것에서 주의! jsp파일의 list명과 DTO 내의 객체이름이 같아야함
+		// Route가 여러 개일수 있으므로, DTO를 list로 반환(jsp에서 모두 array(name=list[0].field)로 던지기 때문에 list로 써야함)
 		List<TravelDTO> travels = travelDto.getTlist();
 		List<TravelDetailDTO> travelDetails = travelDetailDto.getTdlist();
 		List<TravelRouteDTO> routes = travelRouteDto.getTrlist();
@@ -78,6 +80,7 @@ public class TravelServiceImpl implements TravelService {
 					travelDAO.insertTravelDetail(travelDetail);
 				}
 				
+				// 첨부한 파일을 얻어온다
 				MultipartFile f = request.getFile("image");
 				String filename = f.getOriginalFilename();
 				
@@ -87,35 +90,35 @@ public class TravelServiceImpl implements TravelService {
 				
 				String storedFileName = null;
 				String temp = null;
+				
+				// 저장할 경로가 없다면 생성
 				File file = new File(filepath);
 				if (file.exists() == false) {
 					file.mkdirs();
 				}
 				
 				temp = filename.substring(filename.lastIndexOf("."));
-				storedFileName = CommonUtil.getRandomString() + temp;
 				
-				file = new File(filepath + storedFileName);
-				// 지정한 경로에 파일 저장
-				multipartFile.transferTo(file);
+				// 첨부파일 이미지인지 check
+				if (temp.equals("jpg") || temp.equals("JPG") || temp.equals("gif") || temp.equals("GIF")
+						|| temp.equals("png") || temp.equals("PNG") || temp.equals("jpeg") || temp.equals("JPEG")
+						|| temp.equals("bmp") || temp.equals("BMP")) {
+					
+					storedFileName = CommonUtil.getRandomString() + temp;
+					
+					file = new File(filepath + storedFileName);
+					// 지정한 경로에 파일 저장
+					multipartFile.transferTo(file);
+					
+					// 파일명 db에 insert
+					TravelImageDTO travelImage = new TravelImageDTO();
+					
+					travelImage.setImage(storedFileName);
+					travelImage.setTravelCode(travelCode);
+					
+					travelDAO.insertTravelImage(travelImage);
 				
-				// 파일명 db에 insert
-				TravelImageDTO travelImage = new TravelImageDTO();
-				
-				travelImage.setImage(storedFileName);
-				travelImage.setTravelCode(travelCode);
-				
-				travelDAO.insertTravelImage(travelImage);
-				
-	//			// insert.. travelImage table
-	//			for (TravelImageDTO travelImage : travelImages) {
-	//				// travelCode setting
-	//				travelImage.setTravelCode(travelCode);
-	//				travelDAO.insertTravelImage(travelImage);
-	//			}
-			}
-			else {
-				// err(?)
+				}
 			}
 			
 			// insert.. travelRoute table
@@ -160,8 +163,13 @@ public class TravelServiceImpl implements TravelService {
 	
 	// scroll
 	@Override
-	public List<Map<String, Object>> scrollDown(Integer code) {
-		return travelDAO.scrollDown(code);
+	public List<Map<String, Object>> scrollDown(String keys) throws ParseException {
+		JSONParser jsonParser = new JSONParser();
+		// JSON 데이터를 넣어 JSON Object 로 만들어 준다.
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
+		int code = Integer.parseInt((String) jsonObject.get("travelCode"));
+		
+		return travelDAO.scrollDown(code-1);
 	}
 
 	// for check applicant(로그인한 회원이 신청한 사람인지 체크하기 위해 신청목록을 가져옴)

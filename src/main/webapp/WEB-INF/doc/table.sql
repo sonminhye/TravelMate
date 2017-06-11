@@ -156,7 +156,7 @@ ALTER TABLE message
 CREATE TABLE travelEval (
 	evalCode  INT UNSIGNED NOT NULL COMMENT '평가번호', -- 평가번호
 	applyCode INT UNSIGNED NOT NULL COMMENT '신청코드', -- 신청코드
-	point     INT UNSIGNED NOT NULL COMMENT '점수' -- 점수
+	point     TINYINT(1) NOT NULL COMMENT '점수' -- 점수
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '평가';
 

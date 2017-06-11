@@ -21,6 +21,7 @@ public class ReviewController {
 	@Resource(name = "ReviewService")
 	private ReviewService reviewService;
 	
+	// 리뷰 작성 요청
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
 	public ModelAndView writeReview(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
 		ModelAndView mv = new ModelAndView();
@@ -30,7 +31,7 @@ public class ReviewController {
 			mv.setViewName("redirect:/travelList");
 		}
 		catch (Exception e) {
-			mv.setViewName("/errorPage");
+			mv.setViewName("redirect:/errorPage");
 			log.error(e);
 		}
 		return mv;

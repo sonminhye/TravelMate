@@ -7,19 +7,13 @@
 <title>ERROR!</title>
 </head>
 <body>
-	<jsp:include page="header.jsp"></jsp:include>
-	<hr><hr>
-
-	<div class="row">
-		<div class="col-lg-12 text-center"></div>
-	</div>
 	<div role="tabpanel">
 		<!-- Tab panes -->
-		<div class="tab-content">
+		<div class="tab-content" style="text-align: center;">
+			<font size="30" color="red">ERROR</font>
 			<p>요청한 작업에 문제가 있습니다.</p>
 			<p>요청한 작업이 처리되지 않았습니다.</p>
 		</div>
 	</div>
-	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
