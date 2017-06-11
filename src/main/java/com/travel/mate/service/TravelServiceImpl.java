@@ -100,9 +100,9 @@ public class TravelServiceImpl implements TravelService {
 				temp = filename.substring(filename.lastIndexOf("."));
 				
 				// 첨부파일 이미지인지 check
-				if (temp.equals("jpg") || temp.equals("JPG") || temp.equals("gif") || temp.equals("GIF")
-						|| temp.equals("png") || temp.equals("PNG") || temp.equals("jpeg") || temp.equals("JPEG")
-						|| temp.equals("bmp") || temp.equals("BMP")) {
+				if (temp.equals(".jpg") || temp.equals(".JPG") || temp.equals(".gif") || temp.equals(".GIF")
+						|| temp.equals(".png") || temp.equals(".PNG") || temp.equals(".jpeg") || temp.equals(".JPEG")
+						|| temp.equals(".bmp") || temp.equals(".BMP")) {
 					
 					storedFileName = CommonUtil.getRandomString() + temp;
 					
@@ -118,6 +118,10 @@ public class TravelServiceImpl implements TravelService {
 					
 					travelDAO.insertTravelImage(travelImage);
 				
+				}
+				else {
+					log.debug("not image file!!");
+					throw new Exception();
 				}
 			}
 			
