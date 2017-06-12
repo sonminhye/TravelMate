@@ -6,8 +6,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,12 +34,8 @@ public class TravelController {
 	
 	// ajax scroll event
 	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
-	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException{
-		JSONParser jsonParser = new JSONParser();
-		// JSON 데이터를 넣어 JSON Object 로 만들어 준다.
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(keys);
-		int code = Integer.parseInt((String) jsonObject.get("travelCode"));
-		List<Map<String, Object>> scroll = travelService.scrollDown(code - 1);
+	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException {
+		List<Map<String, Object>> scroll = travelService.scrollDown(keys);
 		return scroll;
 	}
 	
@@ -98,9 +92,8 @@ public class TravelController {
 		return "writeTravel";
 	}
 	
-	// 글쓰기를 등록할 때
+	// 글쓰기 요청
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
-	// @ModelAttribute("jsp 파일에서 name="list[idx].field" 일때의 list 값") / DTO 객체에 담음 / 사용할 변수명
 	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
 			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
 			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto,
@@ -113,12 +106,13 @@ public class TravelController {
 			mv.setViewName("redirect:/travelList");
 		}
 		catch (Exception e) {
-			mv.setViewName("/errorPage");
+			mv.setViewName("redirect:/errorPage");
 			log.error(e);
 		}
 		return mv;
 	}
 
+	// 여행신청 요청
 	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
 	public ModelAndView doApply(@ModelAttribute("alist") ApplyDTO applyDto) {
 		// view Setting
@@ -129,13 +123,14 @@ public class TravelController {
 			mv.setViewName("redirect:/travelList");
 		}
 		catch (Exception e) {
-			mv.setViewName("/errorPage");
+			mv.setViewName("redirect:/errorPage");
 			log.error(e);
 		}
 		
 		return mv;
 	}
 
+	// 여행취소 요청
 	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)
 	public ModelAndView doCancel(@ModelAttribute("alist") ApplyDTO applyDto) {
 		// view Setting
@@ -146,9 +141,19 @@ public class TravelController {
 			mv.setViewName("redirect:/travelList");
 		}
 		catch (Exception e) {
-			mv.setViewName("/errorPage");
+			mv.setViewName("redirect:/errorPage");
 			log.error(e);
 		}
+		return mv;
+	}
+	
+	// 예외처리 페이지
+	@RequestMapping(value = "/errorPage")
+	public ModelAndView goErrorPage() {
+		// view Setting
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/errorPage");
+		
 		return mv;
 	}
 
