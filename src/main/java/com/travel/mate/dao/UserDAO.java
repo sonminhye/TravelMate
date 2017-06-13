@@ -47,4 +47,9 @@ public class UserDAO extends AbstractDAO{
 		int rowcount = (Integer) selectOne("user.selectUserId", id);
 		return rowcount;
 	}
+	
+	// userDetail meanPoint update
+	public void updateUserMeanPoint(UserDetailDTO userDetailDto) {
+		update("user.updateUserMeanPoint", userDetailDto);
+	}
 }

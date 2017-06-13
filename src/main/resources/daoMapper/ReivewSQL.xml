@@ -64,5 +64,45 @@
 		]]>
 	</select>
 	
+	<!-- For userDetail meanPoint update -->
+	<!-- 여행글을 쓴 사람의 유저코드 -->
+	<select id="selectUserCode" parameterType="int" resultType="int">
+		<![CDATA[
+			SELECT	t.userCode
+			FROM	travel t, apply a
+			WHERE	a.travelCode = t.travelCode
+				AND	a.applyCode = #{applyCode}
+		]]>
+	</select>
+	
+	<!-- 유저코드를 이용해서 작성했던 여행들의 각 평점을 가져옴 -->
+	<select id="selectAvgPoint" parameterType="int" resultType="hashmap">
+		<![CDATA[
+			SELECT		tt.travelCode, COUNT(*) AS people, AVG(te.point) AS avgPoint
+			FROM		(
+						SELECT	t.travelCode, a.applyCode
+						FROM	travel t, apply a
+						WHERE	t.travelCode = a.travelCode
+							AND	t.userCode = #{userCode}
+						) tt, travelEval te
+			WHERE		tt.applyCode = te.applyCode
+			GROUP BY	tt.travelCode
+		]]>
+	</select>
+	
+	<!-- 유저코드를 이용해서 작성했던 여행들에 리뷰를 남긴 총인원을 가져옴 -->
+	<select id="selectCountAllPeople" parameterType="int" resultType="int">
+		<![CDATA[
+			SELECT	COUNT(*)
+			FROM	(
+					SELECT	t.travelCode, a.applyCode
+					FROM	travel t, apply a
+					WHERE	t.travelCode = a.travelCode
+						AND	t.userCode = #{userCode}
+					) tt, travelEval te
+			WHERE	tt.applyCode = te.applyCode
+		]]>
+	</select>
+	
 </mapper>
 

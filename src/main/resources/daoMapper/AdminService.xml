@@ -42,5 +42,23 @@
 			SELECT * FROM securedResourceAuthority
 		]]>
 	</select>
-
+	<update id="updateUserAuth" parameterType="map">
+		<![CDATA[
+			UPDATE  userAuthority 
+			SET     authority=#{authority} 
+			WHERE   userCode=#{userCode} 
+		]]>
+	</update>
+	<delete id="deleteSecuredResourceAuth" parameterType="int">
+			DELETE FROM securedResourceAuthority
+			WHERE resourceCode=#{resourceCode}
+	</delete>
+	<insert id="insertSecuredResourceAuth" parameterType="java.util.List">
+			INSERT INTO 
+				securedResourceAuthority (resourceCode, authority)
+			VALUES
+			<foreach collection="list" item="item" separator=",">
+				(#{item.resourceCode}, #{item.authority})
+			</foreach>
+	</insert>
 </mapper>

@@ -35,5 +35,19 @@ public class ReviewDAO extends AbstractDAO {
 	public void insertPoint(TravelEvalDTO travelEvalDto) {
 		insert("review.insertTravelEval", travelEvalDto);	
 	}
+	
+	/* 아래 세 개의 메소드는 userDetail meanPoint를 update하기 위함 */
+	public int selectUserCode(int applyCode) {
+		return (Integer) selectOne("review.selectUserCode", applyCode);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectAvgPoint(int userCode) {
+		return (List<Map<String, Object>>) selectList("review.selectAvgPoint", userCode);
+	}
+	
+	public int selectCountAllPeople(int userCode) {
+		return (Integer) selectOne("review.selectCountAllPeople", userCode);
+	}
 
 }

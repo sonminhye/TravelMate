@@ -4,6 +4,8 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %> 
+<%@ taglib prefix="form"  uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -239,6 +241,8 @@
 						<div class="form-group">
 							<label for="name">이름</label>
 							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+							<form:errors path="userDetailDTO.name" />
+
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
@@ -277,6 +281,7 @@
 							</label>
 							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>
+				
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
 					

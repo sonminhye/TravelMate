@@ -154,6 +154,27 @@
 			<version>1.2.0</version>
 		</dependency>
 
+		<!-- validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.0.Final</version>	
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>4.3.0.Final</version>	
+		</dependency>
+
+
+
+
+
 		<!-- <dependency> 2 <groupId>org.springframework</groupId> 3 <artifactId>spring-jdbc</artifactId> 
 			4 <version>${org.springframework-version}</version> 5 </dependency> -->
 		<dependency>
