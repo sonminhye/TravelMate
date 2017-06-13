@@ -2,6 +2,7 @@ package com.travel.mate.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.travel.mate.dto.AuthDTO;
 import com.travel.mate.dto.LanguageDTO;
@@ -22,5 +23,6 @@ public interface AdminService {
 	public ArrayList<SecuredResourceDTO> showAllSecuredResource();
 	public ArrayList<SecuredResourceAuthDTO> showAllSecuredResourceAuth();
 	public void modifyUserAuth(HashMap<String, String> param);
+	public void modifySecuredResourceAuth(List<SecuredResourceAuthDTO> auths);
 	
 }
