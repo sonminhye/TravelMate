@@ -58,13 +58,36 @@ public class TravelServiceImpl implements TravelService {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
 		try {
-			if ((null != travels && travels.size() > 0)
+			// 첨부한 파일을 얻어온다
+			MultipartFile f = request.getFile("image");
+			String filename = f.getOriginalFilename();
+			
+			Iterator<String> iterator = request.getFileNames();
+			
+			MultipartFile multipartFile = request.getFile(iterator.next());
+			
+			String storedFileName = null;
+			String temp = null;
+			
+			// 저장할 경로가 없다면 생성
+			File file = new File(filepath);
+			if (file.exists() == false) {
+				file.mkdirs();
+			}
+			
+			temp = filename.substring(filename.lastIndexOf("."));
+			
+			// 첨부파일 이미지인지 check
+			if ((temp.equals(".jpg") || temp.equals(".JPG") || temp.equals(".gif") || temp.equals(".GIF")
+					|| temp.equals(".png") || temp.equals(".PNG") || temp.equals(".jpeg") || temp.equals(".JPEG")
+					|| temp.equals(".bmp") || temp.equals(".BMP"))
+					&& (null != travels && travels.size() > 0)
 					&& (null != travelDetails && travelDetails.size() > 0)
 					&& (null != request)) {
+				
 				// insert.. travel table & apply table 
 				for (TravelDTO travel : travels) {
 					travelDAO.insertTravel(travel);
-
 					// travelCode general
 					travelCode = travel.getTravelCode();
 					/* 작성자도 신청한 것으로 처리 */
@@ -80,49 +103,22 @@ public class TravelServiceImpl implements TravelService {
 					travelDAO.insertTravelDetail(travelDetail);
 				}
 				
-				// 첨부한 파일을 얻어온다
-				MultipartFile f = request.getFile("image");
-				String filename = f.getOriginalFilename();
+				storedFileName = CommonUtil.getRandomString() + temp;
 				
-				Iterator<String> iterator = request.getFileNames();
+				file = new File(filepath + storedFileName);
+				// 지정한 경로에 파일 저장
+				multipartFile.transferTo(file);
 				
-				MultipartFile multipartFile = request.getFile(iterator.next());
-				
-				String storedFileName = null;
-				String temp = null;
-				
-				// 저장할 경로가 없다면 생성
-				File file = new File(filepath);
-				if (file.exists() == false) {
-					file.mkdirs();
-				}
-				
-				temp = filename.substring(filename.lastIndexOf("."));
-				
-				// 첨부파일 이미지인지 check
-				if (temp.equals(".jpg") || temp.equals(".JPG") || temp.equals(".gif") || temp.equals(".GIF")
-						|| temp.equals(".png") || temp.equals(".PNG") || temp.equals(".jpeg") || temp.equals(".JPEG")
-						|| temp.equals(".bmp") || temp.equals(".BMP")) {
-					
-					storedFileName = CommonUtil.getRandomString() + temp;
-					
-					file = new File(filepath + storedFileName);
-					// 지정한 경로에 파일 저장
-					multipartFile.transferTo(file);
-					
-					// 파일명 db에 insert
-					TravelImageDTO travelImage = new TravelImageDTO();
-					
-					travelImage.setImage(storedFileName);
-					travelImage.setTravelCode(travelCode);
-					
-					travelDAO.insertTravelImage(travelImage);
-				
-				}
-				else {
-					log.debug("not image file!!");
-					throw new Exception();
-				}
+				// 파일명 db에 insert
+				TravelImageDTO travelImage = new TravelImageDTO();
+				travelImage.setImage(storedFileName);
+				travelImage.setTravelCode(travelCode);
+				travelDAO.insertTravelImage(travelImage);
+			
+			}
+			else {
+				log.debug("Not image file!! OR Format empty!! ");
+				throw new Exception();
 			}
 			
 			// insert.. travelRoute table
