@@ -42,5 +42,12 @@
 			SELECT * FROM securedResourceAuthority
 		]]>
 	</select>
+	<update id="updateUserAuth" parameterType="map">
+		<![CDATA[
+			UPDATE  userAuthority 
+			SET     authority=#{authority} 
+			WHERE   userCode=#{userCode} 
+		]]>
+	</update>
 
 </mapper>

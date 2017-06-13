@@ -27,6 +27,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body" style="padding-bottom:20px; padding-top:20px;">
+           
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -38,11 +39,18 @@
 	                <th>지역</th>
 	                <th>언어</th>
 	                <th>권한</th> 
+	                <th></th>
+	                <th></th>
                 </tr>
                 </thead>
+                                
+                
                 <tbody>
+               
                 <c:forEach items="${userDetailList }" var="userDetail">
                 <tr>
+                
+                
                		<td>${userDetail.userCode }</td>
                		
                		<td>
@@ -76,10 +84,26 @@
                				 ${userAuth.authority}
                			</c:if>
                		</c:forEach>
-                	</td>          	
-                </tr>
-                </c:forEach>      
-                </tbody>
+                	</td>  
+                	
+                	<!-- 권한수정 -->        	
+                	<form action="modifyUserAuth" method="POST">
+                	<td>
+	                	<select class="form-control" name="authList">
+	                	<c:forEach items="${authList }" var="auth">
+	                		<option value="${auth.authority}">${auth.authorityName}</option>
+	                	</c:forEach>
+	                	</select>
+                	</td>
+                	<td>
+                		<input type="hidden" name="userCode" value="${userDetail.userCode }"/>
+              			<!-- <a href='modifyAuth' style='float: right;'><button type='button' class='btn btn-primary btn-lg btn-info'>수정</button></a> -->
+              			<button type="submit" class="btn btn-default">수정</button>
+              		</td>
+              		</form>
+                </tr>              
+                </c:forEach>                 
+                </tbody>              
               </table>
             </div>
             <!-- /.box-body -->

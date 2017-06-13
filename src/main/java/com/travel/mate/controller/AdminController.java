@@ -1,5 +1,6 @@
 package com.travel.mate.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.travel.mate.dto.AuthDTO;
 import com.travel.mate.dto.LanguageDTO;
@@ -49,5 +51,22 @@ public class AdminController {
 		return "adminPage";
 	}
 	
+	
+	@RequestMapping(value = "/modifyUserAuth", method = RequestMethod.POST)
+	public String modifyUserAuth(@RequestParam("userCode") String userCode, 
+			                 @RequestParam("authList") String authority,
+							 Model model) {
+		System.out.println("userCode : " + userCode);
+		System.out.println("auth : " + authority);
+	
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put("userCode", userCode);
+		param.put("authority", authority);
+		
+		adminService.modifyUserAuth(param);
+		
+		return "redirect:adminPage";
+	}
+
 	
 }

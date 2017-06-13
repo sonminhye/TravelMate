@@ -72,7 +72,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	
 	public void reload() throws Exception {
 	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securedObjectService.getRolesAndUrl();
-	
 	        Iterator<Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
 	
 	        // 이전 데이터 삭제
@@ -82,10 +81,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	        Entry<RequestMatcher, List<ConfigAttribute>> entry = iterator.next();
 	            
 	            requestMap.put(entry.getKey(), entry.getValue());
-	        }
-	        
-	        if (logger.isInfoEnabled()) {
-	            logger.info("Secured Url Resources - Role Mappings reloaded at Runtime!");
 	        }
 	}
 
