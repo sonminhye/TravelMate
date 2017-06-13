@@ -1,6 +1,8 @@
 package com.travel.mate.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -56,6 +58,16 @@ public class AdminServiceImpl implements AdminService{
 
 	public ArrayList<SecuredResourceAuthDTO> showAllSecuredResourceAuth() {
 		return adminDAO.selectSecuredResourceAuthList();
+	}
+	
+	public void modifyUserAuth(HashMap<String, String> param){
+		adminDAO.updateUserAuth(param);
+	}
+	
+	public void modifySecuredResourceAuth(List<SecuredResourceAuthDTO> auths){
+		int resourceCode = auths.get(0).getResourceCode();
+		adminDAO.deleteSecuredResourceAuth(resourceCode);
+		adminDAO.insertSecuredResourceAuth(auths);
 	}
 
 }
