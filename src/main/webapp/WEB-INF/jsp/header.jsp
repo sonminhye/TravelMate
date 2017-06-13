@@ -327,7 +327,7 @@
 	
 	 	// nick name 정보를 서버에 보냄
 	 	socket.emit('joinAllRooms', {
-	 		userCode : userCode,
+	 		userCode : userCode
 	 	});
 	 	
 	 	// 메세지 수신 부분
@@ -339,7 +339,6 @@
 	
 	 	// 읽지않은 메세지 개수 늘려주기
 	 	appendCount = function(data) {
-	 		console.log("count 증가!");
 	 		var text = data.msg;
 	 		var unread = $('.unreadMsg');
 	 		
@@ -348,7 +347,6 @@
 	 		} else {
 	 			unread.html(1);
 	 		}
-	
 	 	};
  	</script>
 </body>

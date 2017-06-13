@@ -63,8 +63,8 @@
 				<c:forEach items="${list}" var="dto">
 					<!-- 리스트의 parameter를 post 형식으로 보내주기 위한 form -->
 					<form name="hiddenForm" id="hiddenForm" action="chat" method="POST">
-						<input type="hidden" name="rcode" value="" /> <input type="hidden"
-							name="room" value="" />
+						<input type="hidden" name="rcode" value="" /> 
+						<input type="hidden" name="room" value="" />
 					</form>
 					<script type="text/javascript">
 						function goChat(receiverCode, roomCode) {
@@ -74,30 +74,15 @@
 							form.submit();
 						}
 					</script>
-					<c:choose>
-						<c:when test="${myCode==dto.senderCode}">
-							<a class="chatlist" href="#" id="${dto.roomCode }"
-								onclick="goChat('${dto.receiverCode}','${dto.roomCode }');">
-								<div>
-									<p>참여자 : ${dto.receive}</p>
-									<p class="latestdate">${dto.latestDate}</p>
-									<p>${dto.roomCode}</p>
-									<p class="unread">${dto.unread }</p>
-								</div>
-							</a>
-						</c:when>
-						<c:otherwise>
-							<a class="chatlist" id="${dto.roomCode}"
-								onclick="goChat('${dto.senderCode}','${dto.roomCode }');">
-								<div>
-									<p>참여자 : ${dto.send}</p>
-									<p class="latestdate">${dto.latestDate}</p>
-									<p>${dto.roomCode}</p>
-									<p class="unread">${dto.unread }</p>
-								</div>
-							</a>
-						</c:otherwise>
-					</c:choose>
+						<a class="chatlist" id="${dto.roomCode}"
+							onclick="goChat('${dto.receiverCode}','${dto.roomCode }');">
+							<div>
+								<p>참여자 : ${dto.receive}</p>
+								<p class="latestdate">${dto.latestDate}</p>
+								<p>${dto.roomCode}</p>
+								<p class="unread">${dto.unread }</p>
+							</div>
+						</a>
 				</c:forEach>
 			</c:otherwise>
 		</c:choose>
@@ -110,16 +95,18 @@
 			// 내가 보낸 메세지가 아니며
 			// 상대방이 읽지않은 메세지라면
 			if(data.scode != userCode && data.readFlag==0)
-				//해당 룸의 안읽은 숫자 늘리기
 				appendCountByRoom(data); 
+				//각 룸의 안읽은 메세지 개수 올려주기
 		});
 
 		// 읽지않은 메세지 개수 늘려주기
 		appendCountByRoom = function(data) {
+			
 			var text = data.msg;
 			var parent = $('#' + data.roomCode);
 			var date = parent.find('.latestdate');
 			var unread = parent.find('.unread');
+			
 			if (unread.html() != "") {
 				unread.html(parseInt(unread.html()) + 1);
 			} else {
@@ -128,7 +115,7 @@
 			
 			date.html(data.date);
 			parent.prependTo("#chatList");
-			console.log(text);
+		
 		};
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>

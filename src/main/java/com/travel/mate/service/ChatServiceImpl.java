@@ -42,9 +42,8 @@ public class ChatServiceImpl implements ChatService {
 		// TODO Auto-generated method stub
 		System.out.println("showChatRoomExist()");
 		
-		
 		ChatRoomDTO chatRoom = new ChatRoomDTO();
-		chatRoom.setsenderCode(senderCode);
+		chatRoom.setSenderCode(senderCode);
 		chatRoom.setreceiverCode(receiverCode);
 		
 		return chatDAO.showChatRoomExist(chatRoom);
@@ -55,10 +54,10 @@ public class ChatServiceImpl implements ChatService {
 		// TODO Auto-generated method stub
 		ChatRoomDTO chatRoom = new ChatRoomDTO();
 
-		chatRoom.setsenderCode(senderCode);
+		chatRoom.setSenderCode(senderCode);
 		chatRoom.setreceiverCode(receiverCode);
 		chatRoom.setLatestDate(latestdate);
-
+		
 		return chatDAO.addRoom(chatRoom);
 	}
 

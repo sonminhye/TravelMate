@@ -2,44 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="chat">
+<mapper namespace="chat">	
+	
 	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
-		select sender.roomCode,  sender.senderCode, sender.receiverCode, sender.latestDate, sender.name as send, receiver.name as receive, (select count(*) from message where roomCode=sender.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
+		select r.roomCode, userCode as receiverCode, name as receive, latestDate, (select count(*) from message where roomCode=r.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
 		from
-		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.senderCode) as sender join
-		(select * from userDetail join messageRoom where userDetail.userCode = messageRoom.receiverCode) as receiver
-		where sender.roomCode = receiver.roomCode and sender.senderCode = #{userCode} or sender.receiverCode = #{userCode} 
-		group by sender.roomCode
-		order by latestdate desc
+		(select userDetail.userCode, userDetail.name, roomUser.roomCode from roomUser join userDetail where userDetail.userCode = roomUser.userCode and roomUser.userCode!=#{userCode}) as r join
+		(select messageRoom.roomCode, latestDate from roomUser join messageRoom where roomUser.userCode = #{userCode}) as m
+		where m.roomCode = r.roomCode
+		group by r.roomCode
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
 		select * , (select userDetail.name from userDetail where message.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where message.receiverCode = userDetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
 	</select>
 
-	<!-- <select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
-		select *
-		from messageRoom 
-		where roomCode = (select roomCode from roomUser where userCode=#{receiverCode} or userCode=#{senderCode})
-	</select> -->
-	
 	<select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
-		select *
-		from messageRoom 
-		where ( senderCode=#{senderCode} and receiverCode=#{receiverCode} ) or (senderCode=#{receiverCode} and receiverCode = #{senderCode})
+		select sender.roomCode 
+		from
+		(select * from roomUser where userCode=#{senderCode}) as sender join
+		(select * from roomUser where userCode=#{receiverCode}) as receiver
+		where sender.roomCode = receiver.roomCode 	
 	</select>
 	
-	
 	<insert id="addChatRoom" parameterType="com.travel.mate.dto.ChatRoomDTO" useGeneratedKeys="true" keyProperty="roomCode">
-		insert into messageRoom(senderCode, receiverCode, latestdate) values (#{senderCode},#{receiverCode},#{latestDate})
+		insert 
+		into messageRoom(latestdate) values (#{latestDate})	
 	</insert>
 	
+	<insert id="addRoomUser" parameterType="com.travel.mate.dto.ChatRoomDTO">
+		insert into roomUser(roomCode,userCode) values(#{roomCode},#{senderCode}),(#{roomCode},#{receiverCode})
+	</insert>
+	
+	<!-- 안읽은 메세지 불러오기 -->
 	<select id="checkUnReadMessage" parameterType="int" resultType="int">
 		select count(*)
 		from message
 		where receiverCode=#{receiverCode} and readFlag=0
 	</select>
 	
+	<!-- 사실상 이것도 서버에서 잘 관리하면, 없어도 괜찮을 듯. -->
 	<update id="changeUnReadMessage" parameterType="com.travel.mate.dto.ChatDTO">
 		update message
 		set readFlag=1

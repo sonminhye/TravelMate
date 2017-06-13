@@ -96,10 +96,9 @@
 		var message_side = 'right';
 		var inchatRoom = false;
 		var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
-
+		console.log(room);
 		//nick name, 방정보 등 정보를 서버에 보냄
-		//보내면서 내 코드와 룸에서 읽지않은 것이 있다면 읽음 표시를 해줌
-		socket.emit('join', {
+		socket.emit('chat', {
 			nickname : nick,
 			room : room,
 			scode : scode,
@@ -135,7 +134,6 @@
 
 		//메세지 수신 부분
 		socket.on('msg', function(data) {
-			var nick = decodeURI(data.nickname);
 			appendMessage(data);
 		});
 
@@ -194,6 +192,7 @@
 					//text 클래스를 찾아서 메세지 오른쪽/왼쪽 정해주기
 					$message.addClass(_this.message_side).find('.text').html(
 							_this.text);
+					
 					//avatar 클래스 찾아서 닉네임 써주기
 					$message.find('.avatar').append(_this.nick);
 
@@ -258,7 +257,6 @@
 					return false;
 				});
 	</script>
-
 	<jsp:include page="footer.jsp"></jsp:include>
 
 </body>
