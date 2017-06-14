@@ -173,11 +173,11 @@
               		<form action="modifySecuredResourceAuth" method="POST">
               		<td width>
               		<label class="checkbox-inline">
-              			<c:forEach items="${authList }" var="auth" varStatus="status">  
-              			    			
-	                	  <input type="hidden" name="securedResourceAuthDTOList[${status.index}].resourceCode" value="${secResource.resourceCode}"/>
-						  <input type="checkbox" id="inlineCheckbox1" name="securedResourceAuthDTOList[${status.index}].authority" value="${auth.authority}">${auth.authorityName}
-	                	
+              		<input type="hidden" name="securedResourceAuthDTOList[0].resourceCode" value="${secResource.resourceCode}"/>
+              		<input type="checkbox" id="inlineCheckbox1" name="securedResourceAuthDTOList[0].authority" value="none">없음
+              			<c:forEach items="${authList }" var="auth" varStatus="status">       			    			
+	                	  <input type="hidden" name="securedResourceAuthDTOList[${status.index + 1}].resourceCode" value="${secResource.resourceCode}"/>
+						  <input type="checkbox" id="inlineCheckbox1" name="securedResourceAuthDTOList[${status.index + 1}].authority" value="${auth.authority}">${auth.authorityName}        	
 	                	</c:forEach>
 	                </label>
 	              		
