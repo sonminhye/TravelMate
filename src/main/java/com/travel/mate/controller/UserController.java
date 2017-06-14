@@ -8,11 +8,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +28,8 @@ import com.travel.mate.service.UserService;
 
 @Controller
 public class UserController {
+	Logger log = Logger.getLogger(this.getClass());
+
 	@Resource(name = "UserService")
 	private UserService userService;
 	
@@ -43,16 +47,31 @@ public class UserController {
 
 	}
 	
-	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public String signUp(@ModelAttribute @Valid UserDTO userDTO ,@ModelAttribute @Valid UserDetailDTO userDetailDTO,
+	@RequestMapping(value = "/doSignUp", method = RequestMethod.POST)
+	public String doSignUp(@ModelAttribute @Valid UserDTO userDTO ,BindingResult result1,  @ModelAttribute @Valid UserDetailDTO userDetailDTO, BindingResult result2 ,
 						 @RequestParam("authority") String authority,
 						 @ModelAttribute("langDTOList") UserLanguageDTO languageDTO, 
-						 BindingResult bindingResult, Model model) {
+						  Model model) {
 		System.out.println("signup controller");
-		   if(bindingResult.hasErrors()){
-	           	  return "main";
-	            
+
+	        // Validation 오류 발생시 
+	        if (result1.hasErrors()) {
+	            // 에러 출력
+	            List<ObjectError> list = result1.getAllErrors();
+	            for (ObjectError e : list) {
+	                log.error(" ObjectError : " + e);
+	            }
+	            return "signUp";
 	        }
+	        if (result2.hasErrors()) {
+	            // 에러 출력
+	            List<ObjectError> list = result2.getAllErrors();
+	            for (ObjectError e : list) {
+	                log.error(" ObjectError : " + e);
+	            }
+	            return "signUp";
+	        }
+		   
 
 
 		//암호화
@@ -87,6 +106,11 @@ public class UserController {
 		return "signIn";
 	}
 	
+	@RequestMapping(value = "/signUp", method = RequestMethod.GET)
+	public String signUp(Locale locale, Model model) {
+	
+		return "signUp";
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/checkSignup", method = RequestMethod.POST)

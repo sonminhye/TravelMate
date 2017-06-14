@@ -62,8 +62,8 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Transactional(readOnly=false)
-	public void modifyUserAuth(HashMap<String, String> param){
-		adminDAO.updateUserAuth(param);
+	public void updateUserAuth(UserAuthDTO userAuthDTO){
+		adminDAO.updateUserAuth(userAuthDTO);
 	}
 	
 	@Transactional(readOnly=false)
@@ -77,6 +77,11 @@ public class AdminServiceImpl implements AdminService{
 		if(!auths.get(0).getAuthority().equals("none")){
 			adminDAO.insertSecuredResourceAuth(auths);
 		}
+	}
+	
+	@Transactional(readOnly=false)
+	public void updateSecuredResource(SecuredResourceDTO securedResourceDTO){
+		adminDAO.updateSecuredResource(securedResourceDTO);
 	}
 
 }

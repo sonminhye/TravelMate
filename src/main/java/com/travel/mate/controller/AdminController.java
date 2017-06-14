@@ -1,6 +1,5 @@
 package com.travel.mate.controller;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.travel.mate.dto.AuthDTO;
 import com.travel.mate.dto.LanguageDTO;
@@ -36,6 +34,7 @@ public class AdminController {
 	@Autowired
 	ReloadableFilterInvocationSecurityMetadataSource relodable;
 	
+	/*목록불러오기*/
 	@RequestMapping(value = "/adminPage", method = RequestMethod.GET)
 	public String adminPage(Locale locale, Model model) {
 		System.out.println("Admincontroller!!!!!");
@@ -62,17 +61,10 @@ public class AdminController {
 	
 	/*회원권한변경*/
 	@RequestMapping(value = "/modifyUserAuth", method = RequestMethod.POST)
-	public String modifyUserAuth(@RequestParam("userCode") String userCode, 
-			                 @RequestParam("authList") String authority,
+	public String modifyUserAuth(@ModelAttribute UserAuthDTO userAuthDTO,
 							 Model model) {
-		System.out.println("userCode : " + userCode);
-		System.out.println("auth : " + authority);
-	
-		HashMap<String, String> param = new HashMap<String, String>();
-		param.put("userCode", userCode);
-		param.put("authority", authority);
 		
-		adminService.modifyUserAuth(param);
+		adminService.updateUserAuth(userAuthDTO);
 		
 		return "redirect:adminPage";
 	}
@@ -80,6 +72,7 @@ public class AdminController {
 	/*url별 접근권한 변경*/
 	@RequestMapping(value = "/modifySecuredResourceAuth", method = RequestMethod.POST)
 	public String modifySecuredResourceAuth(@ModelAttribute("securedResourceAuthDTOList") SecuredResourceAuthDTO securedResourceAuthDTO,
+											@ModelAttribute SecuredResourceDTO securedResourceDTO,
 							 				Model model) {
 	
 		List<SecuredResourceAuthDTO> auths = securedResourceAuthDTO.getSecuredResourceAuthDTOList();
@@ -99,7 +92,12 @@ public class AdminController {
 			System.out.println("authList"+dto.getResourceCode() +" : " + dto.getAuthority());
 		}
 		
-		adminService.modifySecuredResourceAuth(auths);
+		//auths가 비어있으면(선택된 체크박스가 없으면)쿼리를 실행하지 않음 
+		if(!auths.isEmpty()){
+			adminService.modifySecuredResourceAuth(auths);
+		}
+		
+		adminService.updateSecuredResource(securedResourceDTO);
 		
 		//Spring security resource 재설정(reload 메소드 호출)
 		try {

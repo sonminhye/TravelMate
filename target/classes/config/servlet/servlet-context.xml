@@ -12,7 +12,19 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<annotation-driven validator="validator" />
+ 
+ 
+ 	<!-- validation -->
+    <beans:bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <!-- Register the Customer.properties -->
+    <beans:bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+        <beans:property name="basename" value="message/messages" />
+    </beans:bean>
+
+
 
 	<interceptors>
 		<interceptor>
@@ -41,7 +53,7 @@
 	
 	<context:component-scan base-package="com.travel.mate" />
 	
-	 <!-- Transactional annotation -->
+	<!-- Transactional annotation -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/> 
 	
 </beans:beans>

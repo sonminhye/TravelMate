@@ -5,10 +5,21 @@ import javax.validation.constraints.Size;
 
 public class UserDetailDTO {
 	private int userCode;
-	@NotNull(message="5자에서 50자 사이의 값만 가능합니다") private String name;
-	@NotNull private int age;
-	@NotNull private String sex;
-	@NotNull private String location;
+	@NotNull(message="5자에서 50자 사이의 값만 가능합니다") 
+	@Size(min=1)
+	private String name;
+	
+	@NotNull
+	private int age;
+	
+	@NotNull
+	@Size(min=1) 
+	private String sex;
+	
+	@NotNull
+	@Size(min=1) 
+	private String location;
+	
 	private float meanPoint;
 	
 	public UserDetailDTO(){

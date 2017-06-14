@@ -22,7 +22,7 @@ public interface AdminService {
 	public ArrayList<UserAuthDTO> showAllUserAuth();
 	public ArrayList<SecuredResourceDTO> showAllSecuredResource();
 	public ArrayList<SecuredResourceAuthDTO> showAllSecuredResourceAuth();
-	public void modifyUserAuth(HashMap<String, String> param);
+	public void updateUserAuth(UserAuthDTO userAuthDTO);
 	public void modifySecuredResourceAuth(List<SecuredResourceAuthDTO> auths);
-	
+	public void updateSecuredResource(SecuredResourceDTO securedResourceDTO);
 }

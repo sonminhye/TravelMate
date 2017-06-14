@@ -219,7 +219,7 @@
 					<h4 class="modal-title" id="myModalLabel">회원가입</h4>
 				</div>
 				<div class="modal-body">
-					<form action="signUp" method="POST" onsubmit="return checkSubmit()">
+					<form:form action="doSignUp" method="POST" onsubmit="return checkSubmit()">
 						<div class="form-group">
 							<!-- 권한을 ROLE_USER로 설정 -->
 							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
@@ -283,7 +283,7 @@
 						</div>
 				
 						<button type="submit" class="btn btn-default">가입</button>
-					</form>
+					</form:form>
 					
 					<!-- 입력 여부 체크하기위한 hidden input -->
 					<div class="formCheck">
