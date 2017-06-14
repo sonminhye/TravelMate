@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <title>Footer with Button and Logo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/footer.css?ver=1">
+    <link rel="stylesheet" href="<c:url value='/css/footer.css?ver=1' />">
     
 <!--         jQuery
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -24,7 +26,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-3">
-                    <h2 class="logo"><a href="/main">Travle Mate</a></h2>
+                    <h2 class="logo"><a href="<c:url value='/main' />">Travle Mate</a></h2>
                 </div>
                 <div class="col-sm-2">
                     <h5>Get started</h5>

@@ -24,7 +24,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>여행 보기</title>
-	<link href="css/starPoint.css" rel="stylesheet">
+	<link href="<c:url value='/css/starPoint.css' />" rel="stylesheet">
 </head>
 <body>
 	<c:set value="<%=code %>" var="mCode"></c:set>

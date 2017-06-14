@@ -20,7 +20,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>여행등록</title>
-	<script type="text/javascript" src="js/writeCheck.js"></script>
+	<script type="text/javascript" src="<c:url value='/js/writeCheck.js' />"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
@@ -104,10 +104,9 @@
 		</form>
 	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
-	<script src="js/datetimepicker/jquery.timepicker.js"></script>
-	<link rel="stylesheet" href="js/datetimepicker/jquery.timepicker.css">
-	<link rel="stylesheet"
-		href="js/datetimepicker/lib/bootstrap-datepicker.css">
+	<script src="<c:url value='/js/datetimepicker/jquery.timepicker.js' />"></script>
+	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/jquery.timepicker.css' />">
+	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/lib/bootstrap-datepicker.css' />">
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// time

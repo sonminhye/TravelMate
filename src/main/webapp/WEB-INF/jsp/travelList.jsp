@@ -23,8 +23,8 @@
 <head>
 	<title>여행 목록</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="js/travelCommon.js"></script>
-	<script src="js/calculateDay.js"></script>
+	<!-- <script src="js/travelCommon.js"></script> -->
+	<script src="<c:url value='/js/calculateDay.js' />"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
@@ -60,7 +60,7 @@
 									<c:forEach items="${list }" var="row">
 									
 										<div class="travel col-md-4 col-sm-6 portfolio-item" style="height: 500">
-											<a href="#this" name="img-link" class="portfolio-link" data-toggle="modal">
+											<a href="<c:url value='/readTravel/${row.travelCode }' />" name="img-link" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
 												<input type="hidden" class="userCode" value=<%=code %>>
 												<div class="portfolio-hover">
@@ -92,21 +92,6 @@
 								</c:otherwise>
 							</c:choose>
 
-							<script type="text/javascript">
-								$(document).ready(function () {
-									$("a[name='img-link']").on("click", function(e) {
-										e.preventDefault();
-										readTravel($(this));
-									});
-								});
-								function readTravel(obj) {
-									var comSubmit = new ComSubmit();
-									comSubmit.setUrl("<c:url value='/readTravel' />");
-									comSubmit.addParam("travelCode", obj.parent().find(".travelCode").val());
-									comSubmit.addParam("userCode", obj.parent().find(".userCode").val());
-									comSubmit.submit();
-								}
-							</script>
 
 						</div>
 					</div>
