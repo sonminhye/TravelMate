@@ -73,6 +73,10 @@ public class TravelController {
 		// review 썼는지 안썼는지
 		List<Map<String, Object>> listReviewWrite = reviewService.selectReviewWrite(travelDto);
 		
+		// user
+		// user 정보
+		List<Map<String, Object>> listUserInfo = travelService.selectUserInfo(travelDto);
+		
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
 		
@@ -82,6 +86,8 @@ public class TravelController {
 		mv.addObject("reviewList", listReview);
 		mv.addObject("reviewWriteCheck", listReviewWriteCheck);
 		mv.addObject("reviewWrite", listReviewWrite);
+		
+		mv.addObject("userInfo", listUserInfo);
 		return mv;
 	}
 

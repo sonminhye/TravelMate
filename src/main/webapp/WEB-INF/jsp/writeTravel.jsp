@@ -35,8 +35,8 @@
 				</tr>
 				<tr>
 					<td>설명</td>
-					<td><textarea name="tlist[0].content" class='form-control'
-							style="height: 100px; resize: none;"></textarea></td>
+					<td><textarea placeholder="최대 20000자 입력" name="tlist[0].content" class='form-control'
+							style="height: 100px; resize: none;" maxlength="20000" ></textarea></td>
 				</tr>
 				<tr>
 					<td>시작날짜<font color="red">*</font></td>

@@ -79,7 +79,7 @@
 						</tr>
 						<tr>
 							<td>작성자</td>
-							<td>${row.name }</a></td>
+							<td><a data-toggle="modal" data-dismiss="modal" href="#userInfo">${row.name }</a></td>
 							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
 						<c:if test="${row.userCode!= mCode}">
@@ -90,7 +90,7 @@
 						</c:if>
 						<tr>
 							<td>설명</td>
-							<td>${row.content }</td>
+							<td><textarea readonly="readonly" style="resize: none; border: none; width: 100%;">${row.content }</textarea></td>
 						</tr>
 						<tr>
 							<td>시간</td>
@@ -247,7 +247,8 @@
 			<c:choose>
 				<c:when test="${fn:length(reviewList) > 0 }">
 					<c:forEach items="${reviewList }" var="review">
-						<div>${review.name }	${review.content }(${review.writeTime })</div>
+						<div>${review.name }(${review.writeTime })<textarea readonly="readonly" style="width: 100%; resize: none; border: none; display: inline;">${review.content }</textarea>
+						</div>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
@@ -274,7 +275,7 @@
 										</p>
 										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
-										<textarea name="content" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline"></textarea>
+										<textarea name="content" placeholder="최대 20000자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="20000"></textarea>
 										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
@@ -294,6 +295,46 @@
 	</div>
 	
 	<script type="text/javascript" src="<c:url value='/js/starPoint.js'/>"></script>
+
+	<c:choose>
+		<c:when test="${fn:length(userInfo) > 0}">
+			<c:forEach items="${userInfo }" var="userInfo">
+				<c:set var="sex" value="${userInfo.sex }"></c:set>
+				<c:choose>
+					<c:when test="${sex == 'male' }">
+						<c:set var="sex" value="남성"></c:set>
+					</c:when>
+					<c:otherwise>
+						<c:set var="sex" value="여성"></c:set>
+					</c:otherwise>
+				</c:choose>
+				<div class="modal fade" id="userInfo" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-body">
+								<div class="form-group">
+									<label>${userInfo.name }</label>
+								</div>
+								<div class="form-group">
+									<label>${sex }</label>
+								</div>
+								<div class="form-group">
+									<label>${userInfo.age }세</label>
+								</div>
+								<div class="form-group">
+									<label>${userInfo.location } 거주</label>
+								</div>
+								<div class="form-group">
+									<label>★ ${userInfo.meanPoint }</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</c:when>
+	</c:choose>
 
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>

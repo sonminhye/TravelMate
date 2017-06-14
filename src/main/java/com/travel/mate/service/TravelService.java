@@ -31,4 +31,7 @@ public interface TravelService {
 	List<Map<String, Object>> selectTravelApply(TravelDTO travelDto);
 	List<Map<String, Object>> selectTravelApplyCount(TravelDTO travelDto);
 
+	/* 글쓴이 정보 */
+	List<Map<String, Object>> selectUserInfo(TravelDTO travelDto);
+
 }

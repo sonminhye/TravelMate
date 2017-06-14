@@ -251,4 +251,11 @@ public class TravelServiceImpl implements TravelService {
 			throw e;
 		}
 	}
+
+	// 글쓴이 정보
+	@Override
+	public List<Map<String, Object>> selectUserInfo(TravelDTO travelDto) {
+		int tCode = travelDto.getTravelCode();
+		return travelDAO.selectUserInfo(tCode);
+	}
 }
