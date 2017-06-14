@@ -9,39 +9,30 @@ import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.travel.mate.dao.UserDAO;
-import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
+import com.travel.mate.dto.UserLanguageDTO;
 
-@Repository
+@Transactional(readOnly=true)
+@Service("UserService")
 public class UserServiceImpl implements UserService {
-	
-	@Autowired
-	private SqlSession sqlSession;
 	
 	@Resource(name="UserDAO")
 	private UserDAO userDAO;
-
 	
 	//test용 리스트출력
 	@Override
 	public ArrayList<UserDTO> showList(){
 		System.out.println("listService");
-		
-/*		ArrayList<UserDTO> result = new ArrayList<UserDTO>();
-		
-		UserService dao = sqlSession.getMapper(UserService.class);
-		result = dao.showList();
-		
-		return result;
-		*/
 		return userDAO.selectTestList();
 	}
 	
 	//회원가입
+	@Transactional(readOnly=false)
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs){
 		System.out.println("doSignup Service");
 		int userCode = 0;
@@ -65,20 +56,14 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-
 	@Override
 	public UserDetailDTO showUserDetail(int userCode) {
 		// TODO Auto-generated method stub
 		return userDAO.selectUserDetail(userCode);
 	}
 
-
-
-
 	public int checkSignup(String id) {
-		
 		return userDAO.selectUserId(id);
 	}
-
 
 }

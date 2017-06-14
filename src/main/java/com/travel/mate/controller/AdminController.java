@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +24,15 @@ import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.security.service.ReloadableFilterInvocationSecurityMetadataSource;
-import com.travel.mate.service.AdminServiceImpl;
+import com.travel.mate.service.AdminService;
 
 @Controller
 public class AdminController {
-	@Autowired
-	private AdminServiceImpl adminService;
+
+	@Resource(name = "AdminService")
+	private AdminService adminService;
 	
+	/*spring security의 권한정보를 재설정하는 reload 메소드를 호출하기 위해 */
 	@Autowired
 	ReloadableFilterInvocationSecurityMetadataSource relodable;
 	
@@ -43,8 +47,7 @@ public class AdminController {
 		List<UserAuthDTO> userAuthList = adminService.showAllUserAuth();
 		List<SecuredResourceDTO> securedResourceList = adminService.showAllSecuredResource();
 		List<SecuredResourceAuthDTO> securedResourceAuthList = adminService.showAllSecuredResourceAuth();
-
-		
+	
 		model.addAttribute("userList", userList);
 		model.addAttribute("userDetailList", userDetailList);
 		model.addAttribute("languageList", languageList);
@@ -57,7 +60,7 @@ public class AdminController {
 		return "adminPage";
 	}
 	
-	
+	/*회원권한변경*/
 	@RequestMapping(value = "/modifyUserAuth", method = RequestMethod.POST)
 	public String modifyUserAuth(@RequestParam("userCode") String userCode, 
 			                 @RequestParam("authList") String authority,
@@ -74,20 +77,23 @@ public class AdminController {
 		return "redirect:adminPage";
 	}
 
+	/*url별 접근권한 변경*/
 	@RequestMapping(value = "/modifySecuredResourceAuth", method = RequestMethod.POST)
 	public String modifySecuredResourceAuth(@ModelAttribute("securedResourceAuthDTOList") SecuredResourceAuthDTO securedResourceAuthDTO,
-							 Model model) {
+							 				Model model) {
 	
 		List<SecuredResourceAuthDTO> auths = securedResourceAuthDTO.getSecuredResourceAuthDTOList();
+	
 		//선택되지 않은 체크박스는 null값이므로 이를 list에서 제거해 주는 작업
 		for(Iterator<SecuredResourceAuthDTO> it = auths.iterator(); it.hasNext();){
 			SecuredResourceAuthDTO auth = it.next();
 			
 			if(auth.getAuthority() == null){
 				it.remove();
-			}
+			}		
 		}//end for
 
+		
 		//테스트용 출력
 		for(SecuredResourceAuthDTO dto: auths){
 			System.out.println("authList"+dto.getResourceCode() +" : " + dto.getAuthority());
@@ -95,7 +101,7 @@ public class AdminController {
 		
 		adminService.modifySecuredResourceAuth(auths);
 		
-		//Spring security resource 재설정
+		//Spring security resource 재설정(reload 메소드 호출)
 		try {
 			relodable.reload();
 		} catch (Exception e) {
