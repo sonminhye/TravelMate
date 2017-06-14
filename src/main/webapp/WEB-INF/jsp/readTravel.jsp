@@ -211,7 +211,7 @@
 								<p>글쓴이는 자동적으로 신청되며, 글수정 및 삭제 기능은 예정 없음</p>
 							</c:when>
 							<c:otherwise>
-								<form action="doCancel" method="post">
+								<form action="<c:url value='/doCancel'/>" method="post">
 									<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
 								</form>
 							</c:otherwise>
@@ -220,7 +220,7 @@
 					<c:otherwise>
 						<c:choose>
 							<c:when test="${fn:length(applyCount) != maxPeople }">
-								<form action="doApply" method="post">
+								<form action="<c:url value='/doApply'/>" method="post">
 									<%=applyButtonStart %><%=applyButtonEnd %>
 								</form>
 							</c:when>
@@ -265,7 +265,7 @@
 									<%-- 이미 리뷰를 작성했습니다. --%>
 								</c:when>
 								<c:otherwise>
-									<form action="doWriteReview" method="post">
+									<form action="<c:url value='/doWriteReview'/>" method="post">
 										<p class="star_rating">
 										    <a href="#this" id="point1">★</a>
 										    <a href="#this" id="point2">★</a>
