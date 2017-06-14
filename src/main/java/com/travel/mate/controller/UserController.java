@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.dto.UserLanguageDTO;
-import com.travel.mate.service.UserServiceImpl;
+import com.travel.mate.service.UserService;
 
 @Controller
 public class UserController {
-	@Autowired
-	private UserServiceImpl userService;
+	@Resource(name = "UserService")
+	private UserService userService;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -75,7 +75,6 @@ public class UserController {
 		for(UserLanguageDTO dto: langs){
 			System.out.println("langList"+dto.getUserCode() +" : " + dto.getLanguageCode());
 		}
-        /////////
 		
 		userService.doSignup(userDTO, userDetailDTO, authority, langs);
 				
@@ -88,8 +87,9 @@ public class UserController {
 		return "signIn";
 	}
 	
-	@RequestMapping(value = "/checkSignup", method = RequestMethod.POST)
+	
 	@ResponseBody
+	@RequestMapping(value = "/checkSignup", method = RequestMethod.POST)
 	public String checkSignup(HttpServletRequest request, Model model) {
 		System.out.println("chcekSignup controller");
 		
@@ -106,6 +106,4 @@ public class UserController {
 		return "myPage";
 	}
 	
-
-
 }
