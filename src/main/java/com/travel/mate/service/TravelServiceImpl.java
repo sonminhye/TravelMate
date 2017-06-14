@@ -33,7 +33,9 @@ import com.travel.mate.dto.TravelRouteDTO;
 public class TravelServiceImpl implements TravelService {
 	Logger log = Logger.getLogger(this.getClass());
 	
+
 	private static final String filepath = "/var/webapps/userimg/";
+
 	
 	@Resource(name="TravelDAO")
 	private TravelDAO travelDAO;
@@ -103,7 +105,9 @@ public class TravelServiceImpl implements TravelService {
 					travelDAO.insertTravelDetail(travelDetail);
 				}
 				
+
 				storedFileName = CommonUtil.getRandomString() + temp;
+
 				
 				file = new File(filepath + storedFileName);
 				// 지정한 경로에 파일 저장

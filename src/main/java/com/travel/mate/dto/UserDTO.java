@@ -1,9 +1,11 @@
 package com.travel.mate.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class UserDTO {
 	private int userCode;
-	private String id;
-	private String password;
+	@NotNull private String id;
+	@NotNull private String password;
 	
 	public UserDTO(){
 		

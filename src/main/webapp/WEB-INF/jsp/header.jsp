@@ -4,18 +4,23 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %> 
+<%@ taglib prefix="form"  uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
 	String email = "";
-	
+	String unReadCount ="";
 	if(principal != null && principal instanceof MyUser){
 		//code는 PK인 유저코드. 
 		code = ((MyUser)principal).getUserCode();
 		email = ((MyUser)principal).getUsername();
+		unReadCount = request.getAttribute("unReadCount").toString();
 	}
+	
+	
 %>
 
 <html>
@@ -191,7 +196,7 @@
 	                </li>
 	                <li>
 	                	<a class="page-scroll" href="chatList">Message</a>
-	                	<div class="unreadMsg"></div>
+	                	<div class="unreadMsg"><%=unReadCount %></div>
 	                </li>
                 </sec:authorize>
                 </ul>
@@ -236,6 +241,8 @@
 						<div class="form-group">
 							<label for="name">이름</label>
 							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+							<form:errors path="userDetailDTO.name" />
+
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
@@ -274,6 +281,7 @@
 							</label>
 							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>
+				
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
 					
@@ -319,12 +327,12 @@
 		</div>
 	</div>
  	<script type="text/javascript">
-	 	var socket = io('http://175.115.95.52:3000');
+	 	var socket = io('http://localhost:3000');
 	 	var userCode = '<%=code%>';
 	
 	 	// nick name 정보를 서버에 보냄
 	 	socket.emit('joinAllRooms', {
-	 		userCode : userCode,
+	 		userCode : userCode
 	 	});
 	 	
 	 	// 메세지 수신 부분
@@ -336,7 +344,6 @@
 	
 	 	// 읽지않은 메세지 개수 늘려주기
 	 	appendCount = function(data) {
-	 		console.log("count 증가!");
 	 		var text = data.msg;
 	 		var unread = $('.unreadMsg');
 	 		
@@ -345,7 +352,6 @@
 	 		} else {
 	 			unread.html(1);
 	 		}
-	
 	 	};
  	</script>
 </body>
