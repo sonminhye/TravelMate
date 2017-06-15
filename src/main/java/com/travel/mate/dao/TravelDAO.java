@@ -70,4 +70,9 @@ public class TravelDAO extends AbstractDAO {
 		delete("travel.deleteTravelApply", apply);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectUserInfo(int travelCode) {
+		return (List<Map<String, Object>>)selectList("travel.selectUserInfo", travelCode);
+	}
+
 }

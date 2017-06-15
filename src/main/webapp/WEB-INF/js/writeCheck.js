@@ -2,14 +2,17 @@ function fileCheck(obj) {
 	var filePoint = obj.value.lastIndexOf(".");
 	var fileName = obj.value.substring(filePoint + 1, obj.length);
 	var fileType = fileName.toLowerCase();
+	var maxSize = 10 * 1024 * 1024; // 10MB
+	var fileSize = obj.files[0].size;
 	
-	var checkFileType = new Array();
-	checkFileType = ["jpg", "gif", "png", "jpeg", "bmp"];
+	if (fileSize > maxSize) {
+		alert("10MB 이하의 파일만 가능합니다");
+		$("#image").val("");
+		return false;
+	}
 	
-	if (checkFileType.indexOf(fileType) == -1) {
-		alert("이미지 파일만 선택 가능합니다");
-		var parentObj = obj.parentNode;
-		var node = parentObj.replaceChild(obj.cloneNode(true), obj);
+	if (!(fileType == "jpg" || fileType == "gif" || fileType == "png" || fileType == "jpeg" || fileType == "bmp")) {
+		alert("이미지 파일(jpg, gif, png, jpeg, bmp)만 선택 가능합니다");
 		$("#image").val("");
 		return false;
 	}

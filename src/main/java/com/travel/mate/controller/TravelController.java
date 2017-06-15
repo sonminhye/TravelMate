@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,8 +53,8 @@ public class TravelController {
 	}
 
 	// 리스트 이미지를 클릭하여 해당 글에 대한 정보 읽기
-	@RequestMapping(value = "/readTravel")
-	public ModelAndView readTravel(TravelDTO travelDto) {
+	@RequestMapping(value = "/readTravel/{travelCode}")
+	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode) {
 		// view Setting
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
@@ -73,6 +74,10 @@ public class TravelController {
 		// review 썼는지 안썼는지
 		List<Map<String, Object>> listReviewWrite = reviewService.selectReviewWrite(travelDto);
 		
+		// user
+		// user 정보
+		List<Map<String, Object>> listUserInfo = travelService.selectUserInfo(travelDto);
+		
 		mv.addObject("list", listinfo);
 		mv.addObject("route", listRoute);
 		
@@ -82,6 +87,8 @@ public class TravelController {
 		mv.addObject("reviewList", listReview);
 		mv.addObject("reviewWriteCheck", listReviewWriteCheck);
 		mv.addObject("reviewWrite", listReviewWrite);
+		
+		mv.addObject("userInfo", listUserInfo);
 		return mv;
 	}
 

@@ -3,6 +3,19 @@
 
 <mapper namespace="travel">
 
+	<!-- 글쓴이 정보 -->
+	<select id="selectUserInfo" parameterType="int" resultType="hashmap">
+		<![CDATA[
+			SELECT	u.name, u.age, u.sex, u.location, u.meanPoint
+			FROM	userDetail u
+			WHERE	u.userCode = (
+									SELECT	t.userCode
+									FROM	travel t
+									WHERE	t.travelCode = #{travelCode}
+								)
+		]]>
+	</select>
+
 	<!-- 해당 게시물의 신청인원 출력 -->
 	<select id="selectTravelApplyCount" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[

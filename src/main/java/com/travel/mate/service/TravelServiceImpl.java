@@ -78,11 +78,10 @@ public class TravelServiceImpl implements TravelService {
 			}
 			
 			temp = filename.substring(filename.lastIndexOf("."));
+			temp = temp.toLowerCase();
 			
 			// 첨부파일 이미지인지 check
-			if ((temp.equals(".jpg") || temp.equals(".JPG") || temp.equals(".gif") || temp.equals(".GIF")
-					|| temp.equals(".png") || temp.equals(".PNG") || temp.equals(".jpeg") || temp.equals(".JPEG")
-					|| temp.equals(".bmp") || temp.equals(".BMP"))
+			if ((temp.equals(".jpg") || temp.equals(".gif") || temp.equals(".png") || temp.equals(".jpeg") || temp.equals(".bmp"))
 					&& (null != travels && travels.size() > 0)
 					&& (null != travelDetails && travelDetails.size() > 0)
 					&& (null != request)) {
@@ -254,5 +253,12 @@ public class TravelServiceImpl implements TravelService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+	}
+
+	// 글쓴이 정보
+	@Override
+	public List<Map<String, Object>> selectUserInfo(TravelDTO travelDto) {
+		int tCode = travelDto.getTravelCode();
+		return travelDAO.selectUserInfo(tCode);
 	}
 }
