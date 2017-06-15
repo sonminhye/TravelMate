@@ -59,8 +59,8 @@ public class AdminDAO extends AbstractDAO{
 		return (ArrayList<SecuredResourceAuthDTO>)selectList("admin.selectSecuredResourceAuthList");
 	}
 	
-	public void updateUserAuth(HashMap<String, String> param){
-		update("admin.updateUserAuth", param);
+	public void updateUserAuth(UserAuthDTO userAuthDTO){
+		update("admin.updateUserAuth", userAuthDTO);
 	}
 	
 	public void deleteSecuredResourceAuth(int resourceCode){
@@ -69,5 +69,9 @@ public class AdminDAO extends AbstractDAO{
 	
 	public void insertSecuredResourceAuth(List<SecuredResourceAuthDTO> auths){
 		insert("admin.insertSecuredResourceAuth", auths);
+	}
+	
+	public void updateSecuredResource(SecuredResourceDTO securedResourceDTO){
+		update("admin.updateSecuredResource", securedResourceDTO);
 	}
 }

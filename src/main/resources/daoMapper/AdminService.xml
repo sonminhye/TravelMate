@@ -35,6 +35,7 @@
 	<select id="selectSecuredResourceList" resultType="com.travel.mate.dto.SecuredResourceDTO">
 		<![CDATA[
 			SELECT * FROM securedResource
+			ORDER BY sortOrder
 		]]>
 	</select>
 	<select id="selectSecuredResourceAuthList" resultType="com.travel.mate.dto.SecuredResourceAuthDTO">
@@ -42,7 +43,7 @@
 			SELECT * FROM securedResourceAuthority
 		]]>
 	</select>
-	<update id="updateUserAuth" parameterType="map">
+	<update id="updateUserAuth" parameterType="com.travel.mate.dto.UserAuthDTO">
 		<![CDATA[
 			UPDATE  userAuthority 
 			SET     authority=#{authority} 
@@ -50,8 +51,10 @@
 		]]>
 	</update>
 	<delete id="deleteSecuredResourceAuth" parameterType="int">
+		<![CDATA[
 			DELETE FROM securedResourceAuthority
 			WHERE resourceCode=#{resourceCode}
+		]]>
 	</delete>
 	<insert id="insertSecuredResourceAuth" parameterType="java.util.List">
 			INSERT INTO 
@@ -61,4 +64,11 @@
 				(#{item.resourceCode}, #{item.authority})
 			</foreach>
 	</insert>
+	<update id="updateSecuredResource" parameterType="com.travel.mate.dto.SecuredResourceDTO">
+		<![CDATA[
+			UPDATE  securedResource
+			SET     sortOrder=#{sortOrder} 
+			WHERE   resourceCode=#{resourceCode} 
+		]]>
+	</update>
 </mapper>

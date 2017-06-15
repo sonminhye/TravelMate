@@ -139,7 +139,7 @@ public class MyUser implements UserDetails{
 
 	@Override
 	public String toString() {
-		return "확인용!!!!! MyUser [userCode=" + userCode + ", id=" + id + ", authorities=" + authorities + "]";
+		return "MyUser [userCode=" + userCode + ", id=" + id + ", authorities=" + authorities + "]";
 	}
 	
 	
