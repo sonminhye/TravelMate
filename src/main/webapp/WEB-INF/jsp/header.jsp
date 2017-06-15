@@ -331,7 +331,7 @@
  	<script type="text/javascript">
 	 	var socket = io('http://localhost:3000');
 	 	var userCode = '<%=code%>';
-	
+		
 	 	// nick name 정보를 서버에 보냄
 	 	socket.emit('joinAllRooms', {
 	 		userCode : userCode

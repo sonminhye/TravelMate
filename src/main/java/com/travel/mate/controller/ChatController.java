@@ -18,8 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -68,7 +71,7 @@ public class ChatController {
 		
 		System.out.println(roomCode);
 		
-		//읽지않은 메세지가 있다면 읽음 표시
+		//읽지않은 메세지가 있다면 읽기
 		chatService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
@@ -117,6 +120,19 @@ public class ChatController {
 		redirectAttributes.addFlashAttribute("param", map);
 		result = "redirect:chat";
 		return result;
+	}
+	
+	//채팅방 리스트 뷰
+	@ResponseBody
+	@RequestMapping(value = "/getMoreChats", method=RequestMethod.POST)
+	public ArrayList<ChatDTO> getMoreChats(@RequestBody Map<Object, Object> map) {
+		
+		String messageCode = map.get("messageCode").toString();
+		String roomCode = map.get("room").toString();
+		System.out.println(messageCode + "," + roomCode);
+		//채팅방의 리스트를 불러오는 부분
+		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode), Integer.parseInt(messageCode));
+		return list;
 	}
 	
 	//유저의 코드를 받아오는 함수

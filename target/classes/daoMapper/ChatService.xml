@@ -5,24 +5,32 @@
 <mapper namespace="chat">	
 	
 	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
-		select r.roomCode, userCode as receiverCode, name as receive, latestDate, (select count(*) from message where roomCode=r.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
+		select r.roomCode, r.userCode as receiverCode, userDetail.name as receive, messageRoom.latestdate, (select count(*) from message where roomCode=r.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
 		from
-		(select userDetail.userCode, userDetail.name, roomUser.roomCode from roomUser join userDetail where userDetail.userCode = roomUser.userCode and roomUser.userCode!=#{userCode}) as r join
-		(select messageRoom.roomCode, latestDate from roomUser join messageRoom where roomUser.userCode = #{userCode}) as m
-		where m.roomCode = r.roomCode
-		group by r.roomCode
+		(select * from roomUser where roomCode in (select roomCode from roomUser where userCode=#{userCode}) and userCode!=#{userCode}) as r 
+			join userDetail 
+			join messageRoom
+		where r.userCode = userDetail.userCode and r.roomCode = messageRoom.roomCode
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
-		select * , (select userDetail.name from userDetail where message.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where message.receiverCode = userDetail.userCode) as receiverName from message where roomCode=#{roomCode} order by sendDate
+		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where temp.receiverCode = userDetail.userCode) as receiverName 
+		from (select * from message where roomCode=#{roomCode} order by sendDate desc limit 35) temp 
+		order by sendDate;
+	</select>
+
+	<select id="showMoreChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="com.travel.mate.dto.ChatDTO">
+		<![CDATA[
+		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where temp.receiverCode = userDetail.userCode) as receiverName 
+		from (select * from message where roomCode=#{roomCode} and messageCode < #{messageCode} order by sendDate desc limit 35) temp 
+		]]>
 	</select>
 
 	<select id="showChatRoomExist" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="com.travel.mate.dto.ChatRoomDTO">
-		select sender.roomCode 
-		from
-		(select * from roomUser where userCode=#{senderCode}) as sender join
-		(select * from roomUser where userCode=#{receiverCode}) as receiver
-		where sender.roomCode = receiver.roomCode 	
+		select * 
+		from roomUser 
+		where roomCode in (select roomCode from roomUser where userCode=#{senderCode}) 
+		and userCode=#{receiverCode}
 	</select>
 	
 	<insert id="addChatRoom" parameterType="com.travel.mate.dto.ChatRoomDTO" useGeneratedKeys="true" keyProperty="roomCode">
@@ -41,7 +49,6 @@
 		where receiverCode=#{receiverCode} and readFlag=0
 	</select>
 	
-	<!-- 사실상 이것도 서버에서 잘 관리하면, 없어도 괜찮을 듯. -->
 	<update id="changeUnReadMessage" parameterType="com.travel.mate.dto.ChatDTO">
 		update message
 		set readFlag=1
