@@ -75,7 +75,7 @@
 					<td>최소인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input onchange="minPeopleCheck(this);" id="minPeople" name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
+							<input onblur="minPeopleCheck(this);" id="minPeople" name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>
 				</tr>
@@ -83,7 +83,7 @@
 					<td>최대인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input onchange="maxPeopleCheck(this);" id="maxPeople" name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
+							<input onblur="maxPeopleCheck(this);" id="maxPeople" name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>				
 				</tr>
@@ -98,7 +98,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부<font color="red">*</font></td>
+					<td>사진첨부(10MB미만)<font color="red">*</font></td>
 					<td><input id="image" name="image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>

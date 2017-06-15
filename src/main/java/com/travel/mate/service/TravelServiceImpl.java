@@ -80,6 +80,13 @@ public class TravelServiceImpl implements TravelService {
 			temp = filename.substring(filename.lastIndexOf("."));
 			temp = temp.toLowerCase();
 			
+			// 10MB 보다 크다면 에러
+			if (multipartFile.getSize() > (10 * 1024 * 1024)) {
+				log.error("File size is big");
+				throw new Exception();
+			}
+			
+			
 			// 첨부파일 이미지인지 check
 			if ((temp.equals(".jpg") || temp.equals(".gif") || temp.equals(".png") || temp.equals(".jpeg") || temp.equals(".bmp"))
 					&& (null != travels && travels.size() > 0)
@@ -101,6 +108,18 @@ public class TravelServiceImpl implements TravelService {
 				for (TravelDetailDTO travelDetail : travelDetails) {
 					// travelCode setting
 					travelDetail.setTravelCode(travelCode);
+					int dateCompare = 0;
+					int min = travelDetail.getMinPeople();
+					int max = travelDetail.getMaxPeople();
+					String startDate = travelDetail.getStartDate();
+					String endDate = travelDetail.getEndDate();
+					dateCompare = startDate.compareTo(endDate);
+					
+					if ((dateCompare >= 0) || (min > max)) {
+						log.error("startDate > EndDate OR minPeople > maxPeople");
+						throw new Exception();
+					}
+					
 					travelDAO.insertTravelDetail(travelDetail);
 				}
 				
@@ -120,7 +139,7 @@ public class TravelServiceImpl implements TravelService {
 			
 			}
 			else {
-				log.debug("Not image file!! OR Format empty!! ");
+				log.error("Not image file!! OR Format empty!! ");
 				throw new Exception();
 			}
 			

@@ -59,9 +59,9 @@ function endDateCheck(obj) {
 	}
 };
 function maxPeopleCheck(obj) {
-	var min = $("#minPeople").val();
-	var max = obj.value;
-	if (min == "" || min == null) {
+	var min = parseInt($("#minPeople").val());
+	var max = parseInt(obj.value);
+	if (isNaN(min)) {
 		alert("최소인원을 먼저 선택해주세요");
 		$("#maxPeople").val("");
 	}
@@ -76,9 +76,9 @@ function maxPeopleCheck(obj) {
 	}
 };
 function minPeopleCheck(obj) {
-	var min = obj.value;
-	var max = $("#maxPeople").val();
-	if (max == "" || max == null ) {
+	var min = parseInt(obj.value);
+	var max = parseInt($("#maxPeople").val());
+	if (isNaN(max)) {
 		// 아무것도 하지 않음
 	}
 	else {
