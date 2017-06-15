@@ -24,6 +24,13 @@ public class ChatDAO extends AbstractDAO{
 		System.out.println("showChats()");
 		return (ArrayList<ChatDTO>) selectList("chat.showChats", roomCode);
 	}
+	
+
+	public ArrayList<ChatDTO> showChats(ChatDTO dto) {
+		// TODO Auto-generated method stub
+		System.out.println("showChats()");
+		return (ArrayList<ChatDTO>) selectList("chat.showMoreChats", dto);
+	}
 
 	public ChatRoomDTO showChatRoomExist(ChatRoomDTO chatRoom) {
 		// TODO Auto-generated method stub

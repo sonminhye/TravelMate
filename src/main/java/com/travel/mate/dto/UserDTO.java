@@ -1,11 +1,21 @@
 package com.travel.mate.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+
 
 public class UserDTO {
 	private int userCode;
-	@NotNull private String id;
-	@NotNull private String password;
+	@NotNull
+	@Email
+	@Size(min=1, max=30) 
+	private String id;
+	
+	@NotNull 
+	@Size(min=1, max=15)
+	private String password;
 	
 	public UserDTO(){
 		
@@ -51,3 +61,4 @@ public class UserDTO {
 	
 	
 }
+

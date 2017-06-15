@@ -36,6 +36,19 @@ public class ChatServiceImpl implements ChatService {
 		// 채팅 결과들 목록 나열하고 싶을 때 이곳에서 for 문을 돌리면 됌
 		return chatDAO.showChats(roomCode);
 	}
+	
+	@Override
+	public ArrayList<ChatDTO> showChats(int roomCode, int messageCode) {
+		// TODO Auto-generated method stub
+		System.out.println("showChats()");
+		ChatDTO chatDTO = new ChatDTO();
+		chatDTO.setRoomCode(roomCode);
+		chatDTO.setMessageCode(messageCode);
+		// 채팅 결과들 목록 나열하고 싶을 때 이곳에서 for 문을 돌리면 됌
+		return chatDAO.showChats(chatDTO);
+	}
+	
+	
 
 	@Override
 	public ChatRoomDTO showChatRoomExist(int senderCode, int receiverCode) {

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.Enumeration" %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
@@ -22,6 +23,15 @@
         <div class="col-xs-12">
           <div class="box">
           
+          <%
+          Enumeration se = session.getAttributeNames();
+          
+          while(se.hasMoreElements()){
+           String getse = se.nextElement()+"";
+           System.out.println("@@@@@@@ session : "+getse+" : "+session.getAttribute(getse));
+          }
+
+          %>
             <!-- 회원 목록 출력 -->
             <div class="box-header">
               <h3 class="box-title">회원 목록</h3>
@@ -86,7 +96,7 @@
                 	<!-- 유저 권한 수정 -->        	
                 	<form action="modifyUserAuth" method="POST">
                 	<td>
-	                	<select class="form-control" name="authList">
+	                	<select class="form-control" name="authority">
 		                	<!-- 전체 권한 목록 출력 -->
 		                	<c:forEach items="${authList}" var="auth">
 		                	<!-- 현재 행의 유저가 가진 권한정보는 selected 로 설정 -->
@@ -175,14 +185,20 @@
               		<label class="checkbox-inline">
               		<input type="hidden" name="securedResourceAuthDTOList[0].resourceCode" value="${secResource.resourceCode}"/>
               		<input type="checkbox" id="inlineCheckbox1" name="securedResourceAuthDTOList[0].authority" value="none">없음
-              			<c:forEach items="${authList }" var="auth" varStatus="status">       			    			
+              		</label>
+              			<c:forEach items="${authList }" var="auth" varStatus="status">     
+              			<label class="checkbox-inline">  			    			
 	                	  <input type="hidden" name="securedResourceAuthDTOList[${status.index + 1}].resourceCode" value="${secResource.resourceCode}"/>
 						  <input type="checkbox" id="inlineCheckbox1" name="securedResourceAuthDTOList[${status.index + 1}].authority" value="${auth.authority}">${auth.authorityName}        	
+	                	</label>
 	                	</c:forEach>
-	                </label>
+	               
 	              		
               		</td>
-              		<td>${secResource.sortOrder}</td>
+              		<td>
+              			<input type="hidden" name="resourceCode" value="${secResource.resourceCode}">
+              			<input type="number" class="form-control" name="sortOrder" value="${secResource.sortOrder}" >
+              		</td>
               		<td>
               			<button type="submit" class="btn btn-default">수정</button>
               		</td>

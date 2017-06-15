@@ -7,6 +7,7 @@
 	<property name="basenames">
 		<list>
 			<value>/WEB-INF/messages/spring_security_messages</value>
+			<value>/WEB-INF/messages/signup_error_messages</value>
 		</list>
 	</property>
 	<property name="defaultEncoding" value="UTF-8" />
