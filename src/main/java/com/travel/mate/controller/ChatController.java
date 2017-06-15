@@ -130,7 +130,7 @@ public class ChatController {
 		String messageCode = map.get("messageCode").toString();
 		String roomCode = map.get("room").toString();
 		System.out.println(messageCode + "," + roomCode);
-		//채팅방의 리스트를 불러오는 부분
+		//채팅방의 리스트를 불러오는 부분햣 
 		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode), Integer.parseInt(messageCode));
 		return list;
 	}
