@@ -21,7 +21,7 @@
     <!-- Register the Customer.properties -->
     <beans:bean id="messageSource"
         class="org.springframework.context.support.ResourceBundleMessageSource">
-        <beans:property name="basename" value="message/messages" />
+        <beans:property name="basename" value="/WEB-INF/messages/signup_error_messages" />
     </beans:bean>
 
 

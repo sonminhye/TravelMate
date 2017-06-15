@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class UserDTO {
 	private int userCode;
 	@NotNull
-	@Size(min=1)
+	@Size(min=1, message="5자에서 50자 사이의 값만 가능합니다") 
 	private String id;
 	
 	@NotNull 
