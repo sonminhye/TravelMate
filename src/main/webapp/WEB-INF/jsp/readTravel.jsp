@@ -85,7 +85,7 @@
 						<c:if test="${row.userCode!= mCode}">
 						<tr>
 							<td>채팅링크</td>
-							<td><a href="checkChatRoom?userCode=${row.userCode }">채팅걸기</a></td>
+							<td><a href="<c:url value='/checkChatRoom?userCode=${row.userCode }' />">채팅걸기</a></td>
 						</tr>
 						</c:if>
 						<tr>
