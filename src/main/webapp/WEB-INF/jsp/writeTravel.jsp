@@ -4,6 +4,8 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -26,7 +28,7 @@
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
-		<form action="doWrite" method="post" enctype="multipart/form-data">
+		<form action="<c:url value='/doWrite' />" method="post" enctype="multipart/form-data">
 			<table class="table" width="500">
 			<input type="hidden" name="tlist[0].userCode" class="form-control" value="<%=code%>">
 				<tr>
