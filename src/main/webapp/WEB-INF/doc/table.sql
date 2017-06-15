@@ -51,7 +51,7 @@ ALTER TABLE userDetail
 CREATE TABLE travel (
 	travelCode INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
 	userCode   INT UNSIGNED NOT NULL COMMENT '작성회원번호', -- 작성회원번호
-	title      VARCHAR(20)  NOT NULL COMMENT '제목', -- 제목
+	title      VARCHAR(45)  NOT NULL COMMENT '제목', -- 제목
 	content    TEXT         NULL     COMMENT '내용', -- 내용
 	writeDate  DATE         NOT NULL COMMENT '작성일' -- 작성일
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -76,7 +76,7 @@ CREATE TABLE travelRoute (
 	travelCode      INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
 	lat             DOUBLE       NOT NULL COMMENT '위도', -- 위도
 	lng             DOUBLE       NOT NULL COMMENT '경도', -- 경도
-	location        VARCHAR(50)  NOT NULL COMMENT '장소명', -- 장소명
+	location        VARCHAR(30)  NOT NULL COMMENT '장소명', -- 장소명
 	locOrder        INT UNSIGNED NOT NULL COMMENT '장소순서' -- 장소순서
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '여행경로';
@@ -116,7 +116,7 @@ ALTER TABLE travelDetail
 -- 여행이미지
 CREATE TABLE travelImage (
 	travelCode INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
-	image      TEXT         NOT NULL COMMENT '이미지' -- 이미지
+	image      VARCHAR(40)  NOT NULL COMMENT '이미지' -- 이미지
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '작성한 글의 대표이미지';
 
@@ -156,7 +156,7 @@ ALTER TABLE message
 CREATE TABLE travelEval (
 	evalCode  INT UNSIGNED NOT NULL COMMENT '평가번호', -- 평가번호
 	applyCode INT UNSIGNED NOT NULL COMMENT '신청코드', -- 신청코드
-	point     TINYINT(1) NOT NULL COMMENT '점수' -- 점수
+	point     TINYINT(1)   NOT NULL COMMENT '점수' -- 점수
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '평가';
 
@@ -177,7 +177,7 @@ ALTER TABLE travelEval
 CREATE TABLE review (
 	reviewCode INT UNSIGNED NOT NULL COMMENT '리뷰번호', -- 리뷰번호
 	applyCode  INT UNSIGNED NOT NULL COMMENT '신청코드', -- 신청코드
-	content    TEXT         NULL     COMMENT '내용', -- 내용
+	content    VARCHAR(900) NULL     COMMENT '내용', -- 내용
 	writeTime  DATETIME     NOT NULL COMMENT '작성시간' -- 작성시간
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '후기';
@@ -234,7 +234,7 @@ ALTER TABLE authority
 CREATE TABLE securedResource (
 	resourceCode    INT UNSIGNED NOT NULL COMMENT '리소스번호', -- 리소스번호
 	resourcePattern VARCHAR(50)  NOT NULL COMMENT '리소스패턴', -- 리소스패턴
-	sortOrder       INT(11)      NOT NULL COMMENT '정렬순서' -- 정렬순서
+	sortOrder       INT UNSIGNED NOT NULL COMMENT '정렬순서' -- 정렬순서
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '보안리소스';
 
@@ -294,8 +294,10 @@ COMMENT '회원언어';
 
 -- 메시지룸
 CREATE TABLE messageRoom (
-	roomCode   INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
-	latestDate DATETIME     NOT NULL COMMENT '최근메시지시간' -- 최근메시지시간
+	roomCode     INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
+	senderCode   INT UNSIGNED NOT NULL COMMENT '방만든사람', -- 방만든사람
+	receiverCode INT UNSIGNED NOT NULL COMMENT '참여자', -- 참여자
+	latestDate   DATETIME     NOT NULL COMMENT '최근메시지시간' -- 최근메시지시간
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '메시지룸';
 
@@ -505,6 +507,26 @@ ALTER TABLE userLanguage
 		)
 		REFERENCES language ( -- 언어
 			languageCode -- 언어번호
+		);
+
+-- 메시지룸
+ALTER TABLE messageRoom
+	ADD CONSTRAINT FK_userDetail_TO_messageRoom -- 회원상세 -> 메시지룸
+		FOREIGN KEY (
+			senderCode -- 방만든사람
+		)
+		REFERENCES userDetail ( -- 회원상세
+			userCode -- 회원번호
+		);
+
+-- 메시지룸
+ALTER TABLE messageRoom
+	ADD CONSTRAINT FK_userDetail_TO_messageRoom2 -- 회원상세 -> 메시지룸2
+		FOREIGN KEY (
+			receiverCode -- 참여자
+		)
+		REFERENCES userDetail ( -- 회원상세
+			userCode -- 회원번호
 		);
 
 -- 룸유저

@@ -275,7 +275,7 @@
 										</p>
 										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
-										<textarea name="content" placeholder="최대 20000자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="20000"></textarea>
+										<textarea name="content" placeholder="최대 300자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="300"></textarea>
 										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>

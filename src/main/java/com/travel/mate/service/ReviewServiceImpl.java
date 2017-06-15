@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,6 +24,7 @@ import com.travel.mate.dto.UserDetailDTO;
 
 @Service("ReviewService")
 public class ReviewServiceImpl implements ReviewService {
+	Logger log = Logger.getLogger(this.getClass());
 	
 	@Resource(name="ReviewDAO")
 	private ReviewDAO reviewDAO;
@@ -65,6 +67,11 @@ public class ReviewServiceImpl implements ReviewService {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
 		try {
+			if (point < 0 || point > 5) {
+				log.error("Out of point (required 0~5)");
+				throw new Exception();
+			}
+			
 			List<ApplyDTO> applys = applyDto.getAlist();
 			if ((null != applys && applys.size() > 0)) {
 				for (ApplyDTO apply : applys) {
