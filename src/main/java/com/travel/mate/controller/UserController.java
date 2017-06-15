@@ -54,6 +54,7 @@ public class UserController {
 						  Model model) {
 		System.out.println("signup controller");
 
+			//아이디중복체크해주기
 	        // Validation 오류 발생시 
 	        if (result1.hasErrors()) {
 	            // 에러 출력

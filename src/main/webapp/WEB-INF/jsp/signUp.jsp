@@ -1,31 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>회원가입</title>
-
+<link href="css/style.css?ver=1" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="header.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
-			<form:form action="doSignUp" method="POST" commandName="userDTO" onsubmit="return checkSubmit()">
+			<form action="doSignUp" method="POST" >
 						<div class="form-group">
 							<!-- 권한을 ROLE_USER로 설정 -->
 							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
 						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
+							<form:errors path="userDTO.id" cssClass="error"/>
+							<form:input path="userDTO.id" type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요"/>
 							<div id="checkMsg"></div>
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
-							<input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
+							<form:errors path="userDTO.password" cssClass="error"/>
+							<form:input path="userDTO.password" type="password" class="form-control" id="password1" name="password" placeholder="비밀번호"/>
 						</div>
 						<div class="form-group">
 							<label for="password2">비밀번호 확인</label>
@@ -34,16 +37,17 @@
 						</div>
 						<div class="form-group">
 							<label for="name">이름</label>
-							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
-							<form:errors path="userDetailDTO.name" />
-
+							<form:errors path="userDetailDTO.name" cssClass="error"/>
+							<form:input path="userDetailDTO.name" type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요"/>
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
-							<input type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
+							<form:errors path="userDetailDTO.age" cssClass="error"/>
+							<form:input path="userDetailDTO.age" type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요"/>
 						</div>
 						<div class="form-group">
-							<label for="age">성별</label><br>
+							<label for="age">성별</label>
+							<form:errors path="userDetailDTO.sex" cssClass="error"/><br>
 							<label class="radio-inline">
 								<input type="radio" name="sex" id="inlineRadio1" value="male">남
 							</label>
@@ -53,7 +57,8 @@
 						</div>
 						<div class="form-group">
 							<label for="city">지역</label>
-							<input type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
+							<form:errors path="userDetailDTO.location" cssClass="error"/>
+							<form:input path="userDetailDTO.location" type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요"/>
 						</div>
 						
 						<div class="form-group">
@@ -77,7 +82,7 @@
 						</div>
 				
 						<button type="submit" class="btn btn-default">가입</button>
-					</form:form>
+					</form>
 					
 					<!-- 입력 여부 체크하기위한 hidden input -->
 					<div class="formCheck">

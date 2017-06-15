@@ -59,6 +59,13 @@ public class AdminController {
 		return "adminPage";
 	}
 	
+	
+	/*접근권한 없을 때*/
+	@RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
+	public String accessDenied(Model model) {		
+		return "accessDenied";
+	}
+	
 	/*회원권한변경*/
 	@RequestMapping(value = "/modifyUserAuth", method = RequestMethod.POST)
 	public String modifyUserAuth(@ModelAttribute UserAuthDTO userAuthDTO,

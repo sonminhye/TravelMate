@@ -3,15 +3,18 @@ package com.travel.mate.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
+
 
 public class UserDTO {
 	private int userCode;
 	@NotNull
-	@Size(min=1, message="5자에서 50자 사이의 값만 가능합니다") 
+	@Email
+	@Size(min=1, max=30) 
 	private String id;
 	
 	@NotNull 
-	@Size(min=1)
+	@Size(min=1, max=15)
 	private String password;
 	
 	public UserDTO(){

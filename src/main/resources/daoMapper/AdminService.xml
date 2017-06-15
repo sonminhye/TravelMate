@@ -35,6 +35,7 @@
 	<select id="selectSecuredResourceList" resultType="com.travel.mate.dto.SecuredResourceDTO">
 		<![CDATA[
 			SELECT * FROM securedResource
+			ORDER BY sortOrder
 		]]>
 	</select>
 	<select id="selectSecuredResourceAuthList" resultType="com.travel.mate.dto.SecuredResourceAuthDTO">

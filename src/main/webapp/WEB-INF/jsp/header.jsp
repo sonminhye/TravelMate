@@ -146,7 +146,7 @@
 			alert('이미 존재하는 아이디 입니다.');
 			return false;
 		}
-		if(idCheck=='0' || passwordCheck=='0' || passcheckCheck.length==0 || nameCheck.length==0 || ageCheck.length==0 || sexCheck.length==0 || locationCheck.length==0 || languageCheck.length==0 ){
+		if(idCheck=='0' || passwordCheck=='0' || passcheckCheck.length==0 || nameCheck.length==0 || ageCheck.length==0 || sexCheck.length==0 || locationCheck.length==0 || languageCheck == null ){
 			alert('회원가입 폼을 정확히 채워 주세요.');
 			return false;
 		}else{
