@@ -207,13 +207,11 @@
     </nav>
 	
 	<!-- 회원가입 Modal -->
-	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel">회원가입</h4>
@@ -241,8 +239,6 @@
 						<div class="form-group">
 							<label for="name">이름</label>
 							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
-							<form:errors path="userDetailDTO.name" />
-
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
@@ -279,7 +275,6 @@
 							<label class="checkbox-inline">
 							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].languageCode" value="5">스페인어
 							</label>
-							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
 						</div>
 				
 						<button type="submit" class="btn btn-default">가입</button>

@@ -549,8 +549,10 @@ ALTER TABLE roomUser
 			roomCode -- 방번호
 		);
 		
-INSERT INTO authority (authority, authorityName) VALUES ('ROLE_ADMIN', '관리자');
-INSERT INTO authority (authority, authorityName) VALUES ('ROLE_USER', '회원');
+INSERT INTO `authority` (`authority`, `authorityName`) VALUES
+	('ROLE_ADMIN', '관리자'),
+	('ROLE_GUEST', '손님'),
+	('ROLE_USER', '회원');
 
 INSERT INTO language (languageCode, language) VALUES (1, 'korean');
 INSERT INTO language (languageCode, language) VALUES (2, 'english');
@@ -558,13 +560,25 @@ INSERT INTO language (languageCode, language) VALUES (3, 'chinese');
 INSERT INTO language (languageCode, language) VALUES (4, 'japanese');
 INSERT INTO language (languageCode, language) VALUES (5, 'spanish');
 
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (1, '/signIn', 20);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (2, '/travelList', 30);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (3, '/readTravel', 40);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (4, '/writeTravel', 50);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (5, '/adminPage', 60);
+INSERT INTO `securedresource` (`resourceCode`, `resourcePattern`, `sortOrder`) VALUES
+	(1, '/signIn', 20),
+	(2, '/travelList', 30),
+	(3, '/readTravel', 40),
+	(4, '/writeTravel', 50),
+	(5, '/adminPage', 60),
+	(6, '/main', 10),
+	(7, '/signUp', 20);
 
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (2, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (3, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (4, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (5, 'ROLE_ADMIN');
+INSERT INTO `securedresourceauthority` (`resourceCode`, `authority`) VALUES
+	(4, 'ROLE_USER'),
+	(2, 'ROLE_USER'),
+	(2, 'ROLE_ADMIN'),
+	(4, 'ROLE_ADMIN'),
+	(5, 'ROLE_ADMIN'),
+	(3, 'ROLE_ADMIN'),
+	(3, 'ROLE_USER'),
+	(1, 'ROLE_GUEST'),
+	(7, 'ROLE_GUEST'),
+	(6, 'ROLE_ADMIN'),
+	(6, 'ROLE_GUEST'),
+	(6, 'ROLE_USER');
