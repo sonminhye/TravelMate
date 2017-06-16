@@ -9,17 +9,13 @@ import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractDAO;
 import com.travel.mate.dto.UserLanguageDTO;
+import com.travel.mate.dto.UserAuthDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 
 @Repository("UserDAO")
 public class UserDAO extends AbstractDAO{
 
-	@SuppressWarnings("unchecked")
-	public ArrayList<UserDTO> selectTestList(){
-		return (ArrayList<UserDTO>) selectList("user.showList");
-	}
-	
 	public void insertUser(UserDTO userDTO){
 		insert("user.insertUser", userDTO);
 	}
@@ -28,8 +24,8 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserDetail", userDetailDTO);
 	}
 	
-	public void insertUserAuthority(Map<String, Object> param){
-		insert("user.insertUserAuthority", param);
+	public void insertUserAuthority(UserAuthDTO userAuthDTO){
+		insert("user.insertUserAuthority", userAuthDTO);
 	}
 	
 	public UserDTO selectUser(int userCode){

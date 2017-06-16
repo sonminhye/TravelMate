@@ -104,6 +104,7 @@ public class AdminController {
 			adminService.modifySecuredResourceAuth(auths);
 		}
 		
+		//update sortOrder 
 		adminService.updateSecuredResource(securedResourceDTO);
 		
 		//Spring security resource 재설정(reload 메소드 호출)

@@ -17,7 +17,6 @@
 <html>
 <head>
 	<title>MyPage</title>
-	<script src="<c:url value='/js/travelCommon.js' />"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
@@ -50,24 +49,9 @@
 		   </form>
 		   </li>
 		</ul>
-		            
-            <script type="text/javascript">
-        	$(document).ready(function () {
-        		$("a[name='myInfoLink']").on("click", function(e) {
-        		e.preventDefault();
-        		myPage($(this));
-        		});
-        	});
-        	function myPage(obj) {
-        		var comSubmit = new ComSubmit();
-        		var userCode = obj.parent().find(".userCode").val();
-        		comSubmit.setUrl("<c:url value='/myInfo' />");
-        		comSubmit.addParam("userCode", userCode);
-        		comSubmit.submit();
-        	}
-            </script>
+		
 		 <!-- Tab panes -->
-		 
+		
         <div class="tab-content">
         
         	<!-- 내가 만든 여행 -->
