@@ -56,7 +56,16 @@
 			WHERE  id=#{param1}
 		]]>
 	</select>
-	
+	<update id="updateUserDetail" parameterType="com.travel.mate.dto.UserDetailDTO">
+		<![CDATA[
+			UPDATE	userDetail
+			SET		name = #{name},
+					age = #{age},
+					sex = #{sex},
+					location = #{location}
+			WHERE	userCode = #{userCode}
+		]]>
+	</update>
 	<!-- user mean point -->
 	<update id="updateUserMeanPoint" parameterType="com.travel.mate.dto.UserDetailDTO">
 		<![CDATA[

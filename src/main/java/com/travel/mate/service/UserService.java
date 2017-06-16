@@ -15,5 +15,5 @@ public interface UserService {
 	public UserDetailDTO showUserDetail(int userCode);
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs);
 	public int checkSignup(String id);
-
+	public void updateUserDetail(UserDetailDTO userDetailDTO);
 }

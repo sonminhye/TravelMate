@@ -127,7 +127,7 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value = "/myPage/{userCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/myPage/{userCode}", method = {RequestMethod.POST,RequestMethod.GET})
 	public String myPage(@PathVariable int userCode, Model model) {
 		System.out.println("myPage controller");
 
@@ -138,6 +138,16 @@ public class UserController {
 		model.addAttribute("userDetail", userDetail);
 		
 		return "myPage";
+	}
+	
+	
+	@RequestMapping(value = "/modifyUserDetail", method = RequestMethod.POST)
+	public String modifyUserDetail(@ModelAttribute UserDetailDTO userDetailDTO, Model model) {
+		System.out.println("modifyUserDetail controller");
+		
+		
+		userService.updateUserDetail(userDetailDTO);
+		return "redirect:/myPage";
 	}
 	
 }

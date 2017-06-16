@@ -70,5 +70,10 @@ public class UserServiceImpl implements UserService {
 	public int checkSignup(String id) {
 		return userDAO.selectUserId(id);
 	}
+	
+	@Transactional(readOnly=false)
+	public void updateUserDetail(UserDetailDTO userDetailDTO){
+		userDAO.updateUserDetail(userDetailDTO);
+	}
 
 }

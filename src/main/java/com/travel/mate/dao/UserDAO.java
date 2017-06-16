@@ -50,6 +50,10 @@ public class UserDAO extends AbstractDAO{
 		return rowcount;
 	}
 	
+	public void updateUserDetail(UserDetailDTO userDetailDTO){
+		update("user.updateUserDetail", userDetailDTO);
+	}
+	
 	// userDetail meanPoint update
 	public void updateUserMeanPoint(UserDetailDTO userDetailDto) {
 		update("user.updateUserMeanPoint", userDetailDto);

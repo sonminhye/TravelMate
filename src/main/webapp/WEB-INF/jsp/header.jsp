@@ -24,7 +24,7 @@
 	
 	
 %>
-
+<c:set var="code" value="<%=code %>"></c:set>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -191,7 +191,7 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
+	                	<a class="page-scroll"  href="<c:url value='/myPage/${code }' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
 	                	<a class="page-scroll"  href="<c:url value='/j_spring_security_logout' />">SignOut</a>	
