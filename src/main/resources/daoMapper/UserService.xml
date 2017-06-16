@@ -74,6 +74,13 @@
 			WHERE	userCode = #{userCode}
 		]]>
 	</update>
+	<update id="updatePassword" parameterType="com.travel.mate.dto.UserDTO">
+		<![CDATA[
+			UPDATE	user
+			SET		password = #{password}
+			WHERE	userCode = #{userCode}
+		]]>
+	</update>
 	
 </mapper>
 

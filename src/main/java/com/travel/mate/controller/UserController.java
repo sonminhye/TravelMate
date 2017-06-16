@@ -16,11 +16,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
@@ -126,9 +128,16 @@ public class UserController {
 		return String.valueOf(rowcount);
 	}
 	
+	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
+	public String myPage(Model model) {
+		System.out.println("myPage controller");
+
+		return "myPage";
+	}
 	
-	@RequestMapping(value = "/myPage/{userCode}", method = {RequestMethod.POST,RequestMethod.GET})
-	public String myPage(@PathVariable int userCode, Model model) {
+	
+	@RequestMapping(value = "/myInfo", method = RequestMethod.POST)
+	public String myInfo(@RequestParam("userCode") int userCode, Model model) {
 		System.out.println("myPage controller");
 
 		UserDTO user = userService.showUser(userCode);
@@ -137,7 +146,7 @@ public class UserController {
 		model.addAttribute("user",user);
 		model.addAttribute("userDetail", userDetail);
 		
-		return "myPage";
+		return "myInfo";
 	}
 	
 	
@@ -145,9 +154,48 @@ public class UserController {
 	public String modifyUserDetail(@ModelAttribute UserDetailDTO userDetailDTO, Model model) {
 		System.out.println("modifyUserDetail controller");
 		
-		
 		userService.updateUserDetail(userDetailDTO);
-		return "redirect:/myPage";
+		model.addAttribute("userCode", userDetailDTO.getUserCode());
+		return "myPage";
 	}
 	
+	/*비밀번호 변경 뷰*/
+	@RequestMapping(value = "/myPassword", method = RequestMethod.POST)
+	public String myPassword(@RequestParam("userCode") int userCode, Model model) {
+		System.out.println("myPassword controller");
+		
+		UserDTO user = userService.showUser(userCode);
+		
+		model.addAttribute("user",user);
+		return "myPassword";
+	}
+	
+	
+	@RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
+	public String modifyPassword(@ModelAttribute UserDTO userDTO,
+								 @RequestParam("originalPassword") String originalPassword, 
+						  		 @RequestParam("newPassword") String newPassword,
+								 @RequestParam("newPasswordConfirm") String newPasswordConfirm,
+								 Model model) {
+		System.out.println("modifyPassword controller");
+		
+		boolean fail = false;
+		/*암호화*/
+		String bCryptNew = passwordEncoder.encode(newPassword);
+		
+		/*비밀번호가 일치할 경우 && 비밀번호와 비밀번호 확인이 일치할 경우*/
+		if(passwordEncoder.matches(originalPassword, userDTO.getPassword()) && newPassword.equals(newPasswordConfirm)){
+			userDTO.setPassword(bCryptNew);
+			userService.updatePassword(userDTO);
+					
+			return "myPage";
+		}
+		else{
+			fail = true;
+			model.addAttribute("fail",fail);
+			model.addAttribute("userCode", userDTO.getUserCode());
+			return "forward:/myPassword";
+		}
+		
+	}
 }

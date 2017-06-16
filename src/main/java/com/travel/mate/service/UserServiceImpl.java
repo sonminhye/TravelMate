@@ -75,5 +75,10 @@ public class UserServiceImpl implements UserService {
 	public void updateUserDetail(UserDetailDTO userDetailDTO){
 		userDAO.updateUserDetail(userDetailDTO);
 	}
+	
+	@Transactional(readOnly=false)
+	public void updatePassword(UserDTO userDTO){
+		userDAO.updatePassword(userDTO);
+	}
 
 }

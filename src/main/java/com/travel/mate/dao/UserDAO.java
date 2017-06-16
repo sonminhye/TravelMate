@@ -58,4 +58,8 @@ public class UserDAO extends AbstractDAO{
 	public void updateUserMeanPoint(UserDetailDTO userDetailDto) {
 		update("user.updateUserMeanPoint", userDetailDto);
 	}
+	
+	public void updatePassword(UserDTO userDTO){
+		update("user.updatePassword", userDTO);
+	}
 }

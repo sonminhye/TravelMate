@@ -16,4 +16,5 @@ public interface UserService {
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs);
 	public int checkSignup(String id);
 	public void updateUserDetail(UserDetailDTO userDetailDTO);
+	public void updatePassword(UserDTO userDTO);
 }
