@@ -31,6 +31,17 @@ public class UserServiceImpl implements UserService {
 		return userDAO.selectTestList();
 	}
 	
+	@Override
+	public UserDTO showUser(int userCode){
+		return userDAO.selectUser(userCode);
+	}
+	
+	@Override
+	public UserDetailDTO showUserDetail(int userCode) {
+		// TODO Auto-generated method stub
+		return userDAO.selectUserDetail(userCode);
+	}
+
 	//회원가입
 	@Transactional(readOnly=false)
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs){
@@ -54,12 +65,6 @@ public class UserServiceImpl implements UserService {
 		userDAO.insertUserAuthority(param);
 		userDAO.insertUserLanguage(langs);
 		
-	}
-
-	@Override
-	public UserDetailDTO showUserDetail(int userCode) {
-		// TODO Auto-generated method stub
-		return userDAO.selectUserDetail(userCode);
 	}
 
 	public int checkSignup(String id) {

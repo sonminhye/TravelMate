@@ -32,6 +32,10 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserAuthority", param);
 	}
 	
+	public UserDTO selectUser(int userCode){
+		return (UserDTO) selectOne("user.selectUser", userCode);
+	}
+	
 	public UserDetailDTO selectUserDetail(int userCode){
 		return (UserDetailDTO) selectOne("user.selectUserDetail", userCode);
 	}
@@ -40,6 +44,7 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserLanguage", langs);
 	}
 	
+	/*아이디 중복체크*/
 	public int selectUserId(String id){
 		int rowcount = (Integer) selectOne("user.selectUserId", id);
 		return rowcount;

@@ -11,6 +11,7 @@ import com.travel.mate.dto.UserDetailDTO;
 public interface UserService {
 	public ArrayList<UserDTO> showList();
 
+	public UserDTO showUser(int userCode);
 	public UserDetailDTO showUserDetail(int userCode);
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs);
 	public int checkSignup(String id);

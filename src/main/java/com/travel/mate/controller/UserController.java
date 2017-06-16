@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,10 +49,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/doSignUp", method = RequestMethod.POST)
-	public String doSignUp(@ModelAttribute @Valid UserDTO userDTO ,BindingResult result1,  @ModelAttribute @Valid UserDetailDTO userDetailDTO, BindingResult result2 ,
-						 @RequestParam("authority") String authority,
-						 @ModelAttribute("langDTOList") UserLanguageDTO languageDTO, 
-						  Model model) {
+	public String doSignUp(@ModelAttribute @Valid UserDTO userDTO ,BindingResult result1,  
+			               @ModelAttribute @Valid UserDetailDTO userDetailDTO, BindingResult result2 ,
+						   @RequestParam("authority") String authority,
+						   @ModelAttribute("langDTOList") UserLanguageDTO languageDTO, 
+						    Model model) {
 		System.out.println("signup controller");
 
 			//아이디중복체크해주기
@@ -125,9 +127,16 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
-	public String myPage(Locale locale, Model model) {
-	
+	@RequestMapping(value = "/myPage/{userCode}", method = RequestMethod.GET)
+	public String myPage(@PathVariable int userCode, Model model) {
+		System.out.println("myPage controller");
+
+		UserDTO user = userService.showUser(userCode);
+		UserDetailDTO userDetail = userService.showUserDetail(userCode); 
+		
+		model.addAttribute("user",user);
+		model.addAttribute("userDetail", userDetail);
+		
 		return "myPage";
 	}
 	

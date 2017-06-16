@@ -27,6 +27,9 @@
 		   <li role="presentation">
 		       <a href="#applyTravel" aria-controls="applyTravel" role="tab" data-toggle="tab">내가 신청한 여행</a>
 		   </li>
+		   <li role="presentation">
+		       <a href="#myInfo" aria-controls="myInfo" role="tab" data-toggle="tab">내 정보</a>
+		   </li>
 		</ul>
 		
 		 <!-- Tab panes -->
@@ -127,6 +130,14 @@
 				
 		    </div>
 		    <div role="tabpanel" class="tab-pane" id="applyTravel">...</div>
+		    
+		    
+		    <div role="tabpanel" class="tab-pane" id="myInfo">
+		    
+		    
+		    
+		    
+		    </div>
         </div>	
 	</div><!--탭-->
 	

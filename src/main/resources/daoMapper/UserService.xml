@@ -25,6 +25,13 @@
 			VALUES        (#{userCode}, #{authority})
 		]]>
 	</insert>
+	<select id="selectUser" resultType="com.travel.mate.dto.UserDTO" parameterType="int">
+		<![CDATA[
+			SELECT * 
+			FROM   user 
+			WHERE  userCode = #{userCode}
+		]]>
+	</select>
 	<select id="selectUserDetail" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
 		<![CDATA[
 			SELECT * 
