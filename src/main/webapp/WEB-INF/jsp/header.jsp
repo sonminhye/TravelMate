@@ -5,6 +5,8 @@
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %> 
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
@@ -34,21 +36,21 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<c:url value='/vendor/bootstrap/js/bootstrap.min.js' />"></script>
  
     <!-- Custom Fonts -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/vendor/font-awesome/css/font-awesome.min.css' />" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/agency.css?ver=1" rel="stylesheet">
+    <link href="<c:url value='/vendor/bootstrap/css/bootstrap.min.css' />" rel="stylesheet">
+    <link href="<c:url value='/css/agency.css?ver=1' />" rel="stylesheet">
     
     
-    <script type="text/javascript" src="js/httpRequest.js"></script>
+    <script type="text/javascript" src="<c:url value='/js/httpRequest.js' />"></script>
 <script>
 
 	var checkFirst = false;
@@ -167,7 +169,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="main">Travle Mate</a>
+                <a class="navbar-brand" href="<c:url value='/main' />">Travle Mate</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -189,13 +191,13 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="myPage"><%=email%>님 반갑습니다!</a>	
+	                	<a class="page-scroll"  href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
+	                	<a class="page-scroll"  href="<c:url value='/j_spring_security_logout' />">SignOut</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll" href="chatList">Message</a>
+	                	<a class="page-scroll" href="<c:url value='/chatList' />">Message</a>
 	                	<div class="unreadMsg"><%=unReadCount %></div>
 	                </li>
                 </sec:authorize>
