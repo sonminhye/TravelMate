@@ -58,7 +58,6 @@
 							<c:choose>
 								<c:when test="${fn:length(list) > 0}">
 									<c:forEach items="${list }" var="row">
-									
 										<div class="travel col-md-4 col-sm-6 portfolio-item" style="height: 500">
 											<a href="#" name="img-link" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
@@ -83,26 +82,6 @@
 												</script>
 											</div>
 										</div>
-										
-										
-										<script type="text/javascript">
-											$(document).ready(function () {
-												$("a[name='img-link']").on("click", function(e) {
-												e.preventDefault();
-												readTravel($(this));
-												});
-											});
-											function readTravel(obj) {
-												var comSubmit = new ComSubmit();
-												var travelCode = obj.parent().find(".travelCode").val();
-												var userCode = obj.parent().find(".userCode").val();
-												comSubmit.setUrl("<c:url value='/readTravel/${row.travelCode}' />");
-												comSubmit.addParam("travelCode", travelCode);
-												comSubmit.addParam("userCode", userCode);
-												comSubmit.submit();
-											}
-										</script>
-										
 									</c:forEach>
 								</c:when>
 								<c:otherwise>
@@ -112,7 +91,23 @@
 								</c:otherwise>
 							</c:choose>
 							
-							
+							<script type="text/javascript">
+								$(document).ready(function () {
+									$("a[name='img-link']").on("click", function(e) {
+									e.preventDefault();
+									readTravel($(this));
+									});
+								});
+								function readTravel(obj) {
+									var comSubmit = new ComSubmit();
+									var travelCode = obj.parent().find(".travelCode").val();
+									var userCode = obj.parent().find(".userCode").val();
+									comSubmit.setUrl("<c:url value='/readTravel/' />" + travelCode);
+									comSubmit.addParam("travelCode", travelCode);
+									comSubmit.addParam("userCode", userCode);
+									comSubmit.submit();
+								}
+							</script>
 
 						</div>
 					</div>

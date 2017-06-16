@@ -9,17 +9,13 @@ import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractDAO;
 import com.travel.mate.dto.UserLanguageDTO;
+import com.travel.mate.dto.UserAuthDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 
 @Repository("UserDAO")
 public class UserDAO extends AbstractDAO{
 
-	@SuppressWarnings("unchecked")
-	public ArrayList<UserDTO> selectTestList(){
-		return (ArrayList<UserDTO>) selectList("user.showList");
-	}
-	
 	public void insertUser(UserDTO userDTO){
 		insert("user.insertUser", userDTO);
 	}
@@ -28,8 +24,12 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserDetail", userDetailDTO);
 	}
 	
-	public void insertUserAuthority(Map<String, Object> param){
-		insert("user.insertUserAuthority", param);
+	public void insertUserAuthority(UserAuthDTO userAuthDTO){
+		insert("user.insertUserAuthority", userAuthDTO);
+	}
+	
+	public UserDTO selectUser(int userCode){
+		return (UserDTO) selectOne("user.selectUser", userCode);
 	}
 	
 	public UserDetailDTO selectUserDetail(int userCode){
@@ -40,13 +40,22 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserLanguage", langs);
 	}
 	
+	/*아이디 중복체크*/
 	public int selectUserId(String id){
 		int rowcount = (Integer) selectOne("user.selectUserId", id);
 		return rowcount;
 	}
 	
+	public void updateUserDetail(UserDetailDTO userDetailDTO){
+		update("user.updateUserDetail", userDetailDTO);
+	}
+	
 	// userDetail meanPoint update
 	public void updateUserMeanPoint(UserDetailDTO userDetailDto) {
 		update("user.updateUserMeanPoint", userDetailDto);
+	}
+	
+	public void updatePassword(UserDTO userDTO){
+		update("user.updatePassword", userDTO);
 	}
 }

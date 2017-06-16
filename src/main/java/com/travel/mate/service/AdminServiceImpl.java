@@ -73,12 +73,13 @@ public class AdminServiceImpl implements AdminService{
 		/*먼저 기존 권한정보들을 지워줌*/
 		adminDAO.deleteSecuredResourceAuth(resourceCode);
 		
-		/*없음 체크박스를 선택하지 않은 경우에만 insert 해줌*/
+		/*'없음' 체크박스를 선택하지 않은 경우에만 insert 해줌*/
 		if(!auths.get(0).getAuthority().equals("none")){
 			adminDAO.insertSecuredResourceAuth(auths);
 		}
 	}
 	
+	/*update sortOrder*/
 	@Transactional(readOnly=false)
 	public void updateSecuredResource(SecuredResourceDTO securedResourceDTO){
 		adminDAO.updateSecuredResource(securedResourceDTO);
