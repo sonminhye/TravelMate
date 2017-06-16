@@ -169,7 +169,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="main">Travle Mate</a>
+                <a class="navbar-brand" href="<c:url value='/main' />">Travle Mate</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -191,13 +191,13 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="myPage"><%=email%>님 반갑습니다!</a>	
+	                	<a class="page-scroll"  href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
+	                	<a class="page-scroll"  href="<c:url value='/j_spring_security_logout' />">SignOut</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll" href="chatList">Message</a>
+	                	<a class="page-scroll" href="<c:url value='/chatList' />">Message</a>
 	                	<div class="unreadMsg"><%=unReadCount %></div>
 	                </li>
                 </sec:authorize>
