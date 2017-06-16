@@ -109,6 +109,8 @@
 	<script src="<c:url value='/js/datetimepicker/jquery.timepicker.js' />"></script>
 	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/jquery.timepicker.css' />">
 	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/lib/bootstrap-datepicker.css' />">
+	<link rel="stylesheet" href="<c:url value='/css/datepicker3.css' />">
+	<script src="<c:url value='/js/bootstrap-datepicker.js' />"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// time
@@ -119,6 +121,14 @@
 			$('#endTime').timepicker({
 				'scrollDefault' : 'now',
 				'timeFormat' : "H:i:s"
+			});
+			$('#startDate').datepicker({
+				format: 'yyyy-mm-dd',
+				autoclose: true
+			});
+			$('#endDate').datepicker({
+				format: 'yyyy-mm-dd',
+				autoclose: true
 			});
 		});
 	</script>
