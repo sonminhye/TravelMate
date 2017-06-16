@@ -21,7 +21,7 @@
 	
 		     <div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		     <form action="<c:url value='/modifyUserDetail' />" method="POST">
-		     	<input type="hidden" class="form-control" id="userCode" name="userCode" value="${user.userCode }">
+		     	<%-- <input type="hidden" class="form-control" id="userCode" name="userCode" value="${user.userCode }"> --%>
 		    	<input type="hidden" class="form-control" id="meanPoint" name="meanPoint" value="0">
 		    	
 		    	<div class="row">
@@ -68,8 +68,7 @@
 					</c:choose>
 					</div>
 		    	</div>
-		    	
-		    	
+	
 		    	<div class="row">
 					<div class="form-group col-sm-3">
 					<label for="name">지역</label>
