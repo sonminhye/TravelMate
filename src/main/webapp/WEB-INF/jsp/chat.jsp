@@ -68,7 +68,7 @@
 			<div class="bottom_wrapper clearfix">
 				<div class="message_input_wrapper">
 					<form>
-						<input class="message_input" placeholder="메세지를 입력하세요" />
+						<textarea class="message_input" placeholder="메세지를 입력하세요" maxlength="300"></textarea>
 				</div>
 				<div class="send_message">
 					<div class="icon"></div>
@@ -91,16 +91,18 @@
 	</div>
 
 	<script type="text/javascript">
+	
 		var room = '${room}';
 		var nickname = '${name}';
 		var rcode = '${rcode}';
 		var scode = '${scode}';
+		
 		var Message;
-		var getMessageText, message_side, sendMessage, scrollTop;
+		var sendMessage, scrollTop;
 		var message_side = 'right';
 		var inchatRoom = false;
 		var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
-		console.log(room);
+		
 		//nick name, 방정보 등 정보를 서버에 보냄
 		socket.emit('chat', {
 			nickname : nick,
@@ -109,6 +111,7 @@
 			rcode : rcode
 		});
 
+		//메세지 스크롤을 맨 위로 다 올렸을 때
 		$('.messages').scroll(function() {
 			if($('.messages').scrollTop() == 0){
 				var messageCode = $('.message:first-child').attr('id');
@@ -130,7 +133,7 @@
 			}
 		});
 		
-		//상대방이 채팅창에 들어와있는지 안있는지 판단하는 것
+		//상대방이 채팅창에 들어와있는지 안있는지 판단하는 아이콘
 		online = function(data){
 			var c=document.getElementById("myCanvas");
 			var ctx = c.getContext("2d");
@@ -145,7 +148,6 @@
 		
 		//내가 입장했을 때, 환영메세지가 서버로부터 오는 부분
 		socket.on('welcome', function(data) {
-			var nick = decodeURI(data.nickname);
 			inchatRoom = data.participate;
 			online(inchatRoom);
 			scrollTop();
@@ -153,7 +155,6 @@
 		
 		//누군가 입장했을 때, 알려주는 부분
 		socket.on('join', function(data) {
-			var nick = decodeURI(data.nickname);
 			inchatRoom = data.participate;
 			online(inchatRoom);
 			//채팅방에 들어왔으니까, 읽은 상태이므로 class 를 read 상태로 바꿔준다.
@@ -161,19 +162,17 @@
 				$('.messages').find('.unread').empty();
 				$('.messages').find('.unread').attr('class', 'read');
 			}
-			scrollTop();
 		});
 
-		//메세지 수신 부분
+		//메세지 수신
 		socket.on('msg', function(data) {
 			appendMessage(data);
 		});
-
-		socket.on('left', function(data) { //이 부분은 나중에 온라인 혹은 비온라인 식으로 고쳐줘도 될 듯
-			var nick = decodeURI(data.nickname);
+	
+		//타 유저가 떠났을 때
+		socket.on('left', function(data) {
 			inchatRoom = data.participate;
 			online(inchatRoom);
-			scrollTop();
 		});
 		
 		prependMessage = function(data){
@@ -238,9 +237,7 @@
 			this.old = arg.old;
 			this.draw = function(_this) {
 				return function() {
-					
 					var $message;
-					
 					//메세지 템플릿을 복사
 					$message = $($('.message_template').clone().html());
 					//메세지의 id 지정
@@ -275,46 +272,39 @@
 			}(this)
 		};
 		
+		sendMessage = function(){
+			var msg = $(".message_input").val();
+			if(msg.length==0){
+				alert("메세지를 입력해주세요.");
+				return false;
+			}
+			
+			var readFlag = 0;
+			if (inchatRoom)
+				readFlag = 1;
+			//date 형식
+			var date = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
+			
+			socket.emit('msg', {
+				msg : msg,
+				date : date,
+				readFlag : readFlag
+			});
+			
+			$('.message_input').val('');
+		};
+		
 		//버튼을 클릭했을 때 (마우스 클릭)
 		$('.send_message').click(function(e) {
-					var readFlag = 0;
-					if (inchatRoom)
-						readFlag = 1;
-					//date 형식
-					var date = (new Date()).toISOString().substring(0, 19)
-							.replace('T', ' ');
-					var msg = $(".message_input").val();
-
-					socket.emit('msg', {
-						msg : msg,
-						date : date,
-						readFlag : readFlag
-					});
-					
-					$('.message_input').val('');
-					return false;
-				});
+				sendMessage();
+				return false;
+		});
 
 		//엔터 쳤을 때 (키보드)
 		$('form').submit(function(e) {
-					var readFlag = 0;
-					if (inchatRoom)
-						readFlag = 1;
-					
-					//date 형식
-					var date = (new Date()).toISOString().substring(0, 19)
-							.replace('T', ' ');
-					var msg = $(".message_input").val();
-
-					socket.emit('msg', {
-						msg : msg,
-						date : date,
-						readFlag : readFlag
-					});
-
-					$('.message_input').val('');
+					sendMessage();
 					return false;
-				});
+		});
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 

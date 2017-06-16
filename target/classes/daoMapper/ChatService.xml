@@ -14,14 +14,14 @@
 	</select>
 	
 	<select id="showChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="int">
-		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where temp.receiverCode = userDetail.userCode) as receiverName 
+		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName 
 		from (select * from message where roomCode=#{roomCode} order by sendDate desc limit 35) temp 
 		order by sendDate;
 	</select>
 
 	<select id="showMoreChats" resultType="com.travel.mate.dto.ChatDTO" parameterType="com.travel.mate.dto.ChatDTO">
 		<![CDATA[
-		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName, (select userDetail.name from userDetail where temp.receiverCode = userDetail.userCode) as receiverName 
+		select *, (select userDetail.name from userDetail where temp.senderCode = userDetail.userCode) as senderName
 		from (select * from message where roomCode=#{roomCode} and messageCode < #{messageCode} order by sendDate desc limit 35) temp 
 		]]>
 	</select>

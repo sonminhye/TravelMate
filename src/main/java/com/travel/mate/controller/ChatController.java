@@ -49,8 +49,10 @@ public class ChatController {
 	//채팅창 뷰
 	@RequestMapping(value = "/chat")
 	public String chatView(HttpServletRequest request, Model model) {
+		
 		String rCode, roomCode;
 		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+		
         if(flashMap!=null){
         	Map<String, Integer> map = (HashMap) flashMap.get("param");
         	rCode = map.get("rcode").toString();
@@ -69,9 +71,10 @@ public class ChatController {
 		model.addAttribute("name", name);
 		model.addAttribute("room", roomCode);
 		
-		System.out.println(roomCode);
-		
-		//읽지않은 메세지가 있다면 읽기
+		//읽지않은 메세지 읽기
+		//채팅 페이지로 넘어간 후에 node js 서버와의 통신을 하기 때문에 이는 spring 에 있어야 함.
+		//이 부분을 node js 로 넘긴다면, 다시한번 header 를 갱신해주어야 하는 문제가 발생하는데
+		//node js 에 굳이 이 코드를 넣어야 할 이유가없다면 여기서 해줘도 무방할 듯
 		chatService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
@@ -86,9 +89,9 @@ public class ChatController {
 	public String chatListview(Model model) {
 	
 		int userCode = getUserCode();
+		
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
-		
 		model.addAttribute("list", list);
 		model.addAttribute("myCode", userCode);
 		
@@ -109,14 +112,16 @@ public class ChatController {
 		//두 유저간의 채팅방이 있는지 여부를 구해오는 함수
 		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
 		
-		if(chatRoom ==null){ //채팅방이 없을 때
-			chatRoom = chatService.addRoom(senderCode, receiverCode, currentTime);
-		}
-		
 		Map<String,Integer> map = new HashMap<String,Integer>();
 		map.put("rcode",receiverCode);
-		map.put("room", chatRoom.getRoomCode());		
 		
+		//채팅방이 없을 경우,
+		if(chatRoom ==null){ //채팅방이 없을 때
+			map.put("room", 0);	
+		}else{
+			map.put("room", chatRoom.getRoomCode());	
+		}
+		//post 방식의 구현을 위한 변수
 		redirectAttributes.addFlashAttribute("param", map);
 		result = "redirect:chat";
 		return result;
@@ -129,18 +134,16 @@ public class ChatController {
 		
 		String messageCode = map.get("messageCode").toString();
 		String roomCode = map.get("room").toString();
-		System.out.println(messageCode + "," + roomCode);
-		//채팅방의 리스트를 불러오는 부분햣 
+		
+		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode), Integer.parseInt(messageCode));
 		return list;
 	}
 	
 	//유저의 코드를 받아오는 함수
 	public int getUserCode(){
-		
 		auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal =  auth.getPrincipal();
 		return ((MyUser)principal).getUserCode();
-		
 	}
 }
