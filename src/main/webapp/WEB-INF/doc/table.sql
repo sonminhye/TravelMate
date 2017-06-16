@@ -294,10 +294,8 @@ COMMENT '회원언어';
 
 -- 메시지룸
 CREATE TABLE messageRoom (
-	roomCode     INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
-	senderCode   INT UNSIGNED NOT NULL COMMENT '방만든사람', -- 방만든사람
-	receiverCode INT UNSIGNED NOT NULL COMMENT '참여자', -- 참여자
-	latestDate   DATETIME     NOT NULL COMMENT '최근메시지시간' -- 최근메시지시간
+	roomCode   INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
+	latestDate DATETIME     NOT NULL COMMENT '최근메시지시간' -- 최근메시지시간
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '메시지룸';
 
@@ -509,26 +507,6 @@ ALTER TABLE userLanguage
 			languageCode -- 언어번호
 		);
 
--- 메시지룸
-ALTER TABLE messageRoom
-	ADD CONSTRAINT FK_userDetail_TO_messageRoom -- 회원상세 -> 메시지룸
-		FOREIGN KEY (
-			senderCode -- 방만든사람
-		)
-		REFERENCES userDetail ( -- 회원상세
-			userCode -- 회원번호
-		);
-
--- 메시지룸
-ALTER TABLE messageRoom
-	ADD CONSTRAINT FK_userDetail_TO_messageRoom2 -- 회원상세 -> 메시지룸2
-		FOREIGN KEY (
-			receiverCode -- 참여자
-		)
-		REFERENCES userDetail ( -- 회원상세
-			userCode -- 회원번호
-		);
-
 -- 룸유저
 ALTER TABLE roomUser
 	ADD CONSTRAINT FK_userDetail_TO_roomUser -- 회원상세 -> 룸유저
@@ -549,7 +527,7 @@ ALTER TABLE roomUser
 			roomCode -- 방번호
 		);
 		
-INSERT INTO `authority` (`authority`, `authorityName`) VALUES
+INSERT INTO authority (authority, authorityName) VALUES
 	('ROLE_ADMIN', '관리자'),
 	('ROLE_GUEST', '손님'),
 	('ROLE_USER', '회원');
@@ -560,7 +538,7 @@ INSERT INTO language (languageCode, language) VALUES (3, 'chinese');
 INSERT INTO language (languageCode, language) VALUES (4, 'japanese');
 INSERT INTO language (languageCode, language) VALUES (5, 'spanish');
 
-INSERT INTO `securedresource` (`resourceCode`, `resourcePattern`, `sortOrder`) VALUES
+INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES
 	(1, '/signIn', 20),
 	(2, '/travelList', 30),
 	(3, '/readTravel', 40),
@@ -569,7 +547,7 @@ INSERT INTO `securedresource` (`resourceCode`, `resourcePattern`, `sortOrder`) V
 	(6, '/main', 10),
 	(7, '/signUp', 20);
 
-INSERT INTO `securedresourceauthority` (`resourceCode`, `authority`) VALUES
+INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES
 	(4, 'ROLE_USER'),
 	(2, 'ROLE_USER'),
 	(2, 'ROLE_ADMIN'),
