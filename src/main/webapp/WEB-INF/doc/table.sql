@@ -133,7 +133,7 @@ CREATE TABLE message (
 	roomCode     INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
 	senderCode   INT UNSIGNED NOT NULL COMMENT '보내는회원번호', -- 보내는회원번호
 	receiverCode INT UNSIGNED NOT NULL COMMENT '받는회원번호', -- 받는회원번호
-	content      TEXT         NOT NULL COMMENT '메시지내용', -- 메시지내용
+	content      VARCHAR(900) NOT NULL COMMENT '메시지내용', -- 메시지내용
 	sendDate     DATETIME     NOT NULL COMMENT '보낸날짜', -- 보낸날짜
 	readFlag     TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '읽음여부' -- 읽음여부
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
