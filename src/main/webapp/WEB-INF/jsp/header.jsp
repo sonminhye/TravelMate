@@ -24,7 +24,7 @@
 	
 	
 %>
-<c:set var="code" value="<%=code %>"></c:set>
+
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,6 @@
     <!-- CSS -->
     <link href="<c:url value='/vendor/bootstrap/css/bootstrap.min.css' />" rel="stylesheet">
     <link href="<c:url value='/css/agency.css?ver=1' />" rel="stylesheet">
-    
     
     <script type="text/javascript" src="<c:url value='/js/httpRequest.js' />"></script>
 <script>
@@ -117,7 +116,7 @@
 	   var resultText = httpRequest.responseText;
 	   var listView = document.getElementById('checkMsg');
 	   if(resultText==0){
-	    listView.innerHTML = "";
+	    listView.innerHTML = "사용 가능한 이메일주소입니다";
 	    listView.style.color = "blue";
 	    idCheck = 1; //아이디 입력했음을 체크
 	   }else{
@@ -134,10 +133,7 @@
  	function checkSubmit(){
  		var idEmptyCheck = document.forms[0].id.value;
  		var passcheckCheck = document.forms[0].passwordCheck.value;
-		var nameCheck = document.forms[0].name.value;
-		var ageCheck = document.forms[0].age.value;
-		var sexCheck = document.forms[0].sex.value;
-		var locationCheck = document.forms[0].location.value;
+
 		var languageCheck = document.forms[0].language.value;
 		
 		if(idEmptyCheck.length==0){
@@ -145,22 +141,22 @@
 			return false;
 		}
 		if(idCheck=='2'){
-			alert('이미 존재하는 아이디 입니다.');
+			alert('이미 존재하는 메일주소 입니다.');
 			return false;
 		}
-		if(idCheck=='0' || passwordCheck=='0' || passcheckCheck.length==0 || nameCheck.length==0 || ageCheck.length==0 || sexCheck.length==0 || locationCheck.length==0 || languageCheck == null ){
-			alert('회원가입 폼을 정확히 채워 주세요.');
+		if(passwordCheck=='0'){
+			alert('비밀번호를 정확히 입력해 주세요.');
 			return false;
 		}else{
 			return true;
 		}
 	}
-	
+ 	
+
 </script>
 </head>
 
 <body>
-
     <!-- Nav Bar-->
     <nav id="mainNav" class="navbar navbar-default navbar-custom  navbar-fixed-top">
         <div class="container">
@@ -191,7 +187,8 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="<c:url value='/myPage/${code }' />"><%=email%>님 반갑습니다!</a>	
+               			<input type="hidden" class="userCode" value=<%=code %>>
+	                	<a class="page-scroll" href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
 	                	<a class="page-scroll"  href="<c:url value='/j_spring_security_logout' />">SignOut</a>	
@@ -204,6 +201,7 @@
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
+
         </div>
         <!-- /.container-fluid -->
     </nav>
@@ -226,30 +224,30 @@
 						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
+							<input required type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
 							<div id="checkMsg"></div>
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
-							<input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
+							<input required type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
 						</div>
 						<div class="form-group">
 							<label for="password2">비밀번호 확인</label>
-							<input type="password" class="form-control" id="password2" name="passwordCheck" onkeyup="checkPwd()" placeholder="비밀번호 확인">
+							<input required type="password" class="form-control" id="password2" name="passwordCheck" onkeyup="checkPwd()" placeholder="비밀번호 확인">
 							<div id="checkPwd"></div>
 						</div>
 						<div class="form-group">
 							<label for="name">이름</label>
-							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+							<input required type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
-							<input type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
+							<input required type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="age">성별</label><br>
 							<label class="radio-inline">
-								<input type="radio" name="sex" id="inlineRadio1" value="male">남
+								<input required type="radio" name="sex" id="inlineRadio1" value="male">남
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="sex" id="inlineRadio2" value="female">여
@@ -257,11 +255,11 @@
 						</div>
 						<div class="form-group">
 							<label for="city">지역</label>
-							<input type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
+							<input required type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
 						</div>
 						
-						<div class="form-group">
-							<label for="language">사용가능한 언어 </label>
+						<div class="checkbox-group required">
+							<label for="language">사용가능한 언어 </label>		
 							<label class="checkbox-inline">
 							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].languageCode" value="1">한국어
 							</label>
@@ -276,7 +274,7 @@
 							</label>
 							<label class="checkbox-inline">
 							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].languageCode" value="5">스페인어
-							</label>
+							</label>	
 						</div>
 				
 						<button type="submit" class="btn btn-default">가입</button>
