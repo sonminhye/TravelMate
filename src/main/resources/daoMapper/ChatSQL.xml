@@ -5,7 +5,7 @@
 <mapper namespace="chat">	
 	
 	<select id="showChatRooms" resultType="com.travel.mate.dto.ChatRoomDTO" parameterType="int" >
-		select r.roomCode, r.userCode as receiverCode, userDetail.name as receive, messageRoom.latestdate, (select count(*) from message where roomCode=r.roomCode and receiverCode=#{userCode} and readFlag=0) as unread
+		select r.roomCode, r.userCode as receiverCode, userDetail.name as receive, messageRoom.latestdate
 		from
 		(select * from roomUser where roomCode in (select roomCode from roomUser where userCode=#{userCode}) and userCode!=#{userCode}) as r 
 			join userDetail 

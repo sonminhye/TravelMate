@@ -43,7 +43,7 @@
 				<c:forEach items="${list }" var="dto">
 					<c:choose>
 						<c:when test="${dto.senderCode==scode }">
-							<li class="message right appeared" id="${dto.messageCode }">
+							<li class="message right appeared" id="${dto.id }">
 						</c:when>
 						<c:otherwise>
 							<li class="message left appeared" id="${dto.messageCode }">
@@ -92,6 +92,8 @@
 
 	<script type="text/javascript">
 	
+		var chatList = '${list}';
+	
 		var room = '${room}';
 		var nickname = '${name}';
 		var rcode = '${rcode}';
@@ -115,6 +117,9 @@
 		$('.messages').scroll(function() {
 			if($('.messages').scrollTop() == 0){
 				var messageCode = $('.message:first-child').attr('id');
+				
+				console.log(messageCode);
+				
 				if(messageCode.length!=0){
 					$.ajax({
 						type: 'post',		// post肺 夸没
@@ -185,7 +190,7 @@
 
 				//皋技瘤 按眉 积己
 				message = new Message({
-					messageCode : element.messageCode,
+					messageCode : element.id,
 					text : element.content,
 					message_side : message_side,
 					nick : element.senderName,

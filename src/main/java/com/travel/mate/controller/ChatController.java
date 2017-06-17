@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import com.travel.mate.dto.ChatRoomDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.security.MyUser;
 import com.travel.mate.service.ChatServiceImpl;
+import com.travel.mate.service.MongoChatServiceImpl;
 import com.travel.mate.service.UserServiceImpl;
 
 @Controller
@@ -43,7 +45,10 @@ public class ChatController {
 
 	@Autowired
 	UserServiceImpl userService;
-
+	
+	@Autowired
+	MongoChatServiceImpl mongoService;
+	
 	Authentication auth;
 	
 	//채팅창 뷰
@@ -72,15 +77,12 @@ public class ChatController {
 		model.addAttribute("room", roomCode);
 		
 		//읽지않은 메세지 읽기
-		//채팅 페이지로 넘어간 후에 node js 서버와의 통신을 하기 때문에 이는 spring 에 있어야 함.
-		//이 부분을 node js 로 넘긴다면, 다시한번 header 를 갱신해주어야 하는 문제가 발생하는데
-		//node js 에 굳이 이 코드를 넣어야 할 이유가없다면 여기서 해줘도 무방할 듯
-		chatService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
+		mongoService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
-		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode));
-		model.addAttribute("list", list);
+		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode));
 		
+		model.addAttribute("list", list);
 		return "chat";
 	}
 
@@ -92,6 +94,9 @@ public class ChatController {
 		
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
+		ArrayList<Object> unreadList = mongoService.checkUnReadMessageList(userCode);
+		System.out.println(unreadList.size());
+		model.addAttribute("unreadList", unreadList);
 		model.addAttribute("list", list);
 		model.addAttribute("myCode", userCode);
 		
@@ -121,13 +126,14 @@ public class ChatController {
 		}else{
 			map.put("room", chatRoom.getRoomCode());	
 		}
+		
 		//post 방식의 구현을 위한 변수
 		redirectAttributes.addFlashAttribute("param", map);
 		result = "redirect:chat";
 		return result;
 	}
 	
-	//채팅방 리스트 뷰
+	//채팅 더 불러오기
 	@ResponseBody
 	@RequestMapping(value = "/getMoreChats", method=RequestMethod.POST)
 	public ArrayList<ChatDTO> getMoreChats(@RequestBody Map<Object, Object> map) {
@@ -135,8 +141,9 @@ public class ChatController {
 		String messageCode = map.get("messageCode").toString();
 		String roomCode = map.get("room").toString();
 		
-		//채팅방의 리스트를 불러오는 부분
-		ArrayList<ChatDTO> list = chatService.showChats(Integer.parseInt(roomCode), Integer.parseInt(messageCode));
+		//이 부분을 mongodb에서 리스트를 불러오도록 고쳐야 함
+		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode), messageCode);
+		
 		return list;
 	}
 	

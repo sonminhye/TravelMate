@@ -1,6 +1,12 @@
 package com.travel.mate.dto;
 
+import org.springframework.data.annotation.Id;
+
 public class ChatDTO {
+	
+	@Id
+	private String id;
+	
 	int messageCode;
 	int roomCode;
 	int senderCode;
@@ -27,6 +33,16 @@ public class ChatDTO {
 		this.readFlag = readFlag;
 		this.senderName = senderName;
 		this.receiverName = receiverName;
+	}
+
+	
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public int getMessageCode() {

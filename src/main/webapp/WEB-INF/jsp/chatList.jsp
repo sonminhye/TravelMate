@@ -60,7 +60,7 @@
 				채팅방이 존재하지 않습니다.
 			</c:when>
 			<c:otherwise>
-				<c:forEach items="${list}" var="dto">
+				<c:forEach items="${list}" var="dto" varStatus="status">
 					<!-- 리스트의 parameter를 post 형식으로 보내주기 위한 form -->
 					<form name="hiddenForm" id="hiddenForm" action="chat" method="POST">
 						<input type="hidden" name="rcode" value="" /> 
@@ -80,7 +80,15 @@
 								<p>참여자 : ${dto.receive}</p>
 								<p class="latestdate">${dto.latestDate}</p>
 								<p>${dto.roomCode}</p>
-								<p class="unread">${dto.unread }</p>
+								
+								<p class="unread">					
+								<c:forEach items="${unreadList }" var="ul">
+									<c:if test="${ul._id == dto.roomCode }">
+										${ul.unread }
+									</c:if>
+								</c:forEach>
+								</p>
+								
 							</div>
 						</a>
 				</c:forEach>
@@ -89,7 +97,8 @@
 	</div>
 
 	<script type="text/javascript">
-		
+	
+	
 		// 메세지 수신 부분
 		socket.on('msg', function(data) {
 			// 내가 보낸 메세지가 아니며
@@ -108,6 +117,7 @@
 			var unread = parent.find('.unread');
 			
 			if (unread.html() != "") {
+				console.log(unread.html());
 				unread.html(parseInt(unread.html()) + 1);
 			} else {
 				unread.html(1);

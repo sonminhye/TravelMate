@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.travel.mate.security.MyUser;
-import com.travel.mate.service.ChatServiceImpl;
+import com.travel.mate.service.MongoChatServiceImpl;
 
 public class LoggerInterceptor extends HandlerInterceptorAdapter {
     protected Log log = LogFactory.getLog(LoggerInterceptor.class);
      
     @Autowired
-	ChatServiceImpl chatService;
+	MongoChatServiceImpl mongoService;
     
     Authentication auth;
     
@@ -44,7 +44,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         Object principal = auth.getPrincipal();
         if(principal!=null && principal instanceof MyUser){
     		int userCode =  ((MyUser)principal).getUserCode();
-            int unReadCount = chatService.checkUnReadMessage(userCode);
+            int unReadCount = mongoService.checkUnReadMessage(userCode);
             request.setAttribute("unReadCount", unReadCount);
         }
         
