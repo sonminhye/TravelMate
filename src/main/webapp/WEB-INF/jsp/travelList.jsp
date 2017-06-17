@@ -116,40 +116,30 @@
 		</div>
 	</div>
 	
-	<script>
+	<script type="text/javascript">
 		var lastScrollTop = 0;
-		// 1. 스크롤 발생
 		$(window).scroll(function() {
 			var currentScrollTop = $(window).scrollTop();
-			// 스크롤 다운
 			if (currentScrollTop - lastScrollTop > 0) {
-				// 2. 현재 스크롤의 top 좌표 > (글을 불러올 화면 height - 윈도우 height) 인 순간
 				if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
-					// 3. class가 scroll인 것 중 마지막 요소를 선택, data-tcode를 가져옴
-					// 뿌려진 글의 마지막 코드를 읽어 다음 글을 읽기 위함
 					var lasttcode = $(".scrolling:last").attr("data-tcode");
-					// 4. ajax를 사용해서 해당 코드값을 서버로 보내 3개를 더 읽어온다
 					$.ajax({
-						type: 'post',		// post로 요청
-						url: 'scrollDown',	// 요청할 url
+						type: 'post',
+						url: 'scrollDown',
 						headers: {
 							"Content-Type" : "application/json",
 							"X-HTTP-Method-Override" : "POST"
 						},
-						dataType: 'json',	// 서버로부터 되돌려 받을 데이터타입 명시
+						dataType: 'json',
 						data: JSON.stringify({
 							travelCode : lasttcode
 						}),
-						// ajax 성공시 수행할 함수
 						success: function(data) {
 							var str = "";
 							var ddayResult = "";
 							var ajaxResult = [];
-							// 5. 서버에서 온 데이터가 ""이거나 null인경우 DOM handling..
 							if (data != "") {
-								// 6. 서버에게 온 데이터가 리스트이므로 each문을 사용하여 접근
 								$(data).each(
-									// 7. html 코드만들기
 									function() {
 										ddayResult = getDiffDay(this.startDate, getToday());
 										
@@ -166,7 +156,6 @@
 										ajaxResult.push(str[0]);
 									}
 								);
-								// 8. 얻어온 3개의 게시물을 더해준다
 								$(".scrollLocation").append(ajaxResult);
 								
 								function addEvent() {
@@ -178,12 +167,12 @@
 								addEvent();
 							}
 							else {
-								// 서버로부터 받을 데이터 없으면 아무것도 하지않음
+								;
 							}
-						} // end success
-					}); // end ajax
-				} // end if (top 좌표 > (글 height - 윈도우 height))
-			} // end if
+						}
+					});
+				}
+			}
 		});
 	</script>
 	
