@@ -1,8 +1,7 @@
 package com.travel.mate.dto;
 
-import java.util.List;
-
 public class TravelDetailDTO {
+	
 	int travelCode;
 	String startDate;
 	String startTime;
@@ -10,8 +9,6 @@ public class TravelDetailDTO {
 	String endTime;
 	int minPeople;
 	int maxPeople;
-	
-	List<TravelDetailDTO> tdlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -68,12 +65,5 @@ public class TravelDetailDTO {
 	public void setMaxPeople(int maxPeople) {
 		this.maxPeople = maxPeople;
 	}
-
-	public List<TravelDetailDTO> getTdlist() {
-		return tdlist;
-	}
-
-	public void setTdlist(List<TravelDetailDTO> tdlist) {
-		this.tdlist = tdlist;
-	}
+	
 }

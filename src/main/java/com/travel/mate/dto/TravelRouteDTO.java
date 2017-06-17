@@ -3,6 +3,7 @@ package com.travel.mate.dto;
 import java.util.List;
 
 public class TravelRouteDTO {
+	
 	int travelRouteCode;
 	int travelCode;
 	double lat;
@@ -67,4 +68,5 @@ public class TravelRouteDTO {
 	public void setTrlist(List<TravelRouteDTO> trlist) {
 		this.trlist = trlist;
 	}
+	
 }

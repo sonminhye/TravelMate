@@ -123,12 +123,12 @@
 	</insert>
 
 	<insert id="insertTravelRoute" parameterType="com.travel.mate.dto.TravelRouteDTO">
-		<![CDATA[
-			INSERT	INTO
-				travelRoute (travelCode, lat, lng, location, locOrder)
-			VALUES
-				(#{travelCode}, #{lat}, #{lng}, #{location}, #{locOrder})
-		]]>
+		INSERT	INTO
+			travelRoute (travelCode, lat, lng, location, locOrder)
+		VALUES
+			<foreach collection="trlist" item="route" separator=", ">
+				(#{travelCode}, #{route.lat}, #{route.lng}, #{route.location}, #{route.locOrder})
+			</foreach>
 	</insert>
 	
 	<insert id="insertTravelImage" parameterType="com.travel.mate.dto.TravelImageDTO">

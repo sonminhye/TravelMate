@@ -21,11 +21,17 @@ public class ReviewController {
 	@Resource(name = "ReviewService")
 	private ReviewService reviewService;
 	
-	// 리뷰 작성 요청
+	/*
+	 * Method	: writeReview
+	 * Summary	: 작성한 리뷰를 Database에 등록하는 과정
+	 * @param	: ApplyDTO(for get applyInfo)
+	 * @param	: String content(for insert review)
+	 * @param	: int point(for insert point)
+	 * @Return	: void
+	 */
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
-	public ModelAndView writeReview(@ModelAttribute("alist") ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
+	public ModelAndView writeReview(@ModelAttribute ApplyDTO applyDto, @RequestParam("content") String content, @RequestParam("point") int point) {
 		ModelAndView mv = new ModelAndView();
-		
 		try {
 			reviewService.insertReview(applyDto, content, point);
 			mv.setViewName("redirect:/travelList");
@@ -36,5 +42,5 @@ public class ReviewController {
 		}
 		return mv;
 	}
-
+	
 }

@@ -7,7 +7,7 @@ import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 
 public interface ReviewService {
-
+	
 	List<Map<String, Object>> selectReviewAll(TravelDTO travelDto);
 
 	List<Map<String, Object>> selectReviewWriteCheck(TravelDTO travelDto);
@@ -15,5 +15,5 @@ public interface ReviewService {
 	List<Map<String, Object>> selectReviewWrite(TravelDTO travelDto);
 
 	void insertReview(ApplyDTO applyDto, String content, int point) throws Exception;
-
+	
 }

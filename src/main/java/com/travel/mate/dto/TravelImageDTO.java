@@ -1,6 +1,7 @@
 package com.travel.mate.dto;
 
 public class TravelImageDTO {
+	
 	int travelCode;
 	String image;
 
@@ -19,5 +20,5 @@ public class TravelImageDTO {
 	public void setImage(String image) {
 		this.image = image;
 	}
-
+	
 }

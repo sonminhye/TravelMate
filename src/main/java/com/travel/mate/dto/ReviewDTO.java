@@ -1,15 +1,13 @@
 package com.travel.mate.dto;
 
 import java.util.Date;
-import java.util.List;
 
 public class ReviewDTO {
+	
 	int reviewCode;
 	int applyCode;
 	String content;
 	Date writeDate;
-	
-	List<ReviewDTO> rlist;
 
 	public int getReviewCode() {
 		return reviewCode;
@@ -41,14 +39,6 @@ public class ReviewDTO {
 
 	public void setWriteDate(Date writeDate) {
 		this.writeDate = writeDate;
-	}
-
-	public List<ReviewDTO> getRlist() {
-		return rlist;
-	}
-
-	public void setRlist(List<ReviewDTO> rlist) {
-		this.rlist = rlist;
 	}
 	
 }

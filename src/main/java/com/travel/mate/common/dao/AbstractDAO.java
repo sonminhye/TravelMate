@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AbstractDAO {
+	
 	protected Log log = LogFactory.getLog(AbstractDAO.class);
 
 	@Autowired
@@ -55,4 +56,5 @@ public class AbstractDAO {
 		printQueryId(queryId);
 		return sqlSession.selectList(queryId, params);
 	}
+	
 }
