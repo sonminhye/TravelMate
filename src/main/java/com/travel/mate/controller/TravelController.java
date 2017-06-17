@@ -1,9 +1,17 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 25
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.controller;
 
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
@@ -26,24 +34,35 @@ import com.travel.mate.service.ReviewService;
 
 @Controller
 public class TravelController {
+	
 	Logger log = Logger.getLogger(this.getClass());
 
 	@Resource(name = "TravelService")
 	private TravelService travelService;
+	
 	@Resource(name = "ReviewService")
 	private ReviewService reviewService;
 	
-	// ajax scroll event
+	/*
+	 * Method	: scrollDown
+	 * Summary	: Scroll 최하단으로 갈 시 작동하는 Controller
+	 * @param	: String keys(travelCode)
+	 * @Return	: List<Map<String, Object>>
+	 */
 	@RequestMapping(value = "/scrollDown", method = RequestMethod.POST)
-	public @ResponseBody List<Map<String, Object>> scrollDownPOST(@RequestBody String keys) throws ParseException {
+	public @ResponseBody List<Map<String, Object>> scrollDown(@RequestBody String keys) throws ParseException {
 		List<Map<String, Object>> scroll = travelService.scrollDown(keys);
 		return scroll;
 	}
 	
-	// 첫 화면 6개
+	/*
+	 * Method	: travelList
+	 * Summary	: 첫 화면 리스트 6개를 보여주는 Controller
+	 * @param	: Notthing
+	 * @Return	: ModelAndView
+	 */
 	@RequestMapping(value = "/travelList")
 	public ModelAndView travelList() {
-		// view Setting
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/travelList");
 		
@@ -52,30 +71,33 @@ public class TravelController {
 		return mv;
 	}
 
-	// 리스트 이미지를 클릭하여 해당 글에 대한 정보 읽기
+	/*
+	 * Method	: readTravel(view travel info)
+	 * Summary	: 여행 정보 상세
+	 * @param	: TravelDTO(for use travelInfo)
+	 * @param	: PathVarible(for use url)
+	 * @Return	: ModelAndView
+	 */
 	@RequestMapping(value = "/readTravel/{travelCode}")
-	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode) {
-		// view Setting
+	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		
 		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(travelDto);
 		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(travelDto);
 		
-		// 신청 버튼 or 취소버튼을 위함
+		// apply or cancel button
 		List<Map<String, Object>> listApply = travelService.selectTravelApply(travelDto);
 		List<Map<String, Object>> listApplyCount = travelService.selectTravelApplyCount(travelDto);
 		
-		// review
-		// 작성된 review list
+		// writed review list
 		List<Map<String, Object>> listReview = reviewService.selectReviewAll(travelDto);
-		// review 쓸 수 있는 지
+		// is possible write review
 		List<Map<String, Object>> listReviewWriteCheck = reviewService.selectReviewWriteCheck(travelDto);
-		// review 썼는지 안썼는지
+		// is write reivew
 		List<Map<String, Object>> listReviewWrite = reviewService.selectReviewWrite(travelDto);
 		
-		// user
-		// user 정보
+		// userInfo
 		List<Map<String, Object>> listUserInfo = travelService.selectUserInfo(travelDto);
 		
 		mv.addObject("list", listinfo);
@@ -89,25 +111,38 @@ public class TravelController {
 		mv.addObject("reviewWrite", listReviewWrite);
 		
 		mv.addObject("userInfo", listUserInfo);
+		
+		request.setAttribute("travelCode", travelCode);
+		
 		return mv;
 	}
 
-	// 여행 글쓰기를 눌렀을 때
+	/*
+	 * Method	: writeTravel
+	 * Summary	: 여행 글 작성으로 이동
+	 * @param	: Notthing
+	 * @Return	: String
+	 */
 	@RequestMapping(value = "/writeTravel")
 	public String writeTravel() {
-		// writeTravel.jsp로 이동
 		return "writeTravel";
 	}
 	
-	// 글쓰기 요청
+	/*
+	 * Method	: doWrite
+	 * Summary	: 작성한 여행 정보를 Database에 등록하는 과정
+	 * @param	: TravelDTO(for insert travel)
+	 * @param	: TravelDetailDTO(for insert travelDetail)
+	 * @param	: TravelRouteDTO(for insert travelRoute)
+	 * @param	: MultipartHttpServletRequest(for insert travelImage)
+	 * @Return	: ModelAndview
+	 */
 	@RequestMapping(value = "/doWrite", method = RequestMethod.POST)
-	public ModelAndView doWrite(@ModelAttribute("tlist") TravelDTO travelDto,
-			@ModelAttribute("tdlist") TravelDetailDTO travelDetailDto,
+	public ModelAndView doWrite(@ModelAttribute TravelDTO travelDto,
+			@ModelAttribute TravelDetailDTO travelDetailDto,
 			@ModelAttribute("trlist") TravelRouteDTO travelRouteDto,
 			MultipartHttpServletRequest request) {
-		// view Setting
 		ModelAndView mv = new ModelAndView();
-
 		try {
 			travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
 			mv.setViewName("redirect:/travelList");
@@ -119,12 +154,15 @@ public class TravelController {
 		return mv;
 	}
 
-	// 여행신청 요청
+	/*
+	 * Method	: doApply
+	 * Summary	: 여행 신청하면 Database에 등록하는 과정
+	 * @param	: ApplyDTO(for insert apply)
+	 * @Return	: ModelAndView
+	 */
 	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
-	public ModelAndView doApply(@ModelAttribute("alist") ApplyDTO applyDto) {
-		// view Setting
+	public ModelAndView doApply(@ModelAttribute ApplyDTO applyDto) {
 		ModelAndView mv = new ModelAndView();
-		
 		try {
 			travelService.insertTravelApply(applyDto);
 			mv.setViewName("redirect:/travelList");
@@ -133,16 +171,18 @@ public class TravelController {
 			mv.setViewName("redirect:/errorPage");
 			log.error(e);
 		}
-		
 		return mv;
 	}
 
-	// 여행취소 요청
+	/*
+	 * Method	: doCancel
+	 * Summary	: 여행 신청 취소하면 Database에서 삭제 되는 과정
+	 * @param	: ApplyDTO(for delete apply)
+	 * @Return	: ModelAndView
+	 */
 	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)
-	public ModelAndView doCancel(@ModelAttribute("alist") ApplyDTO applyDto) {
-		// view Setting
+	public ModelAndView doCancel(@ModelAttribute ApplyDTO applyDto) {
 		ModelAndView mv = new ModelAndView();
-		
 		try {
 			travelService.deleteTravelApply(applyDto);
 			mv.setViewName("redirect:/travelList");
@@ -154,14 +194,15 @@ public class TravelController {
 		return mv;
 	}
 	
-	// 예외처리 페이지
+	/*
+	 * Method	: goErrorPage
+	 * Summary	: 예외가 발생할 경우 이동하는 페이지
+	 * @param	: Notthing
+	 * @Return	: String
+	 */
 	@RequestMapping(value = "/errorPage")
-	public ModelAndView goErrorPage() {
-		// view Setting
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/errorPage");
-		
-		return mv;
+	public String goErrorPage() {	
+		return "errorPage";
 	}
-
+	
 }

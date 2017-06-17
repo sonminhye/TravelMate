@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 06. 07
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.dao;
 
 import java.util.List;
@@ -15,4 +22,5 @@ public class ApplyDAO extends AbstractDAO {
 	public List<Map<String, Object>> selectApply(ApplyDTO applyDto) {
 		return (List<Map<String, Object>>)selectList("apply.selectApply", applyDto);
 	}
+	
 }

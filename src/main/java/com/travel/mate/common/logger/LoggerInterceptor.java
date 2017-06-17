@@ -1,3 +1,12 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 31
+ * @Modify	: 2017. 06. 09(by Son Min Hye)
+ * 			: 2017. 06. 17
+ * @Details	: 2017. 06. 09 - message count interceptor 추가
+ * 			: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.common.logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +37,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             log.debug("======================================          START         ======================================");
             log.debug(" Request URI \t:  " + request.getRequestURI());
         }
-        
-        
-		
         return super.preHandle(request, response, handler);
     }
      
@@ -47,6 +53,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             int unReadCount = mongoService.checkUnReadMessage(userCode);
             request.setAttribute("unReadCount", unReadCount);
         }
-        
     }
+    
 }

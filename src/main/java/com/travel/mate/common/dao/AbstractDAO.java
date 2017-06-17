@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 28
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.common.dao;
 
 import java.util.List;
@@ -8,6 +15,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AbstractDAO {
+	
 	protected Log log = LogFactory.getLog(AbstractDAO.class);
 
 	@Autowired
@@ -55,4 +63,5 @@ public class AbstractDAO {
 		printQueryId(queryId);
 		return sqlSession.selectList(queryId, params);
 	}
+	
 }

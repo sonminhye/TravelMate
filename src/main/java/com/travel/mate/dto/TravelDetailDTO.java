@@ -1,8 +1,15 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 26
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
+
 package com.travel.mate.dto;
 
-import java.util.List;
-
 public class TravelDetailDTO {
+	
 	int travelCode;
 	String startDate;
 	String startTime;
@@ -10,8 +17,6 @@ public class TravelDetailDTO {
 	String endTime;
 	int minPeople;
 	int maxPeople;
-	
-	List<TravelDetailDTO> tdlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -68,12 +73,5 @@ public class TravelDetailDTO {
 	public void setMaxPeople(int maxPeople) {
 		this.maxPeople = maxPeople;
 	}
-
-	public List<TravelDetailDTO> getTdlist() {
-		return tdlist;
-	}
-
-	public void setTdlist(List<TravelDetailDTO> tdlist) {
-		this.tdlist = tdlist;
-	}
+	
 }

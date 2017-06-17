@@ -31,7 +31,7 @@
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
-		String travelCode = request.getParameter("travelCode");
+		int travelCode = (Integer) request.getAttribute("travelCode");
 		
 		String applyButtonStart = null;
 		String applyButtonEnd = null;
@@ -39,21 +39,21 @@
 		String applyCancelButtonEnd = null;
 		// 로그인
 		if (code > 0) {
-			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='alist[0].userCode' class='form-class' value="
+			applyButtonStart = "<a href='#' name='apply' style='float: right;'>"
+			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
-			+ "<input type='hidden' name='alist[0].travelCode'class='form-class' value="
+			+ "<input type='hidden' name='travelCode'class='form-class' value="
 			+ travelCode
 			+ ">"
 			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
 			applyButtonEnd ="</button></a>";
 			
-			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='alist[0].userCode' class='form-class' value="
+			applyCancelButtonStart = "<a href='#' name='apply' style='float: right;'>"
+			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
-			+ "<input type='hidden' name='alist[0].travelCode'class='form-class' value="
+			+ "<input type='hidden' name='travelCode'class='form-class' value="
 			+ travelCode
 			+ ">"
 			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
@@ -67,6 +67,7 @@
 			applyCancelButtonEnd = "";
 		}
 	%>
+
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<table class="table" width="500">
@@ -102,101 +103,92 @@
 							<td>${row.minPeople }/${row.maxPeople }/${fn:length(applyCount) }</td>
 							<c:set var="maxPeople" value="${row.maxPeople }"></c:set>
 						</tr>
-					</c:forEach>
-				</c:when>
-			</c:choose>
-
-			<tr>
-				<td>장소</td>
-				<td>
-					<div id="map" style="width: 500px; height: 400px;"></div>
-					<script
-						type="text/javascript"
-						src="//apis.daum.net/maps/maps3.js?apikey=aa223a53480a208175ae1675e33e4193&libraries=services"></script>
-					<c:choose>
-						<c:when test="${fn:length(route) > 0}">
-							<c:forEach items="${route }" var="init" begin="0" end="1">
+						
+						<tr>
+							<td>장소</td>
+							<td>
+								<div id="map" style="width: 500px; height: 400px;"></div>
+								<script
+									type="text/javascript"
+									src="//apis.daum.net/maps/maps3.js?apikey=aa223a53480a208175ae1675e33e4193&libraries=services"></script>
+								<c:choose>
+									<c:when test="${fn:length(route) > 0}">
+										<c:forEach items="${route }" var="init" begin="0" end="1">
+											<script type="text/javascript">
+												var count = 0;
+												var mapContainer = document.getElementById('map'),
+												mapOption = {
+													center : new daum.maps.LatLng(${init.lat}, ${init.lng}),
+													level : 7
+												};
+				
+												var map = new daum.maps.Map(mapContainer, mapOption);
+												
+												var markers = [];
+												
+												function setMarkers(map) {
+													for (var i = 0; i < markers.length; i++) {
+														markers[i].setMap(map);
+													}
+												}
+											</script>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<script type="text/javascript">
+											$("#map").remove();
+										</script>
+										등록된 장소가 없습니다.
+									</c:otherwise>
+								</c:choose>
+								
 								<script type="text/javascript">
-									var count = 0;
-									var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-									mapOption = {
-										center : new daum.maps.LatLng(${init.lat}, ${init.lng}), // 지도의 중심좌표
-										level : 7
-									// 지도의 확대 레벨
-									};
-	
-									var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-									// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
-									var markers = [];
-	
-									// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
-									function setMarkers(map) {
-										for (var i = 0; i < markers.length; i++) {
-											markers[i].setMap(map);
-										}
+									function addMarker(position, location, locOrder) {
+									
+										var marker = new daum.maps.Marker({
+											position : position
+										});
+									
+										marker.setMap(map);
+										
+										var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + ')' + '</div>',
+									    iwPosition = position;
+				
+										var infowindow = new daum.maps.InfoWindow({
+										    position : iwPosition, 
+										    content : iwContent 
+										});
+										  
+										infowindow.open(map, marker);
+									
+										markers.push(marker);
 									}
 								</script>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<script type="text/javascript">
-								$("#map").remove();
-							</script>
-							등록된 장소가 없습니다.
-						</c:otherwise>
-					</c:choose>
-					
-					<script type="text/javascript">
-					
-					// 마커를 생성하고 지도위에 표시하는 함수입니다
-					function addMarker(position, location, locOrder) {
-					
-						// 마커를 생성합니다
-						var marker = new daum.maps.Marker({
-							position : position
-						});
-					
-						// 마커가 지도 위에 표시되도록 설정합니다
-						marker.setMap(map);
-						
-						
-						var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + ')' + '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-					    iwPosition = position; //인포윈도우 표시 위치입니다
-
-						// 인포윈도우를 생성합니다
-						var infowindow = new daum.maps.InfoWindow({
-						    position : iwPosition, 
-						    content : iwContent 
-						});
-						  
-						// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-						infowindow.open(map, marker);
-					
-						// 생성된 마커를 배열에 추가합니다
-						markers.push(marker);
-						// 하단에 좌표 값을 등록
-					}
-					</script>
-					
-					<c:choose>
-						<c:when test="${fn:length(route) > 0}">
-							<c:forEach items="${route }" var="routes">
-								<script type="text/javascript">
-								// 마커 하나를 지도위에 표시합니다
-									addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}), '${routes.location}', ${routes.locOrder});
-								</script>
-								${routes.location }(${routes.locOrder + 1}번째)
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<!-- 아무것도 하지않음 -->
-						</c:otherwise>
-					</c:choose>
-				</td>
-			</tr>
+								
+								<c:choose>
+									<c:when test="${fn:length(route) > 0}">
+										<c:forEach items="${route }" var="routes">
+											<script type="text/javascript">
+												addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}), '${routes.location}', ${routes.locOrder});
+											</script>
+											${routes.location }(${routes.locOrder + 1}번째)
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<!-- 아무것도 하지않음 -->
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</tr>	
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					없는 여행정보입니다
+				</c:otherwise>
+			</c:choose>
 		</table>
-		<!-- 여행 시작일이 오늘보다 크다면, 신청가능 -->
-		<!-- 신청가능하다면, 여행신청했는지에 따라 버튼 생성 -->
+		<%-- 여행 시작일이 오늘보다 크다면, 신청가능 --%>
+		<%-- 신청가능하다면, 여행신청했는지에 따라 버튼 생성 --%>
 		<c:set var="userCode" value="<%= code %>"></c:set>
 		
 		<jsp:useBean id="now" class="java.util.Date" />
@@ -208,7 +200,7 @@
 					<c:when test="${fn:length(applyList) > 0}">
 						<c:choose>
 							<c:when test="${userCode == writerCode}">
-								<p>글쓴이는 자동적으로 신청되며, 글수정 및 삭제 기능은 예정 없음</p>
+								<%--글쓴이는 자동적으로 신청되며, 글수정 및 삭제 기능은 예정 없음 --%>
 							</c:when>
 							<c:otherwise>
 								<form action="<c:url value='/doCancel'/>" method="post">
@@ -232,16 +224,15 @@
 				</c:choose>
 			</c:when>
 			<c:otherwise>
-				<!-- 시작일이 지났으므로 신청 불가 -->
-				<p>시작일이 지나서 신청이 불가능합니다.</p>
+				<%-- 시작일이 지났으므로 신청 불가 --%>
 			</c:otherwise>
 		</c:choose>
 		<hr>
-		<!-- review 출력 -->
-		<!-- 작성된 리뷰가 있다면 리뷰를 출력하며, 그렇지 않으면 리뷰가 없음을 출력 -->
-		<!-- 해당 여행을 신청한 사람인지 확인 후, 신청한 사람이라면 여행리뷰를 남길 수 있게함 -->
-		<!-- 단, 리뷰를 남기는 것은 여행이 끝나야하므로 endDate와 비교하며 오늘이 endDate가 지났을 때만 리뷰를 남길 수 있도록 생성 -->
-		<!-- 리뷰는 단 한번만 작성할 수 있다 -->
+		<%-- review 출력 --%>
+		<%-- 작성된 리뷰가 있다면 리뷰를 출력하며, 그렇지 않으면 리뷰가 없음을 출력 --%>
+		<%-- 해당 여행을 신청한 사람인지 확인 후, 신청한 사람이라면 여행리뷰를 남길 수 있게함 --%>
+		<%-- 단, 리뷰를 남기는 것은 여행이 끝나야하므로 endDate와 비교하며 오늘이 endDate가 지났을 때만 리뷰를 남길 수 있도록 생성 --%>
+		<%-- 리뷰는 단 한번만 작성할 수 있다 --%>
 		<div id="review">
 		<br><br>
 			<c:choose>
@@ -252,7 +243,7 @@
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
-					<div>작성된 리뷰가 없습니다.</div>
+					<%-- 리뷰 없음 --%>
 				</c:otherwise>
 			</c:choose>
 			
@@ -267,16 +258,16 @@
 								<c:otherwise>
 									<form action="<c:url value='/doWriteReview'/>" method="post">
 										<p class="star_rating">
-										    <a href="#this" id="point1">★</a>
-										    <a href="#this" id="point2">★</a>
-										    <a href="#this" id="point3">★</a>
-										    <a href="#this" id="point4">★</a>
-										    <a href="#this" id="point5">★</a>
+										    <a href="#" id="point1">★</a>
+										    <a href="#" id="point2">★</a>
+										    <a href="#" id="point3">★</a>
+										    <a href="#" id="point4">★</a>
+										    <a href="#" id="point5">★</a>
 										</p>
 										<input type="hidden" name="point" value="0">
-										<input type="hidden" name="alist[0].travelCode" value="<%=travelCode %>">
+										<input type="hidden" name="travelCode" value="<%=travelCode %>">
 										<textarea name="content" placeholder="최대 300자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="300"></textarea>
-										<input type="hidden" name="alist[0].userCode" value="<%=code %>">
+										<input type="hidden" name="userCode" value="<%=code %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
 								</c:otherwise>
@@ -335,7 +326,6 @@
 			</c:forEach>
 		</c:when>
 	</c:choose>
-
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

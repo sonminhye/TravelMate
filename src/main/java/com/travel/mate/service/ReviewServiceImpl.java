@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 06. 05
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.service;
 
 import java.util.List;
@@ -24,6 +31,7 @@ import com.travel.mate.dto.UserDetailDTO;
 
 @Service("ReviewService")
 public class ReviewServiceImpl implements ReviewService {
+	
 	Logger log = Logger.getLogger(this.getClass());
 	
 	@Resource(name="ReviewDAO")
@@ -37,19 +45,28 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	@Autowired
 	PlatformTransactionManager transactionManager;
-
+	
+	/*
+	 * Method	: selectReviewAll(view allReview)
+	 * Summary	: 해당 여행의 모든 리뷰를 반환
+	 * @param	: TravelDTO(for get travelCode)
+	 * @Return	: List<Map<String, Object>>
+	 */
 	@Override
 	public List<Map<String, Object>> selectReviewAll(TravelDTO travelDto) {
-		// 여행(게시물)의 번호를 가져온다
 		int tcode = travelDto.getTravelCode();
 		return reviewDAO.selectReviewAll(tcode);
 	}
 
+	/*
+	 * Method	: selectReviewWriteCheck(check writeReview, after view reviewWriteForm)
+	 * Summary	: 해당 여행에 리뷰를 작성했는 지 확인 후 결과 반환
+	 * @param	: TravelDTO(for get travelCode, userCode(login))
+	 * @Return	: List<Map<String, Object>>
+	 */
 	@Override
 	public List<Map<String, Object>> selectReviewWriteCheck(TravelDTO travelDto) {
-		// 여행(게시물)의 번호를 가져온다
 		int tcode = travelDto.getTravelCode();
-		// 로그인한 사람 코드
 		int ucode = travelDto.getUserCode();
 		
 		ApplyDTO applyDto = new ApplyDTO();
@@ -58,6 +75,12 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDAO.selectReviewWriteCheck(applyDto);
 	}
 
+	/*
+	 * Method	: insertReview(insert review & update writerMeanPoint)
+	 * Summary	: 리뷰 작성, 평점에 따른 여행 작성자의 평점 업데이트
+	 * @param	: ApplyDTO(for get applyInfo), String(for get review content), int(for get review point)
+	 * @Return	: void
+	 */
 	@Override
 	public void insertReview(ApplyDTO applyDto, String content, int point) throws Exception {
 		
@@ -72,50 +95,45 @@ public class ReviewServiceImpl implements ReviewService {
 				throw new Exception();
 			}
 			
-			List<ApplyDTO> applys = applyDto.getAlist();
-			if ((null != applys && applys.size() > 0)) {
-				for (ApplyDTO apply : applys) {
-					// applyCode 얻어와서 리뷰에 넣는다
-					List<Map<String, Object>> applyCodeList = applyDAO.selectApply(apply);
-	//				System.out.println(applyCode);
-					Map<String, Object> aCode = applyCodeList.get(0);
-	//				System.out.println(aCode);
-					// java.lang.Integer cannot be cast to java.lang.String (캐스팅 불가 -> 메소드 사용)
-					String stringCode = String.valueOf(aCode.get("applyCode"));
-	//				System.out.println(stringCode);
-					int applyCode = Integer.parseInt(stringCode);
-					ReviewDTO reviewDto = new ReviewDTO();
-					reviewDto.setApplyCode(applyCode);
-					reviewDto.setContent(content);
-					
-					TravelEvalDTO travelEvalDto = new TravelEvalDTO();
-					travelEvalDto.setApplyCode(applyCode);
-					travelEvalDto.setPoint(point);
-					
-					reviewDAO.insertReview(reviewDto);
-					reviewDAO.insertPoint(travelEvalDto);
-					// meanpoint update
-					System.out.println(applyCode);
-					int writerCode = reviewDAO.selectUserCode(applyCode);
-					List<Map<String, Object>> avgList = reviewDAO.selectAvgPoint(writerCode);
-					int allPeople = reviewDAO.selectCountAllPeople(writerCode);
-					float meanPoint = 0;
-					for (int i = 0; i < avgList.size(); i++) {
-						Map<String, Object> list = avgList.get(i);
-						String stringPeople = String.valueOf(list.get("people"));
-						String stringAvgPoint = String.valueOf(list.get("avgPoint"));
-						float people = Float.parseFloat(stringPeople);
-						float avgPoint = Float.parseFloat(stringAvgPoint);
-						// 가중 평균 더하기
-						meanPoint += avgPoint * (people / allPeople);
-					}
-					// userDetail table update
-					UserDetailDTO userDetailDto = new UserDetailDTO();
-					userDetailDto.setMeanPoint(meanPoint);
-					userDetailDto.setUserCode(writerCode);
-					userDAO.updateUserMeanPoint(userDetailDto);
-				}
+			// get applyCode
+			List<Map<String, Object>> applyCodeList = applyDAO.selectApply(applyDto);
+			Map<String, Object> aCode = applyCodeList.get(0);
+			
+			// java.lang.Integer cannot be cast to java.lang.String(casting err solution.. valueOf method)
+			String stringCode = String.valueOf(aCode.get("applyCode"));
+
+			int applyCode = Integer.parseInt(stringCode);
+			ReviewDTO reviewDto = new ReviewDTO();
+			reviewDto.setApplyCode(applyCode);
+			reviewDto.setContent(content);
+			
+			TravelEvalDTO travelEvalDto = new TravelEvalDTO();
+			travelEvalDto.setApplyCode(applyCode);
+			travelEvalDto.setPoint(point);
+			
+			reviewDAO.insertReview(reviewDto);
+			reviewDAO.insertPoint(travelEvalDto);
+			
+			// calculate meanPoint update
+			int writerCode = reviewDAO.selectUserCode(applyCode);
+			List<Map<String, Object>> avgList = reviewDAO.selectAvgPoint(writerCode);
+			int allPeople = reviewDAO.selectCountAllPeople(writerCode);
+			float meanPoint = 0;
+			for (int i = 0; i < avgList.size(); i++) {
+				Map<String, Object> list = avgList.get(i);
+				String stringPeople = String.valueOf(list.get("people"));
+				String stringAvgPoint = String.valueOf(list.get("avgPoint"));
+				float people = Float.parseFloat(stringPeople);
+				float avgPoint = Float.parseFloat(stringAvgPoint);
+				// update weighted average
+				meanPoint += avgPoint * (people / allPeople);
 			}
+
+			// userDetail table update
+			UserDetailDTO userDetailDto = new UserDetailDTO();
+			userDetailDto.setMeanPoint(meanPoint);
+			userDetailDto.setUserCode(writerCode);
+			userDAO.updateUserMeanPoint(userDetailDto);
 			// 이상 없으면 commit
 			transactionManager.commit(status);
 		}
@@ -126,11 +144,15 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 	}
 
+	/*
+	 * Method	: selectReviewWrite(check writeReview)
+	 * Summary	: 해당 여행에 리뷰를 작성했는 지 확인 후 결과 반환
+	 * @param	: TravelDTO(for get travelCode, userCode(login))
+	 * @Return	: List<Map<String, Object>>
+	 */
 	@Override
 	public List<Map<String, Object>> selectReviewWrite(TravelDTO travelDto) {
-		// 여행(게시물)의 번호를 가져온다
 		int tcode = travelDto.getTravelCode();
-		// 로그인한 사람 코드
 		int ucode = travelDto.getUserCode();
 
 		ApplyDTO applyDto = new ApplyDTO();
@@ -138,5 +160,5 @@ public class ReviewServiceImpl implements ReviewService {
 		applyDto.setUserCode(ucode);
 		return reviewDAO.selectReviewWrite(applyDto);
 	}
-
+	
 }

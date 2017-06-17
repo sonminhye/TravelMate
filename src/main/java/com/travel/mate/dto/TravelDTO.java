@@ -1,16 +1,21 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 26
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.dto;
 
 import java.util.Date;
-import java.util.List;
 
 public class TravelDTO {
+	
 	int travelCode;
 	int userCode;
 	String title;
 	String content;
 	Date writeDate;
-	
-	List<TravelDTO> tlist;
 
 	public int getTravelCode() {
 		return travelCode;
@@ -51,12 +56,5 @@ public class TravelDTO {
 	public void setWriteDate(Date writeDate) {
 		this.writeDate = writeDate;
 	}
-
-	public List<TravelDTO> getTlist() {
-		return tlist;
-	}
-
-	public void setTlist(List<TravelDTO> tlist) {
-		this.tlist = tlist;
-	}
+	
 }

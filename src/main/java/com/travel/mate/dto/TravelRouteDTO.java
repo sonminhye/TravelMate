@@ -1,8 +1,17 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 26
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
+
 package com.travel.mate.dto;
 
 import java.util.List;
 
 public class TravelRouteDTO {
+	
 	int travelRouteCode;
 	int travelCode;
 	double lat;
@@ -67,4 +76,5 @@ public class TravelRouteDTO {
 	public void setTrlist(List<TravelRouteDTO> trlist) {
 		this.trlist = trlist;
 	}
+	
 }

@@ -1,15 +1,18 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 31
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.dto;
 
-import java.util.List;
-
 public class ApplyDTO {
+	
 	int applyCode;
 	int travelCode;
 	int userCode;
-	
-	List<ApplyDTO> alist;
 
-	
 	public int getApplyCode() {
 		return applyCode;
 	}
@@ -33,12 +36,5 @@ public class ApplyDTO {
 	public void setUserCode(int userCode) {
 		this.userCode = userCode;
 	}
-
-	public List<ApplyDTO> getAlist() {
-		return alist;
-	}
-
-	public void setAlist(List<ApplyDTO> alist) {
-		this.alist = alist;
-	}
+	
 }
