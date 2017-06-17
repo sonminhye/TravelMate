@@ -4,6 +4,8 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -18,117 +20,25 @@
 %> 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>여행등록</title>
-<script type="text/javascript">
-// image check
-function fileCheck(obj) {
-	var filePoint = obj.value.lastIndexOf(".");
-	var fileName = obj.value.substring(filePoint + 1, obj.length);
-	var fileType = fileName.toLowerCase();
-	
-	var checkFileType = new Array();
-	checkFileType = ["jpg", "gif", "png", "jpeg", "bmp"];
-	
-	if (checkFileType.indexOf(fileType) == -1) {
-		alert("이미지 파일만 선택 가능합니다");
-		var parentObj = obj.parentNode;
-		var node = parentObj.replaceChild(obj.cloneNode(true), obj);
-		$("#image").val("");
-		return false;
-	}
-};
-function startDateCheck(obj) {
-	var now = new Date();
-	var usDate = obj.value;
-	var ueDate = $("#endDate").val();
-	var temps = usDate.split("-");
-	var tempe = ueDate.split("-");
-	var usersDate = new Date(Number(temps[0]), Number(temps[1]) - 1, Number(temps[2]));
-	var usereDate = new Date(Number(tempe[0]), Number(tempe[1]) - 1, Number(tempe[2]));
-	
-	if (usereDate <= usersDate) {
-		alert("시작날짜가 종료날짜와 같거나  늦을 수 없습니다");
-		$("#startDate").val("");
-	}
-	else {
-		if (usersDate > now) {
-			// 날짜 선택 가능
-		}
-		// 오늘이거나 이전
-		else {
-			alert("오늘이거나 오늘보다 이전 날짜는 선택할 수 없습니다");
-			$("#startDate").val("");
-		}	
-	}
-};
-function endDateCheck(obj) {
-	var sDate = $("#startDate").val();
-	var eDate = obj.value;
-	if (sDate == "" || sDate == null) {
-		alert("시작날짜를 먼저 선택해주세요");
-		$("#endDate").val("");
-	}
-	else {
-		if (sDate >= eDate) {
-			alert("시작날짜이거나 시작날짜보다 이전 날짜는 선택할 수 없습니다");
-			$("#endDate").val("");
-		}
-		else {
-			// 날짜선택가능
-		}
-	}
-};
-function maxPeopleCheck(obj) {
-	var min = $("#minPeople").val();
-	var max = obj.value;
-	if (min == "" || min == null) {
-		alert("최소인원을 먼저 선택해주세요");
-		$("#maxPeople").val("");
-	}
-	else {
-		if (max < min) {
-			alert("최대인원은 최소인원보다 작을 수 없습니다");
-			$("#maxPeople").val("");
-		}
-		else {
-			// 인원선택가능
-		}
-	}
-};
-function minPeopleCheck(obj) {
-	var min = obj.value;
-	var max = $("#maxPeople").val();
-	if (max == "" || max == null ) {
-		// 아무것도 하지 않음
-	}
-	else {
-		if (max < min) {
-			alert("최소인원은 최대인원보다 클 수 없습니다")
-			$("#minPeople").val("");
-		}
-		else {
-			// max 값 입력되어 있고, min <= max 이므로 입력가능
-		}
-	}
-}
-</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>여행등록</title>
+	<script type="text/javascript" src="<c:url value='/js/writeCheck.js' />"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
-		<form action="doWrite" method="post" enctype="multipart/form-data">
+		<form action="<c:url value='/doWrite' />" method="post" enctype="multipart/form-data">
 			<table class="table" width="500">
 			<input type="hidden" name="tlist[0].userCode" class="form-control" value="<%=code%>">
 				<tr>
 					<td>여행이름<font color="red">*</font></td>
-					<td><input name="tlist[0].title" class='form-control' type="text" required></td>
+					<td><input name="tlist[0].title" class='form-control' type="text" maxlength="15" placeholder="여행제목을 입력하세요(15자이내)" required></td>
 				</tr>
 				<tr>
 					<td>설명</td>
-					<td><textarea name="tlist[0].content" class='form-control'
-							style="height: 100px; resize: none;"></textarea></td>
+					<td><textarea placeholder="최대 20000자 입력" name="tlist[0].content" class='form-control'
+							style="height: 100px; resize: none;" maxlength="20000" ></textarea></td>
 				</tr>
 				<tr>
 					<td>시작날짜<font color="red">*</font></td>
@@ -143,7 +53,7 @@ function minPeopleCheck(obj) {
 				</tr>
 				<tr>
 					<td>시작시간</td>
-					<td><input id="startTime" name="tdlist[0].startTime" type="time" class="form-control"></td>
+					<td><input id="startTime" name="tdlist[0].startTime" type="time" class="form-control" value="00:00:00"></td>
 				</tr>
 				<tr>
 					<td>종료날짜<font color="red">*</font></td>
@@ -158,14 +68,14 @@ function minPeopleCheck(obj) {
 				</tr>
 				<tr>
 					<td>종료시간</td>
-					<td><input id="endTime" name="tdlist[0].endTime" type="time" class="form-control">
+					<td><input id="endTime" name="tdlist[0].endTime" type="time" class="form-control" value="00:00:00">
 					</td>
 				</tr>
 				<tr>
 					<td>최소인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input onchange="minPeopleCheck(this);" id="minPeople" name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
+							<input onblur="minPeopleCheck(this);" id="minPeople" name="tdlist[0].minPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>
 				</tr>
@@ -173,7 +83,7 @@ function minPeopleCheck(obj) {
 					<td>최대인원<font color="red">*</font></td>
 					<td>
 						<div class="col-xs-2 form-group row">
-							<input onchange="maxPeopleCheck(this);" id="maxPeople" name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
+							<input onblur="maxPeopleCheck(this);" id="maxPeople" name="tdlist[0].maxPeople" class='form-control' type="number" min="1" required>
 						</div>
 					</td>				
 				</tr>
@@ -188,7 +98,7 @@ function minPeopleCheck(obj) {
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부<font color="red">*</font></td>
+					<td>사진첨부(10MB미만)<font color="red">*</font></td>
 					<td><input id="image" name="image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>
@@ -196,10 +106,9 @@ function minPeopleCheck(obj) {
 		</form>
 	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
-	<script src="js/datetimepicker/jquery.timepicker.js"></script>
-	<link rel="stylesheet" href="js/datetimepicker/jquery.timepicker.css">
-	<link rel="stylesheet"
-		href="js/datetimepicker/lib/bootstrap-datepicker.css">
+	<script src="<c:url value='/js/datetimepicker/jquery.timepicker.js' />"></script>
+	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/jquery.timepicker.css' />">
+	<link rel="stylesheet" href="<c:url value='/js/datetimepicker/lib/bootstrap-datepicker.css' />">
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// time

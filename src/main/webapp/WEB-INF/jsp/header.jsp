@@ -4,6 +4,10 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %> 
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -32,21 +36,20 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<c:url value='/vendor/bootstrap/js/bootstrap.min.js' />"></script>
  
     <!-- Custom Fonts -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/vendor/font-awesome/css/font-awesome.min.css' />" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/agency.css?ver=1" rel="stylesheet">
+    <link href="<c:url value='/vendor/bootstrap/css/bootstrap.min.css' />" rel="stylesheet">
+    <link href="<c:url value='/css/agency.css?ver=1' />" rel="stylesheet">
     
-    
-    <script type="text/javascript" src="js/httpRequest.js"></script>
+    <script type="text/javascript" src="<c:url value='/js/httpRequest.js' />"></script>
 <script>
 
 	var checkFirst = false;
@@ -113,7 +116,7 @@
 	   var resultText = httpRequest.responseText;
 	   var listView = document.getElementById('checkMsg');
 	   if(resultText==0){
-	    listView.innerHTML = "";
+	    listView.innerHTML = "사용 가능한 이메일주소입니다";
 	    listView.style.color = "blue";
 	    idCheck = 1; //아이디 입력했음을 체크
 	   }else{
@@ -130,10 +133,7 @@
  	function checkSubmit(){
  		var idEmptyCheck = document.forms[0].id.value;
  		var passcheckCheck = document.forms[0].passwordCheck.value;
-		var nameCheck = document.forms[0].name.value;
-		var ageCheck = document.forms[0].age.value;
-		var sexCheck = document.forms[0].sex.value;
-		var locationCheck = document.forms[0].location.value;
+
 		var languageCheck = document.forms[0].language.value;
 		
 		if(idEmptyCheck.length==0){
@@ -141,22 +141,22 @@
 			return false;
 		}
 		if(idCheck=='2'){
-			alert('이미 존재하는 아이디 입니다.');
+			alert('이미 존재하는 메일주소 입니다.');
 			return false;
 		}
-		if(idCheck=='0' || passwordCheck=='0' || passcheckCheck.length==0 || nameCheck.length==0 || ageCheck.length==0 || sexCheck.length==0 || locationCheck.length==0 || languageCheck.length==0 ){
-			alert('회원가입 폼을 정확히 채워 주세요.');
+		if(passwordCheck=='0'){
+			alert('비밀번호를 정확히 입력해 주세요.');
 			return false;
 		}else{
 			return true;
 		}
 	}
-	
+ 	
+
 </script>
 </head>
 
 <body>
-
     <!-- Nav Bar-->
     <nav id="mainNav" class="navbar navbar-default navbar-custom  navbar-fixed-top">
         <div class="container">
@@ -165,7 +165,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="main">Travle Mate</a>
+                <a class="navbar-brand" href="<c:url value='/main' />">Travle Mate</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -187,67 +187,67 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-	                	<a class="page-scroll"  href="myPage"><%=email%>님 반갑습니다!</a>	
+               			<input type="hidden" class="userCode" value=<%=code %>>
+	                	<a class="page-scroll" href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll"  href="j_spring_security_logout">SignOut</a>	
+	                	<a class="page-scroll"  href="<c:url value='/j_spring_security_logout' />">SignOut</a>	
 	                </li>
 	                <li>
-	                	<a class="page-scroll" href="chatList">Message</a>
+	                	<a class="page-scroll" href="<c:url value='/chatList' />">Message</a>
 	                	<div class="unreadMsg"><%=unReadCount %></div>
 	                </li>
                 </sec:authorize>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
+
         </div>
         <!-- /.container-fluid -->
     </nav>
 	
 	<!-- 회원가입 Modal -->
-	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel">회원가입</h4>
 				</div>
 				<div class="modal-body">
-					<form action="signUp" method="POST" onsubmit="return checkSubmit()">
+					<form action="doSignUp" method="POST" onsubmit="return checkSubmit()">
 						<div class="form-group">
 							<!-- 권한을 ROLE_USER로 설정 -->
 							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
 						</div>
 						<div class="form-group">
 							<label for="email">이메일 주소</label>
-							<input type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
+							<input required type="email" class="form-control" id="id" name="id" onblur="checkEmail()" placeholder="이메일을 입력하세요">
 							<div id="checkMsg"></div>
 						</div>
 						<div class="form-group">
 							<label for="password1">비밀번호</label>
-							<input type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
+							<input required type="password" class="form-control" id="password1" name="password" placeholder="비밀번호">
 						</div>
 						<div class="form-group">
 							<label for="password2">비밀번호 확인</label>
-							<input type="password" class="form-control" id="password2" name="passwordCheck" onkeyup="checkPwd()" placeholder="비밀번호 확인">
+							<input required type="password" class="form-control" id="password2" name="passwordCheck" onkeyup="checkPwd()" placeholder="비밀번호 확인">
 							<div id="checkPwd"></div>
 						</div>
 						<div class="form-group">
 							<label for="name">이름</label>
-							<input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
+							<input required type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="age">나이</label>
-							<input type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
+							<input required type="number" class="form-control" id="age" name="age" placeholder="나이를 입력하세요">
 						</div>
 						<div class="form-group">
 							<label for="age">성별</label><br>
 							<label class="radio-inline">
-								<input type="radio" name="sex" id="inlineRadio1" value="male">남
+								<input required type="radio" name="sex" id="inlineRadio1" value="male">남
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="sex" id="inlineRadio2" value="female">여
@@ -255,11 +255,11 @@
 						</div>
 						<div class="form-group">
 							<label for="city">지역</label>
-							<input type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
+							<input required type="text" class="form-control" id="city" name="location" placeholder="사는 지역을 입력하세요">
 						</div>
 						
-						<div class="form-group">
-							<label for="language">사용가능한 언어 </label>
+						<div class="checkbox-group required">
+							<label for="language">사용가능한 언어 </label>		
 							<label class="checkbox-inline">
 							  <input type="checkbox" id="inlineCheckbox1" name="langDTOList[0].languageCode" value="1">한국어
 							</label>
@@ -274,9 +274,9 @@
 							</label>
 							<label class="checkbox-inline">
 							  <input type="checkbox" id="inlineCheckbox5" name="langDTOList[4].languageCode" value="5">스페인어
-							</label>
-							<!-- <input type="text" class="form-control" id="language" name="language" placeholder="사용 가능한 언어를 입력하세요"> -->
+							</label>	
 						</div>
+				
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
 					
@@ -328,7 +328,7 @@
 	
 	 	// nick name 정보를 서버에 보냄
 	 	socket.emit('joinAllRooms', {
-	 		userCode : userCode,
+	 		userCode : userCode
 	 	});
 	 	
 	 	// 메세지 수신 부분
@@ -338,7 +338,12 @@
 	 		if(data.scode != userCode && data.readFlag==0)
 	 			appendCount(data);
 	 	});
-	
+		
+	 	socket.on('newRoom',function(data){
+	 		//새로운 룸이 생겨서 알림!
+	 		console.log('new Room' + data.roomCode);
+	 	})
+	 	
 	 	// 읽지않은 메세지 개수 늘려주기
 	 	appendCount = function(data) {
 	 		var text = data.msg;
@@ -353,3 +358,4 @@
  	</script>
 </body>
 </html>
+

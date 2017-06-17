@@ -1,6 +1,8 @@
 package com.travel.mate.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -57,4 +59,19 @@ public class AdminDAO extends AbstractDAO{
 		return (ArrayList<SecuredResourceAuthDTO>)selectList("admin.selectSecuredResourceAuthList");
 	}
 	
+	public void updateUserAuth(UserAuthDTO userAuthDTO){
+		update("admin.updateUserAuth", userAuthDTO);
+	}
+	
+	public void deleteSecuredResourceAuth(int resourceCode){
+		delete("admin.deleteSecuredResourceAuth", resourceCode);
+	}
+	
+	public void insertSecuredResourceAuth(List<SecuredResourceAuthDTO> auths){
+		insert("admin.insertSecuredResourceAuth", auths);
+	}
+	
+	public void updateSecuredResource(SecuredResourceDTO securedResourceDTO){
+		update("admin.updateSecuredResource", securedResourceDTO);
+	}
 }

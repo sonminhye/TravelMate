@@ -2,9 +2,8 @@ package com.travel.mate.dto;
 
 public class ChatRoomDTO {
 	int roomCode;
-	String send;
-	int senderCode;
 	String receive;
+	int senderCode;
 	int receiverCode;
 	String latestdate;
 	int unread;
@@ -13,12 +12,11 @@ public class ChatRoomDTO {
 
 	}
 
-	public ChatRoomDTO(int roomCode, String send, int sendereceiverCode, String receive, int receiverCode, String latestdate, int unread) {
+	public ChatRoomDTO(int roomCode, String send, int senderCode, String receive, int receiverCode, String latestdate, int unread) {
 		super();
 		this.roomCode = roomCode;
-		this.send = send;
-		this.senderCode = sendereceiverCode;
 		this.receive = receive;
+		this.senderCode = senderCode;
 		this.receiverCode = receiverCode;
 		this.latestdate = latestdate;
 		this.unread = unread;
@@ -32,28 +30,20 @@ public class ChatRoomDTO {
 		this.roomCode = roomCode;
 	}
 
-	public String getSend() {
-		return send;
-	}
-
-	public void setSend(String send) {
-		this.send = send;
-	}
-
-	public int getsenderCode() {
-		return senderCode;
-	}
-
-	public void setsenderCode(int senderCode) {
-		this.senderCode = senderCode;
-	}
-
 	public String getReceive() {
 		return receive;
 	}
 
 	public void setReceive(String receive) {
 		this.receive = receive;
+	}
+	
+	public int getSenderCode() {
+		return senderCode;
+	}
+
+	public void setSenderCode(int senderCode) {
+		this.senderCode = senderCode;
 	}
 
 	public int getreceiverCode() {

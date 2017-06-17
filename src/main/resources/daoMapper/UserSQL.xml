@@ -2,11 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="user">
-	<select id="showList" resultType="com.travel.mate.dto.UserDTO">
-		<![CDATA[
-			SELECT * FROM user
-		]]>
-	</select>
 	<insert id="insertUser" parameterType="com.travel.mate.dto.UserDTO" useGeneratedKeys="true" keyProperty="userCode">
 		<![CDATA[
 			INSERT INTO   user(id, password)
@@ -19,12 +14,19 @@
 			VALUES        (#{userCode}, #{name}, #{age}, #{sex}, #{location})
 		]]>
 	</insert>
-	<insert id="insertUserAuthority" parameterType="map">
+	<insert id="insertUserAuthority" parameterType="com.travel.mate.dto.UserAuthDTO">
 		<![CDATA[
 			INSERT INTO   userAuthority(userCode, authority)
 			VALUES        (#{userCode}, #{authority})
 		]]>
 	</insert>
+	<select id="selectUser" resultType="com.travel.mate.dto.UserDTO" parameterType="int">
+		<![CDATA[
+			SELECT * 
+			FROM   user 
+			WHERE  userCode = #{userCode}
+		]]>
+	</select>
 	<select id="selectUserDetail" resultType="com.travel.mate.dto.UserDetailDTO" parameterType="int">
 		<![CDATA[
 			SELECT * 
@@ -49,6 +51,31 @@
 			WHERE  id=#{param1}
 		]]>
 	</select>
-
+	<update id="updateUserDetail" parameterType="com.travel.mate.dto.UserDetailDTO">
+		<![CDATA[
+			UPDATE	userDetail
+			SET		name = #{name},
+					age = #{age},
+					sex = #{sex},
+					location = #{location}
+			WHERE	userCode = #{userCode}
+		]]>
+	</update>
+	<!-- user mean point -->
+	<update id="updateUserMeanPoint" parameterType="com.travel.mate.dto.UserDetailDTO">
+		<![CDATA[
+			UPDATE	userDetail
+			SET		meanPoint = #{meanPoint}
+			WHERE	userCode = #{userCode}
+		]]>
+	</update>
+	<update id="updatePassword" parameterType="com.travel.mate.dto.UserDTO">
+		<![CDATA[
+			UPDATE	user
+			SET		password = #{password}
+			WHERE	userCode = #{userCode}
+		]]>
+	</update>
+	
 </mapper>
 

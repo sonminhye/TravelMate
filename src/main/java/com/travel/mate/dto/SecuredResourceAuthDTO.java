@@ -1,11 +1,19 @@
 package com.travel.mate.dto;
 
+import java.util.List;
+
 public class SecuredResourceAuthDTO {
 	private int resourceCode;
 	private String authority;
 	
+	private List<SecuredResourceAuthDTO> securedResourceAuthDTOList;
+	
 	public SecuredResourceAuthDTO(){
 		
+	}
+
+	public SecuredResourceAuthDTO(List<SecuredResourceAuthDTO> securedResourceAuthDTOList) {
+		this.securedResourceAuthDTOList = securedResourceAuthDTOList;
 	}
 
 	public SecuredResourceAuthDTO(int resourceCode, String authority) {
@@ -28,6 +36,14 @@ public class SecuredResourceAuthDTO {
 
 	public void setAuthority(String authority) {
 		this.authority = authority;
+	}
+
+	public List<SecuredResourceAuthDTO> getSecuredResourceAuthDTOList() {
+		return securedResourceAuthDTOList;
+	}
+
+	public void setSecuredResourceAuthDTOList(List<SecuredResourceAuthDTO> securedResourceAuthDTOList) {
+		this.securedResourceAuthDTOList = securedResourceAuthDTOList;
 	}
 	
 	

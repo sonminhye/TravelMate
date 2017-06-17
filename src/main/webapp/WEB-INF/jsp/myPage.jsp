@@ -1,8 +1,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false" contentType="text/html; charset=utf-8"%>
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
+<%@ page import="org.springframework.security.core.Authentication" %>  
+<%@ page import="com.travel.mate.security.MyUser" %> 
+<%
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	Object principal = auth.getPrincipal();
+	int code = 0;
+
+	if(principal != null && principal instanceof MyUser){
+		code = ((MyUser)principal).getUserCode();
+	}
+	
+	
+%>
 <html>
 <head>
 	<title>MyPage</title>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
@@ -13,7 +28,7 @@
     <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">MyPage</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h3 class="section-subheading text-muted">마이페이지 입니다</h3>
                 </div>
     </div>
     
@@ -27,11 +42,19 @@
 		   <li role="presentation">
 		       <a href="#applyTravel" aria-controls="applyTravel" role="tab" data-toggle="tab">내가 신청한 여행</a>
 		   </li>
+		   <li role="presentation">
+		   <form action="<c:url value='/myInfo' />" method="POST">
+		   	  <input type="hidden" name="userCode" value="<%=code %>" >
+		 	  <button type="submit" class="btn btn-default">내 정보 수정하기</button>
+		   </form>
+		   </li>
 		</ul>
 		
 		 <!-- Tab panes -->
-		 
+		
         <div class="tab-content">
+        
+        	<!-- 내가 만든 여행 -->
 		    <div role="tabpanel" class="tab-pane active" id="makeTravel">
 		    	<section id="portfolio" class="bg-light-gray">
                     <div class="container">
@@ -126,7 +149,12 @@
                 </section>
 				
 		    </div>
+		    
+		    <!-- 내가 신청한 여행 -->
 		    <div role="tabpanel" class="tab-pane" id="applyTravel">...</div>
+		    
+	
+		  
         </div>	
 	</div><!--탭-->
 	

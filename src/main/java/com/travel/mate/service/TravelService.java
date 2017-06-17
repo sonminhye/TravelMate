@@ -3,6 +3,7 @@ package com.travel.mate.service;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.travel.mate.dto.ApplyDTO;
@@ -20,7 +21,7 @@ public interface TravelService {
 	List<Map<String, Object>> selectTravelRoute(TravelDTO travelDto);
 
 	/* 스크롤 */
-	List<Map<String, Object>> scrollDown(Integer code);
+	List<Map<String, Object>> scrollDown(String keys) throws ParseException;
 
 	/* 신청 */
 	void insertTravelApply(ApplyDTO applyDto) throws Exception;
@@ -29,5 +30,8 @@ public interface TravelService {
 	/* 신청한 사람 및 인원 수 */
 	List<Map<String, Object>> selectTravelApply(TravelDTO travelDto);
 	List<Map<String, Object>> selectTravelApplyCount(TravelDTO travelDto);
+
+	/* 글쓴이 정보 */
+	List<Map<String, Object>> selectUserInfo(TravelDTO travelDto);
 
 }

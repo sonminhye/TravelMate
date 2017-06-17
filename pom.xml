@@ -40,6 +40,13 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>
 
+		<dependency> 
+			<groupId>org.aspectj</groupId> 
+			<artifactId>aspectjweaver</artifactId> 
+			<version>${org.aspectj-version}</version> 
+	    </dependency>
+
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -119,19 +126,19 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>3.2.5.RELEASE</version>
+			<version>3.2.7.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>3.2.5.RELEASE</version>
+			<version>3.2.7.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>3.2.5.RELEASE</version>
+			<version>3.2.7.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -153,6 +160,33 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.2.0</version>
 		</dependency>
+
+		<!-- validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.0.Final</version>	
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>4.3.0.Final</version>	
+		</dependency>
+
+
+		<dependency> 
+			<groupId>cglib</groupId> 
+			<artifactId>cglib</artifactId> 
+			<version>3.1</version> 
+			<type>jar</type> 
+			<scope>compile</scope> 
+		</dependency>
+
 
 		<!-- <dependency> 2 <groupId>org.springframework</groupId> 3 <artifactId>spring-jdbc</artifactId> 
 			4 <version>${org.springframework-version}</version> 5 </dependency> -->

@@ -2,10 +2,13 @@ package com.travel.mate.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class UserLanguageDTO {
 	private int userCode;
 	private int languageCode;
 	
+	@NotNull
 	private List<UserLanguageDTO> langDTOList;
 
 	public UserLanguageDTO(){

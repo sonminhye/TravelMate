@@ -1,11 +1,28 @@
 package com.travel.mate.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserDetailDTO {
 	private int userCode;
+	@NotNull
+	@Size(min=1)
 	private String name;
+
+	@Max(100)
+	@Min(1)
 	private int age;
+	
+	@NotNull
+	@Size(min=1) 
 	private String sex;
+	
+	@NotNull
+	@Size(min=1) 
 	private String location;
+	
 	private float meanPoint;
 	
 	public UserDetailDTO(){
@@ -78,3 +95,4 @@ public class UserDetailDTO {
 	
 	
 }
+

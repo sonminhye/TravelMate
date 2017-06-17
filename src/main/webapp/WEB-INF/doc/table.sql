@@ -51,7 +51,7 @@ ALTER TABLE userDetail
 CREATE TABLE travel (
 	travelCode INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
 	userCode   INT UNSIGNED NOT NULL COMMENT '작성회원번호', -- 작성회원번호
-	title      VARCHAR(20)  NOT NULL COMMENT '제목', -- 제목
+	title      VARCHAR(45)  NOT NULL COMMENT '제목', -- 제목
 	content    TEXT         NULL     COMMENT '내용', -- 내용
 	writeDate  DATE         NOT NULL COMMENT '작성일' -- 작성일
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -76,7 +76,7 @@ CREATE TABLE travelRoute (
 	travelCode      INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
 	lat             DOUBLE       NOT NULL COMMENT '위도', -- 위도
 	lng             DOUBLE       NOT NULL COMMENT '경도', -- 경도
-	location        VARCHAR(50)  NOT NULL COMMENT '장소명', -- 장소명
+	location        VARCHAR(30)  NOT NULL COMMENT '장소명', -- 장소명
 	locOrder        INT UNSIGNED NOT NULL COMMENT '장소순서' -- 장소순서
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '여행경로';
@@ -116,7 +116,7 @@ ALTER TABLE travelDetail
 -- 여행이미지
 CREATE TABLE travelImage (
 	travelCode INT UNSIGNED NOT NULL COMMENT '여행번호', -- 여행번호
-	image      TEXT         NOT NULL COMMENT '이미지' -- 이미지
+	image      VARCHAR(40)  NOT NULL COMMENT '이미지' -- 이미지
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '작성한 글의 대표이미지';
 
@@ -133,7 +133,7 @@ CREATE TABLE message (
 	roomCode     INT UNSIGNED NOT NULL COMMENT '방번호', -- 방번호
 	senderCode   INT UNSIGNED NOT NULL COMMENT '보내는회원번호', -- 보내는회원번호
 	receiverCode INT UNSIGNED NOT NULL COMMENT '받는회원번호', -- 받는회원번호
-	content      TEXT         NOT NULL COMMENT '메시지내용', -- 메시지내용
+	content      VARCHAR(900) NOT NULL COMMENT '메시지내용', -- 메시지내용
 	sendDate     DATETIME     NOT NULL COMMENT '보낸날짜', -- 보낸날짜
 	readFlag     TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '읽음여부' -- 읽음여부
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -156,7 +156,7 @@ ALTER TABLE message
 CREATE TABLE travelEval (
 	evalCode  INT UNSIGNED NOT NULL COMMENT '평가번호', -- 평가번호
 	applyCode INT UNSIGNED NOT NULL COMMENT '신청코드', -- 신청코드
-	point     INT UNSIGNED NOT NULL COMMENT '점수' -- 점수
+	point     TINYINT(1)   NOT NULL COMMENT '점수' -- 점수
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '평가';
 
@@ -177,7 +177,7 @@ ALTER TABLE travelEval
 CREATE TABLE review (
 	reviewCode INT UNSIGNED NOT NULL COMMENT '리뷰번호', -- 리뷰번호
 	applyCode  INT UNSIGNED NOT NULL COMMENT '신청코드', -- 신청코드
-	content    TEXT         NULL     COMMENT '내용', -- 내용
+	content    VARCHAR(900) NULL     COMMENT '내용', -- 내용
 	writeTime  DATETIME     NOT NULL COMMENT '작성시간' -- 작성시간
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '후기';
@@ -234,7 +234,7 @@ ALTER TABLE authority
 CREATE TABLE securedResource (
 	resourceCode    INT UNSIGNED NOT NULL COMMENT '리소스번호', -- 리소스번호
 	resourcePattern VARCHAR(50)  NOT NULL COMMENT '리소스패턴', -- 리소스패턴
-	sortOrder       INT(11)      NOT NULL COMMENT '정렬순서' -- 정렬순서
+	sortOrder       INT UNSIGNED NOT NULL COMMENT '정렬순서' -- 정렬순서
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '보안리소스';
 
@@ -527,8 +527,10 @@ ALTER TABLE roomUser
 			roomCode -- 방번호
 		);
 		
-INSERT INTO authority (authority, authorityName) VALUES ('ROLE_ADMIN', '관리자');
-INSERT INTO authority (authority, authorityName) VALUES ('ROLE_USER', '회원');
+INSERT INTO authority (authority, authorityName) VALUES
+	('ROLE_ADMIN', '관리자'),
+	('ROLE_GUEST', '손님'),
+	('ROLE_USER', '회원');
 
 INSERT INTO language (languageCode, language) VALUES (1, 'korean');
 INSERT INTO language (languageCode, language) VALUES (2, 'english');
@@ -536,13 +538,25 @@ INSERT INTO language (languageCode, language) VALUES (3, 'chinese');
 INSERT INTO language (languageCode, language) VALUES (4, 'japanese');
 INSERT INTO language (languageCode, language) VALUES (5, 'spanish');
 
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (1, '/signIn', 20);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (2, '/travelList', 30);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (3, '/readTravel', 40);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (4, '/writeTravel', 50);
-INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES (5, '/adminPage', 60);
+INSERT INTO securedResource (resourceCode, resourcePattern, sortOrder) VALUES
+	(1, '/signIn', 20),
+	(2, '/travelList', 30),
+	(3, '/readTravel', 40),
+	(4, '/writeTravel', 50),
+	(5, '/adminPage', 60),
+	(6, '/main', 10),
+	(7, '/signUp', 20);
 
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (2, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (3, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (4, 'ROLE_USER');
-INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES (5, 'ROLE_ADMIN');
+INSERT INTO securedResourceAuthority (resourceCode, authority) VALUES
+	(4, 'ROLE_USER'),
+	(2, 'ROLE_USER'),
+	(2, 'ROLE_ADMIN'),
+	(4, 'ROLE_ADMIN'),
+	(5, 'ROLE_ADMIN'),
+	(3, 'ROLE_ADMIN'),
+	(3, 'ROLE_USER'),
+	(1, 'ROLE_GUEST'),
+	(7, 'ROLE_GUEST'),
+	(6, 'ROLE_ADMIN'),
+	(6, 'ROLE_GUEST'),
+	(6, 'ROLE_USER');

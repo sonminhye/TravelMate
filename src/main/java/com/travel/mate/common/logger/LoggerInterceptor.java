@@ -29,13 +29,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
             log.debug(" Request URI \t:  " + request.getRequestURI());
         }
         
-        auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = auth.getPrincipal();
-        if(principal!=null && principal instanceof MyUser){
-    		int userCode =  ((MyUser)principal).getUserCode();
-            int unReadCount = chatService.checkUnReadMessage(userCode);
-            request.setAttribute("unReadCount", unReadCount);
-        }
+        
 		
         return super.preHandle(request, response, handler);
     }
@@ -45,5 +39,14 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         if (log.isDebugEnabled()) {
             log.debug("======================================           END          ======================================\n");
         }
+        
+        auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        if(principal!=null && principal instanceof MyUser){
+    		int userCode =  ((MyUser)principal).getUserCode();
+            int unReadCount = chatService.checkUnReadMessage(userCode);
+            request.setAttribute("unReadCount", unReadCount);
+        }
+        
     }
 }
