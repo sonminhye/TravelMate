@@ -2,7 +2,7 @@ function fileCheck(obj) {
 	var filePoint = obj.value.lastIndexOf(".");
 	var fileName = obj.value.substring(filePoint + 1, obj.length);
 	var fileType = fileName.toLowerCase();
-	var maxSize = 10 * 1024 * 1024; // 10MB
+	var maxSize = 10 * 1024 * 1024;
 	var fileSize = obj.files[0].size;
 	
 	if (fileSize > maxSize) {
@@ -16,7 +16,8 @@ function fileCheck(obj) {
 		$("#image").val("");
 		return false;
 	}
-};
+}
+
 function startDateCheck(obj) {
 	var now = new Date();
 	var usDate = obj.value;
@@ -32,15 +33,15 @@ function startDateCheck(obj) {
 	}
 	else {
 		if (usersDate > now) {
-			// 날짜 선택 가능
+			;
 		}
-		// 오늘이거나 이전
 		else {
 			alert("오늘이거나 오늘보다 이전 날짜는 선택할 수 없습니다");
 			$("#startDate").val("");
 		}	
 	}
-};
+}
+
 function endDateCheck(obj) {
 	var sDate = $("#startDate").val();
 	var eDate = obj.value;
@@ -54,10 +55,11 @@ function endDateCheck(obj) {
 			$("#endDate").val("");
 		}
 		else {
-			// 날짜선택가능
+			;
 		}
 	}
-};
+}
+
 function maxPeopleCheck(obj) {
 	var min = parseInt($("#minPeople").val());
 	var max = parseInt(obj.value);
@@ -71,15 +73,16 @@ function maxPeopleCheck(obj) {
 			$("#maxPeople").val("");
 		}
 		else {
-			// 인원선택가능
+			;
 		}
 	}
-};
+}
+
 function minPeopleCheck(obj) {
 	var min = parseInt(obj.value);
 	var max = parseInt($("#maxPeople").val());
 	if (isNaN(max)) {
-		// 아무것도 하지 않음
+		;
 	}
 	else {
 		if (max < min) {
@@ -87,7 +90,7 @@ function minPeopleCheck(obj) {
 			$("#minPeople").val("");
 		}
 		else {
-			// max 값 입력되어 있고, min <= max 이므로 입력가능
+			;
 		}
 	}
 }

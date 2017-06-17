@@ -39,7 +39,7 @@
 		String applyCancelButtonEnd = null;
 		// 로그인
 		if (code > 0) {
-			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
+			applyButtonStart = "<a href='#' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
@@ -49,7 +49,7 @@
 			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
 			applyButtonEnd ="</button></a>";
 			
-			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
+			applyCancelButtonStart = "<a href='#' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
@@ -116,18 +116,16 @@
 										<c:forEach items="${route }" var="init" begin="0" end="1">
 											<script type="text/javascript">
 												var count = 0;
-												var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+												var mapContainer = document.getElementById('map'),
 												mapOption = {
-													center : new daum.maps.LatLng(${init.lat}, ${init.lng}), // 지도의 중심좌표
+													center : new daum.maps.LatLng(${init.lat}, ${init.lng}),
 													level : 7
-												// 지도의 확대 레벨
 												};
 				
-												var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-												// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+												var map = new daum.maps.Map(mapContainer, mapOption);
+												
 												var markers = [];
-				
-												// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
+												
 												function setMarkers(map) {
 													for (var i = 0; i < markers.length; i++) {
 														markers[i].setMap(map);
@@ -145,42 +143,32 @@
 								</c:choose>
 								
 								<script type="text/javascript">
-								
-								// 마커를 생성하고 지도위에 표시하는 함수입니다
-								function addMarker(position, location, locOrder) {
-								
-									// 마커를 생성합니다
-									var marker = new daum.maps.Marker({
-										position : position
-									});
-								
-									// 마커가 지도 위에 표시되도록 설정합니다
-									marker.setMap(map);
+									function addMarker(position, location, locOrder) {
 									
+										var marker = new daum.maps.Marker({
+											position : position
+										});
 									
-									var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + ')' + '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-								    iwPosition = position; //인포윈도우 표시 위치입니다
-			
-									// 인포윈도우를 생성합니다
-									var infowindow = new daum.maps.InfoWindow({
-									    position : iwPosition, 
-									    content : iwContent 
-									});
-									  
-									// 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
-									infowindow.open(map, marker);
-								
-									// 생성된 마커를 배열에 추가합니다
-									markers.push(marker);
-									// 하단에 좌표 값을 등록
-								}
+										marker.setMap(map);
+										
+										var iwContent = '<div style="padding:5px;">' +location + '(' + (locOrder+1) + ')' + '</div>',
+									    iwPosition = position;
+				
+										var infowindow = new daum.maps.InfoWindow({
+										    position : iwPosition, 
+										    content : iwContent 
+										});
+										  
+										infowindow.open(map, marker);
+									
+										markers.push(marker);
+									}
 								</script>
 								
 								<c:choose>
 									<c:when test="${fn:length(route) > 0}">
 										<c:forEach items="${route }" var="routes">
 											<script type="text/javascript">
-											// 마커 하나를 지도위에 표시합니다
 												addMarker(new daum.maps.LatLng(${routes.lat}, ${routes.lng}), '${routes.location}', ${routes.locOrder});
 											</script>
 											${routes.location }(${routes.locOrder + 1}번째)
@@ -270,11 +258,11 @@
 								<c:otherwise>
 									<form action="<c:url value='/doWriteReview'/>" method="post">
 										<p class="star_rating">
-										    <a href="#this" id="point1">★</a>
-										    <a href="#this" id="point2">★</a>
-										    <a href="#this" id="point3">★</a>
-										    <a href="#this" id="point4">★</a>
-										    <a href="#this" id="point5">★</a>
+										    <a href="#" id="point1">★</a>
+										    <a href="#" id="point2">★</a>
+										    <a href="#" id="point3">★</a>
+										    <a href="#" id="point4">★</a>
+										    <a href="#" id="point5">★</a>
 										</p>
 										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="travelCode" value="<%=travelCode %>">
@@ -338,16 +326,6 @@
 			</c:forEach>
 		</c:when>
 	</c:choose>
-	
- <!--
-	<script type="text/javascript">
-		var link = document.location.href;
-		var testCode = link.split("/");
-		console.log(link);
-		console.log(testCode[testCode.length - 1]);
-		$('#tt').val(testCode[testCode.length - 1]);
-	</script>
- -->
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
