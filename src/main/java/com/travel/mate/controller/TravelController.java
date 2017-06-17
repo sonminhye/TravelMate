@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 25
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.controller;
 
 import java.util.List;
@@ -37,7 +44,7 @@ public class TravelController {
 	private ReviewService reviewService;
 	
 	/*
-	 * Method	: Ajax Scroll
+	 * Method	: scrollDown
 	 * Summary	: Scroll 최하단으로 갈 시 작동하는 Controller
 	 * @param	: String keys(travelCode)
 	 * @Return	: List<Map<String, Object>>

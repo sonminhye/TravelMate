@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 06. 05
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.service;
 
 import java.util.List;
@@ -40,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 	PlatformTransactionManager transactionManager;
 	
 	/*
-	 * Method	: readTravel(show allReview)
+	 * Method	: selectReviewAll(view allReview)
 	 * Summary	: 해당 여행의 모든 리뷰를 반환
 	 * @param	: TravelDTO(for get travelCode)
 	 * @Return	: List<Map<String, Object>>
@@ -52,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	/*
-	 * Method	: readTravel(check writeReview, after view reviewWriteForm)
+	 * Method	: selectReviewWriteCheck(check writeReview, after view reviewWriteForm)
 	 * Summary	: 해당 여행에 리뷰를 작성했는 지 확인 후 결과 반환
 	 * @param	: TravelDTO(for get travelCode, userCode(login))
 	 * @Return	: List<Map<String, Object>>
@@ -69,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	/*
-	 * Method	: writeReview(insert review & update writerMeanPoint)
+	 * Method	: insertReview(insert review & update writerMeanPoint)
 	 * Summary	: 리뷰 작성, 평점에 따른 여행 작성자의 평점 업데이트
 	 * @param	: ApplyDTO(for get applyInfo), String(for get review content), int(for get review point)
 	 * @Return	: void
@@ -138,7 +145,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	/*
-	 * Method	: readTravel(check writeReview)
+	 * Method	: selectReviewWrite(check writeReview)
 	 * Summary	: 해당 여행에 리뷰를 작성했는 지 확인 후 결과 반환
 	 * @param	: TravelDTO(for get travelCode, userCode(login))
 	 * @Return	: List<Map<String, Object>>

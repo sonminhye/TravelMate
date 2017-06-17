@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 06. 11
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 function fileCheck(obj) {
 	var filePoint = obj.value.lastIndexOf(".");
 	var fileName = obj.value.substring(filePoint + 1, obj.length);

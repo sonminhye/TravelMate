@@ -1,3 +1,12 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 22
+ * @Modify	: 2017. 06. 13
+ * 			: 2017. 06. 17
+ * @Details	: 2017. 06. 13 - 가중 평균 method 추가
+ * 			: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.dao;
 
 import java.util.List;

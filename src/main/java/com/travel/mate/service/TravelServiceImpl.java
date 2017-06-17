@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 26
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.service;
 
 import java.io.File;
@@ -42,7 +49,7 @@ public class TravelServiceImpl implements TravelService {
 	PlatformTransactionManager transactionManager;
 	
 	/*
-	 * Method	: doWrite
+	 * Method	: insertTravel
 	 * Summary	: 각 DTO에 데이터를 저장하여 테이블 하나씩 insert, logic에 이상 있을 시 rollback
 	 * @param	: TravelDTO(for insert travel)
 	 * @param	: TravelDetailDTO(for insert travelDetail)
@@ -144,7 +151,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 
 	/*
-	 * Method	: travelList(show list)
+	 * Method	: selectTravel(view list)
 	 * Summary	: 최근 6개의 여행 정보를 반환
 	 * @param	: Notting
 	 * @Return	: List<Map<String, Object>>
@@ -155,7 +162,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 	
 	/*
-	 * Method	: readTravel(show details)
+	 * Method	: selectTravelDetail(view details)
 	 * Summary	: 해당 여행 정보(시간 등)를 반환
 	 * @param	: TravelDTO(for get travelCode)
 	 * @Return	: List<Map<String, Object>>
@@ -168,7 +175,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 	
 	/*
-	 * Method	: readTravel(show routes)
+	 * Method	: selectTravelRoute(view routes)
 	 * Summary	: 해당 여행 정보(여행 경로)를 반환
 	 * @param	: TravelDTO(for get travelCode)
 	 * @Return	: List<Map<String, Object>>
@@ -180,7 +187,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 	
 	/*
-	 * Method	: travelList(Scroll)
+	 * Method	: scrollDown(Scroll)
 	 * Summary	: 스크롤이 최하단에 도착 시, 다음 3개의 여행 정보를 반환
 	 * @param	: String
 	 * @Return	: List<Map<String, Object>>
@@ -196,7 +203,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 
 	/*
-	 * Method	: readTravel(check apply)
+	 * Method	: selectTravelApply(check apply)
 	 * Summary	: 현재 글을 보고 있는 사람이 신청한 여행인지 확인 후 확인했다면 결과 반환
 	 * @param	: TravelDTO(for get travelCode, userCode)
 	 * @Return	: List<Map<String, Object>>
@@ -213,7 +220,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 
 	/*
-	 * Method	: readTravel(check applyPeople(max))
+	 * Method	: selectTravelApplyCount(check applyPeople(max))
 	 * Summary	: 현재 보고 있는 여행의 신청자를 확인 후 신청 리스트 반환
 	 * @param	: TravelDTO(for get travelCode, userCode)
 	 * @Return	: List<Map<String, Object>>
@@ -230,7 +237,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 	
 	/*
-	 * Method	: doApply
+	 * Method	: insertTravelApply
 	 * Summary	: 여행 신청
 	 * @param	: ApplyDTO(for get applyInfo)
 	 * @Return	: void
@@ -256,7 +263,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 	
 	/*
-	 * Method	: doCancel
+	 * Method	: deleteTravelApply
 	 * Summary	: 여행 신청 취소
 	 * @param	: ApplyDTO(for get applyInfo)
 	 * @Return	: void
@@ -282,7 +289,7 @@ public class TravelServiceImpl implements TravelService {
 	}
 
 	/*
-	 * Method	: readTravel(show writerInfo)
+	 * Method	: selectUserInfo(show writerInfo)
 	 * Summary	: 글쓴이의 정보를 반환
 	 * @param	: TravelDTO(for get applyInfo)
 	 * @Return	: List<Map<String, Object>>

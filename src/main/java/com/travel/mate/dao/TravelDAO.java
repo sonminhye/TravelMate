@@ -1,3 +1,10 @@
+/* 
+ * @Author	: Song Ji Yong
+ * @Date	: 2017. 05. 26
+ * @Modify	: 2017. 06. 17
+ * @Details	: 2017. 06. 17 - comment 추가
+ */
+
 package com.travel.mate.dao;
 
 import java.util.List;
@@ -12,7 +19,6 @@ import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelImageDTO;
 import com.travel.mate.dto.TravelRouteDTO;
 
-// class를 Repository에 등록함으로써 bean으로 사용가능하게 한다
 @Repository("TravelDAO")
 public class TravelDAO extends AbstractDAO {
 
