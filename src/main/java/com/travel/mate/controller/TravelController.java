@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
@@ -71,7 +72,7 @@ public class TravelController {
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/readTravel/{travelCode}")
-	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode) {
+	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		
@@ -103,7 +104,9 @@ public class TravelController {
 		mv.addObject("reviewWrite", listReviewWrite);
 		
 		mv.addObject("userInfo", listUserInfo);
-		mv.addObject("travelCode", travelCode);
+		
+		request.setAttribute("travelCode", travelCode);
+		
 		return mv;
 	}
 

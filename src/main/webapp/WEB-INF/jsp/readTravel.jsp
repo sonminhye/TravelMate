@@ -31,7 +31,7 @@
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
-		String travelCode = request.getParameter("travelCode");
+		int travelCode = (Integer) request.getAttribute("travelCode");
 		
 		String applyButtonStart = null;
 		String applyButtonEnd = null;
