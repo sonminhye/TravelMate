@@ -81,7 +81,6 @@ public class ChatController {
 		
 		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
 		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode));
-		
 		model.addAttribute("list", list);
 		return "chat";
 	}
@@ -94,7 +93,7 @@ public class ChatController {
 		
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
-		ArrayList<Object> unreadList = mongoService.checkUnReadMessageList(userCode);
+		ArrayList<ChatRoomDTO> unreadList = mongoService.checkUnReadMessageList(userCode);
 		System.out.println(unreadList.size());
 		model.addAttribute("unreadList", unreadList);
 		model.addAttribute("list", list);
