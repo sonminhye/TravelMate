@@ -9,15 +9,6 @@
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %>
 
-<%
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	Object principal = auth.getPrincipal();
-	int code = 0;
-	
-	if (principal != null && principal instanceof MyUser) {
-		code = ((MyUser)principal).getUserCode();
-	}
-%>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,21 +16,20 @@
 	<link href="<c:url value='/css/starPoint.css' />" rel="stylesheet">
 </head>
 <body>
-	<c:set value="<%=code %>" var="mCode"></c:set>
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
 		int travelCode = (Integer) request.getAttribute("travelCode");
-		
+		int userCode = (Integer) request.getAttribute("userCode");
 		String applyButtonStart = null;
 		String applyButtonEnd = null;
 		String applyCancelButtonStart = null;
 		String applyCancelButtonEnd = null;
 		// 로그인
-		if (code > 0) {
+		if (userCode > 0) {
 			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ code
+			+ userCode
 			+ ">"
 			+ "<input type='hidden' name='travelCode'class='form-class' value="
 			+ travelCode
@@ -49,7 +39,7 @@
 			
 			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ code
+			+ userCode
 			+ ">"
 			+ "<input type='hidden' name='travelCode'class='form-class' value="
 			+ travelCode
@@ -65,6 +55,7 @@
 			applyCancelButtonEnd = "";
 		}
 	%>
+	<c:set var="userCode" value="<%= userCode %>"></c:set>
 
 
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
@@ -81,7 +72,7 @@
 							<td><a data-toggle="modal" data-dismiss="modal" href="#userInfo">${row.name }</a></td>
 							<c:set var="writerCode" value="${row.userCode }"></c:set>
 						</tr>
-						<c:if test="${row.userCode!= mCode}">
+						<c:if test="${row.userCode!= userCode}">
 						<tr>
 							<td>채팅링크</td>
 							<td><a href="<c:url value='/checkChatRoom?userCode=${row.userCode }' />">채팅걸기</a></td>
@@ -187,7 +178,6 @@
 		</table>
 		<%-- 여행 시작일이 오늘보다 크다면, 신청가능 --%>
 		<%-- 신청가능하다면, 여행신청했는지에 따라 버튼 생성 --%>
-		<c:set var="userCode" value="<%= code %>"></c:set>
 		
 		<jsp:useBean id="now" class="java.util.Date" />
 		<fmt:formatDate var="toDay" value="${now }" pattern="yyyy-MM-dd"/>
@@ -265,7 +255,7 @@
 										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="travelCode" value="<%=travelCode %>">
 										<textarea name="content" placeholder="최대 300자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="300"></textarea>
-										<input type="hidden" name="userCode" value="<%=code %>">
+										<input type="hidden" name="userCode" value="<%=userCode %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
 								</c:otherwise>
