@@ -13,10 +13,8 @@
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
-	String email = "";
 	
-	if(principal != null && principal instanceof MyUser){
-		//code는 PK인 유저코드. 
+	if (principal != null && principal instanceof MyUser) {
 		code = ((MyUser)principal).getUserCode();
 	}
 %>
@@ -39,7 +37,7 @@
 		String applyCancelButtonEnd = null;
 		// 로그인
 		if (code > 0) {
-			applyButtonStart = "<a href='#' name='apply' style='float: right;'>"
+			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
@@ -49,7 +47,7 @@
 			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
 			applyButtonEnd ="</button></a>";
 			
-			applyCancelButtonStart = "<a href='#' name='apply' style='float: right;'>"
+			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
 			+ "<input type='hidden' name='userCode' class='form-class' value="
 			+ code
 			+ ">"
@@ -258,11 +256,11 @@
 								<c:otherwise>
 									<form action="<c:url value='/doWriteReview'/>" method="post">
 										<p class="star_rating">
-										    <a href="#" id="point1">★</a>
-										    <a href="#" id="point2">★</a>
-										    <a href="#" id="point3">★</a>
-										    <a href="#" id="point4">★</a>
-										    <a href="#" id="point5">★</a>
+										    <a href="#this" id="point1">★</a>
+										    <a href="#this" id="point2">★</a>
+										    <a href="#this" id="point3">★</a>
+										    <a href="#this" id="point4">★</a>
+										    <a href="#this" id="point5">★</a>
 										</p>
 										<input type="hidden" name="point" value="0">
 										<input type="hidden" name="travelCode" value="<%=travelCode %>">
