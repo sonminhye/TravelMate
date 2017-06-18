@@ -68,7 +68,7 @@
 		]]>
 	</select>
 	
-	<!-- 유저코드를 이용해서 작성했던 여행들의 각 평점을 가져옴 -->
+	<!-- 유저코드를 이용해서 작성했던 여행들의 각 평점을 가져옴, order by null(remove filesort)-->
 	<select id="selectAvgPoint" parameterType="int" resultType="hashmap">
 		<![CDATA[
 			SELECT		t.travelCode, COUNT(*) AS people, AVG(te.point) AS avgPoint
@@ -77,6 +77,7 @@
 				AND		a.applyCode = te.applyCode
 				AND		t.userCode = #{userCode}
 			GROUP BY	t.travelCode
+			ORDER BY	NULL
 		]]>
 	</select>
 	

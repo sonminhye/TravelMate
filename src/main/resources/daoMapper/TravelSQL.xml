@@ -41,13 +41,18 @@
 	<!-- 첫 화면에 보여질 6개 -->
 	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
-			SELECT		t.travelCode, ud.userCode, t.title, ud.name, t.writeDate, td.startDate, ti.image
-			FROM		travel t, userDetail ud, travelDetail td, travelImage ti
-			WHERE		t.travelCode = td.travelCode
-				AND 	t.travelCode = ti.travelCode
-				AND		t.userCode = ud.userCode
-			ORDER BY	t.travelCode DESC
-			LIMIT 0, 6
+			SELECT	 	tt.travelCode, tt.userCode, tt.title, tt.writeDate, tt.startDate, tt.image, ud.name
+			FROM
+				(
+				SELECT		t.travelCode, t.userCode, t.title, t.writeDate, td.startDate, ti.image
+				FROM		travel t, travelDetail td, travelImage ti
+				WHERE		t.travelCode = td.travelCode
+					AND 	t.travelCode = ti.travelCode
+				ORDER BY	t.travelCode DESC
+				LIMIT 		0, 6
+				) tt, userDetail ud
+			WHERE		tt.userCode = ud.userCode
+			ORDER BY	tt.travelCode DESC
 		]]>
 	</select>
 	
