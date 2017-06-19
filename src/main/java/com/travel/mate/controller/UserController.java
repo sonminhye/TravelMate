@@ -201,8 +201,9 @@ public class UserController {
 			/*새로운 패스워드 암호화*/
 			String bCryptNew = passwordEncoder.encode(newPassword);
 			userDTO.setPassword(bCryptNew);
-			userService.updatePassword(userDTO);			
-			reloadUser.reloadAuthentication(userDTO.getId());
+			userService.updatePassword(userDTO);		
+			reloadUser.reloadAuthentication(userDTO.getId()); //세션재설정
+
 			return "myPage";
 		}
 		else{

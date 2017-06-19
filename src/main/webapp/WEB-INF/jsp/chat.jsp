@@ -74,7 +74,7 @@
 					<div class="icon"></div>
 					<div class="text">Send</div>
 				</div>
-				</form>
+					</form>
 			</div>
 		</div>
 
@@ -91,8 +91,6 @@
 	</div>
 
 	<script type="text/javascript">
-	
-		var chatList = '${list}';
 	
 		var room = '${room}';
 		var nickname = '${name}';
@@ -118,9 +116,7 @@
 			if($('.messages').scrollTop() == 0){
 				var messageCode = $('.message:first-child').attr('id');
 				
-				console.log(messageCode);
-				
-				if(messageCode.length!=0){
+				if(messageCode!=undefined){
 					$.ajax({
 						type: 'post',		// post로 요청
 						url: 'getMoreChats',	// 요청할 url
@@ -181,6 +177,7 @@
 		});
 		
 		prependMessage = function(data){
+			
 			$.each(data, function(index, element) {
 				var message;
 				if (element.senderName == nickname) //만약 내가 쓴 메세지라면
@@ -256,6 +253,7 @@
 					if(_this.old=='n')
 						$('.messages').append($message);
 					else{
+						//스크롤 현재 상태 고정하기
 					    var curOffset = $('.messages').scrollTop();
 					    $('.messages').prepend($message);
 					    curOffset += $message.height() + 20;
@@ -278,7 +276,9 @@
 		};
 		
 		sendMessage = function(){
+			
 			var msg = $(".message_input").val();
+			
 			if(msg.length==0){
 				alert("메세지를 입력해주세요.");
 				return false;
@@ -287,6 +287,7 @@
 			var readFlag = 0;
 			if (inchatRoom)
 				readFlag = 1;
+			
 			//date 형식
 			var date = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
 			
@@ -305,11 +306,16 @@
 				return false;
 		});
 
-		//엔터 쳤을 때 (키보드)
-		$('form').submit(function(e) {
-					sendMessage();
-					return false;
+		//textarea 엔터 쳤을 때 submit
+		$('.message_input').keydown(function(event) {
+			if (event.keyCode == 13 && !event.shiftKey)
+		    {
+				console.log('hello');
+		    	sendMessage();
+		    	return false;
+		    }
 		});
+
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
 

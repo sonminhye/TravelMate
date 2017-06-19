@@ -16,7 +16,7 @@ public class ReloadableUser {
 	
 	public void reloadAuthentication(String userName) {
 		// TODO Auto-generated method stub
-		System.out.println("이벤트!!");
+		System.out.println("reloadAuthentication!!");
 
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication,userName));
