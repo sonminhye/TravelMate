@@ -23,19 +23,16 @@
 	<!-- 해당 게시물에 작성된 리뷰 출력 -->
 	<select id="selectReviewAll" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
-			SELECT		ud.name, rr.content, rr.writeTime
-			FROM		(
-						SELECT	a.userCode, r.content, r.writeTime
-						FROM	apply a, review r
-						WHERE	a.applyCode = r.applyCode
-							AND	a.travelCode = #{travelCode}
-						) rr, userDetail ud
-			WHERE		rr.userCode = ud.userCode
-			ORDER BY	rr.writeTime ASC
+			SELECT		ud.name, r.content, r.writeTime
+			FROM		userDetail ud, review r, apply a
+			WHERE		a.applyCode = r.applycode
+				AND		a.userCode = ud.userCode
+				AND		a.travelCode = #{travelCode}
+			ORDER BY	r.reviewCode ASC
 		]]>
 	</select>
 	
-	<!-- 로그인한 사람이 해당 게시물에 리뷰 작성했는지 여부 -->
+	<!-- 로그인한 사람이 해당 게시물에 리뷰 작성했는지 여부, 작성했다면 결과 반환 -->
 	<select id="selectReviewWrite" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
 			SELECT	a.travelCode, a.userCode
@@ -46,21 +43,17 @@
 		]]>
 	</select>
 	
-	<!-- 지금 보고 있는 게시물을 로그인한 사람이 신청했었다면 리뷰창을 보이게 하도록 하기 위함-->
+	<!-- 지금 보고 있는 게시물을 로그인한 사람이 신청했었다면 리뷰창을 보이게 하도록 하기 위함, 신청했다면 결과 반환 -->
 	<select id="selectReviewWriteCheck" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
-			SELECT	tr.travelCode, a.userCode
-			FROM	(
-					SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime,
-							td.endDate, td.endTime, td.minPeople, td.maxPeople
-					FROM	travel t, travelDetail td
-					WHERE	t.travelCode = td.travelCode
-						AND	td.endDate < now()
-						AND	t.travelCode = #{travelCode}
-					) tr, apply a
-			WHERE	tr.travelCode = a.travelCode
+			SELECT	t.travelCode, a.userCode
+			FROM	travel t, travelDetail td, apply a
+			WHERE	t.travelCode = td.travelCode
+				AND t.travelCode = a.travelCode
+				AND	td.endDate < now()
+				AND t.userCode != a.userCode
+				AND	t.travelCode = #{travelCode}
 				AND a.userCode = #{userCode}
-				AND	tr.userCode != a.userCode
 		]]>
 	</select>
 	
@@ -75,18 +68,16 @@
 		]]>
 	</select>
 	
-	<!-- 유저코드를 이용해서 작성했던 여행들의 각 평점을 가져옴 -->
+	<!-- 유저코드를 이용해서 작성했던 여행들의 각 평점을 가져옴, order by null(remove filesort)-->
 	<select id="selectAvgPoint" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT		tt.travelCode, COUNT(*) AS people, AVG(te.point) AS avgPoint
-			FROM		(
-						SELECT	t.travelCode, a.applyCode
-						FROM	travel t, apply a
-						WHERE	t.travelCode = a.travelCode
-							AND	t.userCode = #{userCode}
-						) tt, travelEval te
-			WHERE		tt.applyCode = te.applyCode
-			GROUP BY	tt.travelCode
+			SELECT		t.travelCode, COUNT(*) AS people, AVG(te.point) AS avgPoint
+			FROM		travel t, travelEval te, apply a
+			WHERE		t.travelCode = a.travelCode
+				AND		a.applyCode = te.applyCode
+				AND		t.userCode = #{userCode}
+			GROUP BY	t.travelCode
+			ORDER BY	NULL
 		]]>
 	</select>
 	
@@ -94,15 +85,11 @@
 	<select id="selectCountAllPeople" parameterType="int" resultType="int">
 		<![CDATA[
 			SELECT	COUNT(*)
-			FROM	(
-					SELECT	t.travelCode, a.applyCode
-					FROM	travel t, apply a
-					WHERE	t.travelCode = a.travelCode
-						AND	t.userCode = #{userCode}
-					) tt, travelEval te
-			WHERE	tt.applyCode = te.applyCode
+			FROM	travel t, apply a, travelEval te
+			WHERE	t.travelCode = a.travelCode
+				AND	a.applyCode = te.applyCode
+				AND	t.userCode = #{userCode}
 		]]>
 	</select>
 	
 </mapper>
-

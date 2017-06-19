@@ -3,7 +3,7 @@
 
 <mapper namespace="apply">
 
-	<!-- 해당 게시물에 작성된 리뷰 출력 -->
+	<!-- 해당 여행을 신청했었을 때, applyCode를 가져옴 -->
 	<select id="selectApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
 			SELECT	a.applyCode
@@ -14,4 +14,3 @@
 	</select>
 	
 </mapper>
-

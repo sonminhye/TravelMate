@@ -12,10 +12,8 @@
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
-	String email = "";
 	
-	if(principal != null && principal instanceof MyUser){
-		//code는 PK인 유저코드. 
+	if (principal != null && principal instanceof MyUser) {
 		code = ((MyUser)principal).getUserCode();
 	}
 %>
@@ -61,7 +59,6 @@
 										<div class="travel col-md-4 col-sm-6 portfolio-item" style="height: 500">
 											<a href="#" name="img-link" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
-												<input type="hidden" class="userCode" value=<%=code %>>
 												<div class="portfolio-hover">
 													<div class="portfolio-hover-content">
 														<i class="fa fa-plus fa-3x"></i>
@@ -101,10 +98,7 @@
 								function readTravel(obj) {
 									var comSubmit = new ComSubmit();
 									var travelCode = obj.parent().find(".travelCode").val();
-									var userCode = obj.parent().find(".userCode").val();
 									comSubmit.setUrl("<c:url value='/readTravel/' />" + travelCode);
-									comSubmit.addParam("travelCode", travelCode);
-									comSubmit.addParam("userCode", userCode);
 									comSubmit.submit();
 								}
 							</script>

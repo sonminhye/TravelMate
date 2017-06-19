@@ -11,10 +11,8 @@
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
-	String email = "";
 	
-	if(principal != null && principal instanceof MyUser){
-		//code는 PK인 유저코드. 
+	if (principal != null && principal instanceof MyUser) {
 		code = ((MyUser)principal).getUserCode();
 	}
 %> 
