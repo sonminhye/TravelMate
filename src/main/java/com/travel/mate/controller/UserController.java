@@ -10,7 +10,6 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,16 +26,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.dto.UserLanguageDTO;
-import com.travel.mate.event.UserEvent;
 import com.travel.mate.security.MyUser;
 import com.travel.mate.service.UserService;
+import com.travel.mate.user.ReloadableUser;
 
 @Controller
 public class UserController {
 	Logger log = Logger.getLogger(this.getClass());
 
-	private final ApplicationEventPublisher publisher;
-	
+	@Autowired
+	ReloadableUser reloadUser;
 	
 	@Resource(name = "UserService")
 	private UserService userService;
@@ -158,7 +157,6 @@ public class UserController {
 		userService.updateUserDetail(userDetailDTO);
 		model.addAttribute("userCode", userDetailDTO.getUserCode());
 		
-		publisher.publishEvent(new UserEvent(this, userDetailDTO.getName()));
 		return "myPage";
 	}
 	
@@ -204,6 +202,7 @@ public class UserController {
 			String bCryptNew = passwordEncoder.encode(newPassword);
 			userDTO.setPassword(bCryptNew);
 			userService.updatePassword(userDTO);			
+			reloadUser.reloadAuthentication(userDTO.getId());
 			return "myPage";
 		}
 		else{
