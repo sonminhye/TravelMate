@@ -11,8 +11,7 @@
 	if(principal != null && principal instanceof MyUser){
 		code = ((MyUser)principal).getUserCode();
 	}
-	
-	
+
 %>
 <html>
 <head>
@@ -44,7 +43,6 @@
 		   </li>
 		   <li role="presentation">
 		   <form action="<c:url value='/myInfo' />" method="POST">
-		   	  <input type="hidden" name="userCode" value="<%=code %>" >
 		 	  <button type="submit" class="btn btn-default">내 정보 수정하기</button>
 		   </form>
 		   </li>

@@ -28,9 +28,7 @@
    </c:if>
 
      <div class="container" style="margin-top: 150px; margin-bottom: 100px;">
-	     <form action="<c:url value='/modifyPassword' />" method="POST" name="myForm">
-	     	<%-- <input type="hidden" class="form-control" id="userCode" name="userCode" value="${user.userCode }">
-	     	<input type="hidden" class="form-control" id="userCode" name="password" value="${user.password }"> --%>   	
+	     <form action="<c:url value='/modifyPassword' />" method="POST" name="myForm">  	
 	    	<div class="row">
 	    	  <div class="form-group col-sm-10">
 			    <label class="control-label">이메일 주소</label> 

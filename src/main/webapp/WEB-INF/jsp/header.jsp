@@ -104,6 +104,7 @@
  		  var params = "id="+encodeURIComponent(keyword);
 	 	  sendRequest("checkSignup", params, displayResult, 'POST');
 		}else {
+			console.log(keyword);
 		}
 	 }
 	 setTimeout("sendEmail();", 500);
@@ -140,10 +141,10 @@
 			alert('이메일 주소를 입력해주세요.');
 			return false;
 		}
-		if(idCheck=='2'){
+/* 		if(idCheck=='2'){
 			alert('이미 존재하는 메일주소 입니다.');
 			return false;
-		}
+		} */
 		if(passwordCheck=='0'){
 			alert('비밀번호를 정확히 입력해 주세요.');
 			return false;

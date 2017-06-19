@@ -21,7 +21,6 @@
 	
 		     <div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		     <form action="modifyUserDetail" method="POST">
-		     	<%-- <input type="hidden" class="form-control" id="userCode" name="userCode" value="${user.userCode }"> --%>
 		    	<input type="hidden" class="form-control" id="meanPoint" name="meanPoint" value="0">
 		    	
 		    	<div class="row">
@@ -83,7 +82,6 @@
 		        </div>
 		      </form>
 		      <form action="<c:url value='/myPassword' />" method="POST">
-		 	        <input type="hidden" name="userCode" value="${user.userCode }">
 		     		<button type="submit" class="btn btn-default">패스워드 변경</button>
 		      </form>
 		      </div>
