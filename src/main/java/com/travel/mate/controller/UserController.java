@@ -28,11 +28,15 @@ import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.security.MyUser;
 import com.travel.mate.service.UserService;
+import com.travel.mate.user.ReloadableUser;
 
 @Controller
 public class UserController {
 	Logger log = Logger.getLogger(this.getClass());
 
+	@Autowired
+	ReloadableUser reloadUser;
+	
 	@Resource(name = "UserService")
 	private UserService userService;
 	
@@ -196,7 +200,8 @@ public class UserController {
 			/*새로운 패스워드 암호화*/
 			String bCryptNew = passwordEncoder.encode(newPassword);
 			userDTO.setPassword(bCryptNew);
-			userService.updatePassword(userDTO);			
+			userService.updatePassword(userDTO);		
+			reloadUser.reloadAuthentication(userDTO.getId()); //세션재설정
 			return "myPage";
 		}
 		else{
