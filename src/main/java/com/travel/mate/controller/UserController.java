@@ -224,8 +224,7 @@ public class UserController {
 		else{
 			fail = true;
 			model.addAttribute("fail",fail);
-		//	model.addAttribute("userCode", userCode);
-			return "forward:/myPassword";
+			return "forward:myPassword";
 		}
 		
 	}
