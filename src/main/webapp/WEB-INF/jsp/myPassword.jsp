@@ -34,7 +34,8 @@
 	    	<div class="row">
 	    	  <div class="form-group col-sm-10">
 			    <label class="control-label">이메일 주소</label> 
-			     <p class="form-control-static">${user.id}</p>
+			    <input type="hidden" name="id" value="${user.id}">
+			     <p class="form-control-static" >${user.id}</p>
 			  </div>
 			</div>
 	    	<div class="row">
