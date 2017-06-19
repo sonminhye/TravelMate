@@ -133,7 +133,6 @@
  	function checkSubmit(){
  		var idEmptyCheck = document.forms[0].id.value;
  		var passcheckCheck = document.forms[0].passwordCheck.value;
-
 		var languageCheck = document.forms[0].language.value;
 		
 		if(idEmptyCheck.length==0){
@@ -342,7 +341,7 @@
 	 	socket.on('newRoom',function(data){
 	 		//새로운 룸이 생겨서 알림!
 	 		console.log('new Room' + data.roomCode);
-	 	})
+	 	});
 	 	
 	 	// 읽지않은 메세지 개수 늘려주기
 	 	appendCount = function(data) {
