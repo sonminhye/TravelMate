@@ -79,14 +79,8 @@
 							<div>
 								<p>참여자 : ${dto.receive}</p>
 								<p class="latestdate">${dto.latestDate}</p>
-								<p>${dto.roomCode}</p>
-								
 								<p class="unread">					
-								<c:forEach items="${unreadList }" var="ul">
-									<c:if test="${ul._id == dto.roomCode }">
-										${ul.unread }
-									</c:if>
-								</c:forEach>
+									0
 								</p>
 								
 							</div>
@@ -97,8 +91,19 @@
 	</div>
 
 	<script type="text/javascript">
-	
-	
+		
+		//각 방 현재 안읽은 메세지 개수를 초기화 해줌
+		<c:forEach var="ul" items="${unreadList}">
+			var parent = $('#' + '${ul.roomCode}');
+			var unread = parent.find('.unread'); 
+			if (unread.html() != "") {
+				console.log(unread.html());
+				unread.html(parseInt(unread.html()) + parseInt('${ul.unread}'));
+			} else {
+				unread.html('${ul.unread}');
+			}
+		</c:forEach>
+
 		// 메세지 수신 부분
 		socket.on('msg', function(data) {
 			// 내가 보낸 메세지가 아니며
@@ -124,6 +129,7 @@
 			}
 			
 			date.html(data.date);
+			//메세지가 온 채팅방을 제일 위로 올리기
 			parent.prependTo("#chatList");
 		
 		};

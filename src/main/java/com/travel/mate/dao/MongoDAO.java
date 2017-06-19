@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractMongoDAO;
 import com.travel.mate.dto.ChatDTO;
+import com.travel.mate.dto.ChatRoomDTO;
 
 
 @Repository("MongoDAO")
@@ -26,7 +27,7 @@ public class MongoDAO extends AbstractMongoDAO{
 		return findAll(query, COLLECTION);
     }
     
-    public ArrayList<Object> checkUnReadMessageList(Aggregation agg, String COLLECTION) {
+    public ArrayList<ChatRoomDTO> checkUnReadMessageList(Aggregation agg, String COLLECTION) {
     	return findCountList(agg, COLLECTION);
     }
     

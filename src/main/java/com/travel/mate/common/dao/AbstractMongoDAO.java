@@ -12,12 +12,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.travel.mate.dto.ChatDTO;
+import com.travel.mate.dto.ChatRoomDTO;
 
 public class AbstractMongoDAO {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
 	
 	public ArrayList<ChatDTO> findAll(Aggregation agg, String COLLECTION){
 		AggregationResults<ChatDTO> data = mongoTemplate.aggregate(agg, COLLECTION, ChatDTO.class);
@@ -28,8 +28,8 @@ public class AbstractMongoDAO {
 		return (ArrayList<ChatDTO>) mongoTemplate.find(query, ChatDTO.class, COLLECTION);
 	}
 	
-	public ArrayList<Object> findCountList(Aggregation agg, String COLLECTION){
-		AggregationResults<Object> data = mongoTemplate.aggregate(agg, COLLECTION, Object.class);
+	public ArrayList<ChatRoomDTO> findCountList(Aggregation agg, String COLLECTION){
+		AggregationResults<ChatRoomDTO> data = mongoTemplate.aggregate(agg, COLLECTION, ChatRoomDTO.class);
 		return new ArrayList(data.getMappedResults()); 
 	}
 	
