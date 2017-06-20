@@ -76,10 +76,6 @@ public class TravelServiceImpl implements TravelService {
 			MultipartFile f = request.getFile("image");
 			String filename = f.getOriginalFilename();
 			
-			Iterator<String> iterator = request.getFileNames();
-			
-			MultipartFile multipartFile = request.getFile(iterator.next());
-			
 			String storedFileName = null;
 			String temp = null;
 			
@@ -87,7 +83,7 @@ public class TravelServiceImpl implements TravelService {
 			temp = temp.toLowerCase();
 			
 			// File size Check
-			if (multipartFile.getSize() > (10 * 1024 * 1024)) {
+			if (f.getSize() > (2 * 1024 * 1024)) {
 				log.error("File size is big");
 				throw new Exception();
 			}
@@ -122,7 +118,7 @@ public class TravelServiceImpl implements TravelService {
 				storedFileName = CommonUtil.getRandomString() + temp;
 				
 				file = new File(filepath + storedFileName);
-				multipartFile.transferTo(file);
+				f.transferTo(file);
 				TravelImageDTO travelImage = new TravelImageDTO();
 				travelImage.setImage(storedFileName);
 				travelImage.setTravelCode(travelCode);
