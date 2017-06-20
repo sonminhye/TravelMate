@@ -21,10 +21,10 @@
 	<%
 		int travelCode = (Integer) request.getAttribute("travelCode");
 		int userCode = (Integer) request.getAttribute("userCode");
-		String applyButtonStart = "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
+		String applyButtonStart = "<button style='float: right;' type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
 		String applyButtonEnd ="</button>";
 		
-		String applyCancelButtonStart = "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
+		String applyCancelButtonStart = "<button style='float: right;' type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
 		String applyCancelButtonEnd ="</button>";
 	%>
 	<c:set var="userCode" value="<%= userCode %>"></c:set>
