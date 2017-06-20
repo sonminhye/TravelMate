@@ -21,39 +21,11 @@
 	<%
 		int travelCode = (Integer) request.getAttribute("travelCode");
 		int userCode = (Integer) request.getAttribute("userCode");
-		String applyButtonStart = null;
-		String applyButtonEnd = null;
-		String applyCancelButtonStart = null;
-		String applyCancelButtonEnd = null;
-		// 로그인
-		if (userCode > 0) {
-			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ userCode
-			+ ">"
-			+ "<input type='hidden' name='travelCode'class='form-class' value="
-			+ travelCode
-			+ ">"
-			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
-			applyButtonEnd ="</button></a>";
-			
-			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ userCode
-			+ ">"
-			+ "<input type='hidden' name='travelCode'class='form-class' value="
-			+ travelCode
-			+ ">"
-			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
-			applyCancelButtonEnd ="</button></a>";
-		}
-		// 로그인 x
-		else {
-			applyButtonStart = "";
-			applyButtonEnd = "";
-			applyCancelButtonStart = "";
-			applyCancelButtonEnd = "";
-		}
+		String applyButtonStart = "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
+		String applyButtonEnd ="</button>";
+		
+		String applyCancelButtonStart = "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
+		String applyCancelButtonEnd ="</button>";
 	%>
 	<c:set var="userCode" value="<%= userCode %>"></c:set>
 
@@ -254,9 +226,7 @@
 										    <a href="#this" id="point5">★</a>
 										</p>
 										<input type="hidden" name="point" value="0">
-										<input type="hidden" name="travelCode" value="<%=travelCode %>">
 										<textarea name="content" placeholder="최대 300자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="300"></textarea>
-										<input type="hidden" name="userCode" value="<%=userCode %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
 								</c:otherwise>

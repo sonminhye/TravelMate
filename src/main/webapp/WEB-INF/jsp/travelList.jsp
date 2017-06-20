@@ -8,15 +8,7 @@
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>  
 <%@ page import="org.springframework.security.core.Authentication" %>  
 <%@ page import="com.travel.mate.security.MyUser" %>
-<%
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	Object principal = auth.getPrincipal();
-	int code = 0;
-	
-	if (principal != null && principal instanceof MyUser) {
-		code = ((MyUser)principal).getUserCode();
-	}
-%>
+
 <html>
 <head>
 	<title>여행 목록</title>
@@ -29,18 +21,8 @@
 	<hr>
 
 	<%
-		String writeButtonStart = null;
-		String writeButtonEnd = null;
-		// 로그인
-		if (code > 0) {
-			writeButtonStart = "<a href='writeTravel' style='float: right;'><button type='button' class='btn btn-primary btn-lg btn-info'>여행 등록하기";
-			writeButtonEnd ="</button></a>";
-		}
-		// 로그인 x
-		else {
-			writeButtonStart = "";
-			writeButtonEnd = "";
-		}
+		String writeButtonStart = "<a href='writeTravel' style='float: right;'><button type='button' class='btn btn-primary btn-lg btn-info'>여행 등록하기";
+		String writeButtonEnd ="</button></a>";
 	%>
 	
 	<div role="tabpanel">

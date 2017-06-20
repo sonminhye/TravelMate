@@ -28,7 +28,6 @@
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action="<c:url value='/doWrite' />" method="post" enctype="multipart/form-data">
 			<table class="table" width="500">
-			<input type="hidden" name="userCode" class="form-control" value="<%=code%>">
 				<tr>
 					<td>여행이름<font color="red">*</font></td>
 					<td><input name="title" class='form-control' type="text" maxlength="15" placeholder="여행제목을 입력하세요(15자이내)" required></td>
