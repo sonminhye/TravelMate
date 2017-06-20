@@ -82,7 +82,7 @@ public class TravelController {
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/readTravel/{travelCode}")
-	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode, HttpServletRequest request) {
+	public ModelAndView readTravel(@PathVariable int travelCode, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		
@@ -94,6 +94,8 @@ public class TravelController {
 		if(principal != null && principal instanceof MyUser){
 			userCode = ((MyUser)principal).getUserCode();
 		}
+		
+		TravelDTO travelDto = new TravelDTO();
 		travelDto.setTravelCode(travelCode);
 		travelDto.setUserCode(userCode);
 		

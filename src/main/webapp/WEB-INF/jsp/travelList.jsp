@@ -21,15 +21,13 @@
 <head>
 	<title>여행 목록</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="<c:url value='/js/travelCommon.js' />"></script>
 	<script src="<c:url value='/js/calculateDay.js' />"></script>
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
 	<hr>
 	<hr>
-	
-	<form id="commonForm" name="commonForm"></form>
+
 	<%
 		String writeButtonStart = null;
 		String writeButtonEnd = null;
@@ -57,7 +55,7 @@
 								<c:when test="${fn:length(list) > 0}">
 									<c:forEach items="${list }" var="row">
 										<div class="travel col-md-4 col-sm-6 portfolio-item" style="height: 500">
-											<a href="#" name="img-link" class="portfolio-link" data-toggle="modal">
+											<a href="<c:url value='/readTravel' />/${row.travelCode}" class="portfolio-link" data-toggle="modal">
 												<input type="hidden" class="travelCode scrolling" data-tcode="${row.travelCode }" value="${row.travelCode }">
 												<div class="portfolio-hover">
 													<div class="portfolio-hover-content">
@@ -87,21 +85,6 @@
 									</tr>
 								</c:otherwise>
 							</c:choose>
-							
-							<script type="text/javascript">
-								$(document).ready(function () {
-									$("a[name='img-link']").on("click", function(e) {
-									e.preventDefault();
-									readTravel($(this));
-									});
-								});
-								function readTravel(obj) {
-									var comSubmit = new ComSubmit();
-									var travelCode = obj.parent().find(".travelCode").val();
-									comSubmit.setUrl("<c:url value='/readTravel/' />" + travelCode);
-									comSubmit.submit();
-								}
-							</script>
 
 						</div>
 					</div>
@@ -138,6 +121,7 @@
 										ddayResult = getDiffDay(this.startDate, getToday());
 										
 										str = $(".travel").clone();
+										str.find(".portfolio-link").attr("href", "<c:url value='/readTravel' />" + "/" + this.travelCode);
 										str.find(".travelCode").attr("data-tcode", this.travelCode);
 										str.find(".travelCode").attr("value", this.travelCode);
 										str.find("img").attr("src", "/userimg/"+this.image);
@@ -151,14 +135,6 @@
 									}
 								);
 								$(".scrollLocation").append(ajaxResult);
-								
-								function addEvent() {
-									$("a[name='img-link']").on("click", function(e) {
-										e.preventDefault();
-										readTravel($(this));
-									});
-								}
-								addEvent();
 							}
 							else {
 								;
