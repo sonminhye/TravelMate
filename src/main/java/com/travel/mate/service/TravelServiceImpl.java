@@ -8,7 +8,6 @@
 package com.travel.mate.service;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +87,9 @@ public class TravelServiceImpl implements TravelService {
 				throw new Exception();
 			}
 			
-			if ((temp.equals(".jpg") || temp.equals(".gif") || temp.equals(".png") || temp.equals(".jpeg") || temp.equals(".bmp"))
+			if ((temp.equals(".jpg") || temp.equals(".gif") ||
+						temp.equals(".png") || temp.equals(".jpeg") ||
+						temp.equals(".bmp"))
 					&& (null != request)) {
 				travelDAO.insertTravel(travelDto);
 				
