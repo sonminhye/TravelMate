@@ -21,8 +21,6 @@
 		email = ((MyUser)principal).getUsername();
 		unReadCount = request.getAttribute("unReadCount").toString();
 	}
-	
-	
 %>
 
 <html>
@@ -71,78 +69,77 @@
 	
 	// 비밀번호확인 
 	function checkPwd(){
-	 var f1 = document.forms[0];
-	 var pw1 = f1.password.value;
-	 var pw2 = f1.passwordCheck.value;
-	 if(pw1!=pw2){
-	  document.getElementById('checkPwd').style.color = "red";
-	  document.getElementById('checkPwd').innerHTML = "비밀번호와 똑같이 입력해주세요.";
-	  passwordCheck = 0;
-	 }else{
-	  document.getElementById('checkPwd').style.color = "blue";
-	  document.getElementById('checkPwd').innerHTML = "비밀번호가 확인 되었습니다.";
-	  passwordCheck = 1;
-	 }
-	 
+		var f1 = document.forms[0];
+		var pw1 = f1.password.value;
+		var pw2 = f1.passwordCheck.value;
+		if(pw1!=pw2){
+		 document.getElementById('checkPwd').style.color = "red";
+		 document.getElementById('checkPwd').innerHTML = "비밀번호와 똑같이 입력해주세요.";
+		 passwordCheck = 0;
+		}else{
+		 document.getElementById('checkPwd').style.color = "blue";
+		 document.getElementById('checkPwd').innerHTML = "비밀번호가 확인 되었습니다.";
+		 passwordCheck = 1;
+		}
 	}
 	
 	
 	function sendEmail() {
-	 if (loopSendKeyword == false) return;
-	 var keyword = document.forms[0].id.value;
-	 if (keyword == '') {
-	  lastKeyword = '';
-	  document.getElementById('checkMsg').style.color = "black";
-	  document.getElementById('checkMsg').innerHTML = "이메일주소를 입력하세요.";
-	 }
-
-	 else if (keyword != lastKeyword) {
-	  lastKeyword = keyword;
-
-		if (keyword != '') {
-		  //중복검사
- 		  var params = "id="+encodeURIComponent(keyword);
-	 	  sendRequest("checkSignup", params, displayResult, 'POST');
-		}else {
-		}
-	 }
-	 setTimeout("sendEmail();", 500);
+		 if (loopSendKeyword == false) return;
+		 var keyword = document.forms[0].id.value;
+		 if (keyword == '') {
+		  lastKeyword = '';
+		  document.getElementById('checkMsg').style.color = "black";
+		  document.getElementById('checkMsg').innerHTML = "이메일주소를 입력하세요.";
+		 }
+	
+		 else if (keyword != lastKeyword) {
+		  lastKeyword = keyword;
+	
+			if (keyword != '') {
+			  //DB를 통해 중복검사
+	 		  var params = "id="+encodeURIComponent(keyword);
+		 	  sendRequest("checkSignup", params, displayResult, 'POST');
+			}else {
+				console.log(keyword);
+			}
+		 }
+		 setTimeout("sendEmail();", 500);
 	}
 	
 	
 	function displayResult() {
-	 if (httpRequest.readyState == 4) {
-	  if (httpRequest.status == 200) {
-	   var resultText = httpRequest.responseText;
-	   var listView = document.getElementById('checkMsg');
-	   if(resultText==0){
-	    listView.innerHTML = "사용 가능한 이메일주소입니다";
-	    listView.style.color = "blue";
-	    idCheck = 1; //아이디 입력했음을 체크
-	   }else{
-	    listView.innerHTML = "이미 등록된 이메일주소입니다";
-	    listView.style.color = "red";
-	    idCheck = 2; //중복아이디임을 체크
-	   }
-	  } else {
-	   alert("에러 발생: "+httpRequest.status + httpRequest.responseText );
-	  }
-	 }
+		if (httpRequest.readyState == 4) {
+			if (httpRequest.status == 200) {
+			 var resultText = httpRequest.responseText;
+			 var listView = document.getElementById('checkMsg');
+			 if(resultText==0){
+			  listView.innerHTML = "사용 가능한 이메일주소입니다";
+			  listView.style.color = "blue";
+			  idCheck = 1; //아이디 입력했음을 체크
+			 }else{
+			  listView.innerHTML = "이미 등록된 이메일주소입니다";
+			  listView.style.color = "red";
+			  idCheck = 2; //중복아이디임을 체크
+			 }
+			} else {
+			 alert("에러 발생: "+httpRequest.status + httpRequest.responseText );
+			}
+		}
 	}
 
  	function checkSubmit(){
  		var idEmptyCheck = document.forms[0].id.value;
  		var passcheckCheck = document.forms[0].passwordCheck.value;
-		var languageCheck = document.forms[0].language.value;
-		
+
 		if(idEmptyCheck.length==0){
 			alert('이메일 주소를 입력해주세요.');
 			return false;
 		}
-		if(idCheck=='2'){
+ 		if(idCheck=='2'){
 			alert('이미 존재하는 메일주소 입니다.');
 			return false;
-		}
+		} 
 		if(passwordCheck=='0'){
 			alert('비밀번호를 정확히 입력해 주세요.');
 			return false;
@@ -151,7 +148,6 @@
 		}
 	}
  	
-
 </script>
 </head>
 
@@ -164,10 +160,9 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="<c:url value='/main' />">Travle Mate</a>
+                <a class="navbar-brand" href="<c:url value='/main' />">Travel Mate</a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                 
@@ -186,7 +181,6 @@
                 <!-- 로그인 정보가 존재할 때 -->
                 <sec:authorize access="isAuthenticated()">
                		<li>
-               			<input type="hidden" class="userCode" value=<%=code %>>
 	                	<a class="page-scroll" href="<c:url value='/myPage' />"><%=email%>님 반갑습니다!</a>	
 	                </li>
 	                <li>
@@ -199,11 +193,8 @@
                 </sec:authorize>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
-
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
+        </div> <!-- /div container -->
+    </nav> <!-- /navvar -->
 	
 	<!-- 회원가입 Modal -->
 	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -218,7 +209,7 @@
 				<div class="modal-body">
 					<form action="doSignUp" method="POST" onsubmit="return checkSubmit()">
 						<div class="form-group">
-							<!-- 권한을 ROLE_USER로 설정 -->
+							<!-- 회원 가입 시 권한을 ROLE_USER로 설정 -->
 							<input type="hidden" class="form-control" id="auth" name="authority" value="ROLE_USER">
 						</div>
 						<div class="form-group">
@@ -279,7 +270,7 @@
 						<button type="submit" class="btn btn-default">가입</button>
 					</form>
 					
-					<!-- 입력 여부 체크하기위한 hidden input -->
+					<!-- password, id 유효성 체크하기위한 hidden input -->
 					<div class="formCheck">
 				        <input name="idCheck" id="idCheck" class="idCheck" type="hidden" value='0'>
 				        <input name="passwordCheck" id="passwordCheck" class="passwordCheck" type="hidden" value='0'>

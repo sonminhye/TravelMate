@@ -20,8 +20,6 @@ public class ReloadableUser {
 
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication,userName));
- 
-	        
 
 	}
 

@@ -1,10 +1,8 @@
 package com.travel.mate.controller;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
@@ -128,22 +125,19 @@ public class UserController {
 	public String myPage(HttpServletRequest request, Model model) {
 		System.out.println("myPage controller");
 		
-/*		String userCode="";
-		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
-        if(flashMap!=null){
-        	Map<String, Integer> map = (HashMap) flashMap.get("param");
-        	userCode = map.get("userCode").toString();
-        }
-        model.addAttribute("userCode", userCode);*/
-		
 		return "myPage";
 	}
 	
-	
 	@RequestMapping(value = "/myInfo", method = RequestMethod.POST)
-	public String myInfo(@RequestParam("userCode") int userCode, Model model) {
+	public String myInfo(Model model) {
 		System.out.println("myPage controller");
+		int userCode = 0;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
 
+		if(principal != null && principal instanceof MyUser){
+			userCode = ((MyUser)principal).getUserCode();
+		}
 		UserDTO user = userService.showUser(userCode);
 		UserDetailDTO userDetail = userService.showUserDetail(userCode); 
 		
@@ -167,21 +161,23 @@ public class UserController {
 		}
 		userDetailDTO.setUserCode(userCode);
 		userService.updateUserDetail(userDetailDTO);
-/*		model.addAttribute("userCode", userDetailDTO.getUserCode());
-		
-		Map<String,Integer> map = new HashMap<String,Integer>();
-		map.put("userCode",userDetailDTO.getUserCode());
-		
-		redirectAttributes.addFlashAttribute("param", map);*/
-		
+
 		return "redirect:myPage";
+
 	}
+	
 	
 	/*비밀번호 변경 뷰*/
 	@RequestMapping(value = "/myPassword", method = RequestMethod.POST)
-	public String myPassword(@RequestParam("userCode") int userCode, Model model) {
+	public String myPassword(Model model) {
 		System.out.println("myPassword controller");
-		
+		int userCode = 0;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+
+		if(principal != null && principal instanceof MyUser){
+			userCode = ((MyUser)principal).getUserCode();
+		}
 		UserDTO user = userService.showUser(userCode);
 		
 		model.addAttribute("user",user);
@@ -222,14 +218,13 @@ public class UserController {
 			userDTO.setPassword(bCryptNew);
 			userService.updatePassword(userDTO);		
 			reloadUser.reloadAuthentication(userDTO.getId()); //세션재설정
-			System.out.println("hello???");
+
 			return "redirect:myPage";
 		}
 		else{
 			fail = true;
 			model.addAttribute("fail",fail);
-			model.addAttribute("userCode", userDTO.getUserCode());
-			return "forward:/myPassword";
+			return "forward:myPassword";
 		}
 		
 	}

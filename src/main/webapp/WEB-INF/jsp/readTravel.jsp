@@ -228,6 +228,7 @@
 					<c:forEach items="${reviewList }" var="review">
 						<div>${review.name }(${review.writeTime })<textarea readonly="readonly" style="width: 100%; resize: none; border: none; display: inline;">${review.content }</textarea>
 						</div>
+						<br>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
