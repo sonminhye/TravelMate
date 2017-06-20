@@ -8,10 +8,11 @@
 		<![CDATA[
 			SELECT	u.name, u.age, u.sex, u.location, u.meanPoint
 			FROM	userDetail u
-			WHERE	u.userCode = (
-									SELECT	t.userCode
-									FROM	travel t
-									WHERE	t.travelCode = #{travelCode}
+			WHERE	u.userCode =
+								(
+								SELECT	t.userCode
+								FROM	travel t
+								WHERE	t.travelCode = #{travelCode}
 								)
 		]]>
 	</select>
@@ -26,7 +27,7 @@
 		]]>
 	</select>
 
-	<!-- 해당 게시물을 신청했었는지 -->
+	<!-- 해당 게시물을 신청했었는지, 신청했다면 결과 반환 -->
 	<select id="selectTravelApply" parameterType="com.travel.mate.dto.ApplyDTO" resultType="hashmap">
 		<![CDATA[
 			SELECT	t.travelCode, a.userCode
@@ -40,56 +41,43 @@
 	<!-- 첫 화면에 보여질 6개 -->
 	<select id="selectTravel" resultType="hashmap">
 		<![CDATA[
-			SELECT		tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
+			SELECT	 	tt.travelCode, tt.userCode, tt.title, tt.writeDate, tt.startDate, tt.image, ud.name
 			FROM
-						(
-						SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
-						FROM
-									(
-									SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-									FROM		travel t, userDetail ud
-									WHERE		t.userCode = ud.userCode
-									) ts, travelDetail td
-						WHERE		ts.travelCode = td.travelCode
-						) tt, travelImage ti
-			WHERE		tt.travelCode = ti.travelCode
-			ORDER BY	tt.writeDate DESC, tt.travelCode DESC
-			LIMIT		0, 6
+				(
+				SELECT		t.travelCode, t.userCode, t.title, t.writeDate, td.startDate, ti.image
+				FROM		travel t, travelDetail td, travelImage ti
+				WHERE		t.travelCode = td.travelCode
+					AND 	t.travelCode = ti.travelCode
+				ORDER BY	t.travelCode DESC
+				LIMIT 		0, 6
+				) tt, userDetail ud
+			WHERE		tt.userCode = ud.userCode
+			ORDER BY	tt.travelCode DESC
 		]]>
 	</select>
 	
 	<!-- 스크롤을 통해 3개씩 더 가져오기 -->
 	<select id="selectTravelScroll" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT		tt.travelCode, tt.userCode, tt.title, tt.name, tt.writeDate, tt.startDate, ti.image
-			FROM		(
-						SELECT		ts.travelCode, ts.userCode, ts.title, ts.name, ts.writeDate, td.startDate
-						FROM		(
-									SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate
-									FROM		travel t, userDetail ud
-									WHERE		t.userCode = ud.userCode
-									) ts, travelDetail td
-						WHERE		ts.travelCode = td.travelCode
-							AND		ts.travelCode <= #{code}
-							AND		ts.travelCode > #{code} - 3
-						) tt, travelImage ti
-			WHERE		tt.travelCode = ti.travelCode
-			ORDER BY	tt.travelCode DESC, tt.writeDate DESC
+			SELECT		t.travelCode, t.userCode, t.title, ud.name, t.writeDate, td.startDate, ti.image
+			FROM		travel t, userDetail ud, travelDetail td, travelImage ti
+			WHERE		t.travelCode = td.travelCode
+				AND		t.travelCode = ti.travelCode
+				AND		t.userCode = ud.userCode
+				AND		t.travelCode <= #{code}
+				AND 	t.travelCode > #{code} - 3
+			ORDER BY	t.travelCode DESC
 		]]>
 	</select>
 	
 	<!-- 여행 정보 읽기 -->
 	<select id="selectTravelDetail" parameterType="int" resultType="hashmap">
 		<![CDATA[
-			SELECT	tr.travelCode, tr.userCode, tr.title, tr.content, tr.writeDate, tr.startDate, tr.startTime, tr.endDate, tr.endTime, tr.minPeople, tr.maxPeople, ud.name
-			FROM	(
-					SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople
-					FROM	travel t, travelDetail td
-					WHERE	t.travelCode = td.travelCode
-						AND	t.travelCode = #{code}
-					) tr, userDetail ud
-			WHERE	tr.userCode = ud.userCode
-				
+			SELECT	t.travelCode, t.userCode, t.title, t.content, t.writeDate, td.startDate, td.startTime, td.endDate, td.endTime, td.minPeople, td.maxPeople, ud.name
+			FROM	travel t, travelDetail td, userDetail ud
+			WHERE	t.travelCode = td.travelCode
+				AND	t.userCode = ud.userCode
+				AND	t.travelCode = #{code}	
 		]]>
 	</select>
 
@@ -157,5 +145,5 @@
 				AND	userCode = #{userCode}
 		]]>
 	</delete>
+	
 </mapper>
-

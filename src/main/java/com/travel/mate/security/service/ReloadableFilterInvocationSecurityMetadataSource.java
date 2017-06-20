@@ -43,7 +43,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 	  // TODO Auto-generated method stub
-        System.out.println("getAttributes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
 
 	  HttpServletRequest request = ((FilterInvocation)object).getRequest();
 	  Collection<ConfigAttribute> result = null;
@@ -59,7 +58,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 	  // TODO Auto-generated method stub
-        System.out.println("getAllConfigAttributes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
 
 	  Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
 	  for(Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : requestMap.entrySet()){
@@ -78,7 +76,6 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securedObjectService.getRolesAndUrl();
 	        Iterator<Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
 	
-	        System.out.println("reload !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
 	        // 이전 데이터 삭제
 	        requestMap.clear();
 	

@@ -11,10 +11,8 @@
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
-	String email = "";
 	
-	if(principal != null && principal instanceof MyUser){
-		//code는 PK인 유저코드. 
+	if (principal != null && principal instanceof MyUser) {
 		code = ((MyUser)principal).getUserCode();
 	}
 %> 
@@ -98,7 +96,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부(10MB미만)<font color="red">*</font></td>
+					<td>사진첨부(2MB미만)<font color="red">*</font></td>
 					<td><input id="image" name="image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>

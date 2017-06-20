@@ -50,7 +50,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         Object principal = auth.getPrincipal();
         if(principal!=null && principal instanceof MyUser){
     		int userCode =  ((MyUser)principal).getUserCode();
-            int unReadCount = mongoService.checkUnReadMessage(userCode);
+    		int unReadCount = mongoService.checkUnReadMessage(userCode);
             request.setAttribute("unReadCount", unReadCount);
         }
     }

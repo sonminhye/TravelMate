@@ -8,7 +8,6 @@
 package com.travel.mate.service;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -76,10 +75,6 @@ public class TravelServiceImpl implements TravelService {
 			MultipartFile f = request.getFile("image");
 			String filename = f.getOriginalFilename();
 			
-			Iterator<String> iterator = request.getFileNames();
-			
-			MultipartFile multipartFile = request.getFile(iterator.next());
-			
 			String storedFileName = null;
 			String temp = null;
 			
@@ -87,12 +82,14 @@ public class TravelServiceImpl implements TravelService {
 			temp = temp.toLowerCase();
 			
 			// File size Check
-			if (multipartFile.getSize() > (10 * 1024 * 1024)) {
+			if (f.getSize() > (2 * 1024 * 1024)) {
 				log.error("File size is big");
 				throw new Exception();
 			}
 			
-			if ((temp.equals(".jpg") || temp.equals(".gif") || temp.equals(".png") || temp.equals(".jpeg") || temp.equals(".bmp"))
+			if ((temp.equals(".jpg") || temp.equals(".gif") ||
+						temp.equals(".png") || temp.equals(".jpeg") ||
+						temp.equals(".bmp"))
 					&& (null != request)) {
 				travelDAO.insertTravel(travelDto);
 				
@@ -122,7 +119,7 @@ public class TravelServiceImpl implements TravelService {
 				storedFileName = CommonUtil.getRandomString() + temp;
 				
 				file = new File(filepath + storedFileName);
-				multipartFile.transferTo(file);
+				f.transferTo(file);
 				TravelImageDTO travelImage = new TravelImageDTO();
 				travelImage.setImage(storedFileName);
 				travelImage.setTravelCode(travelCode);

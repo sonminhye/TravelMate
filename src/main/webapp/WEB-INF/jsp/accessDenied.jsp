@@ -10,7 +10,7 @@
 <body id="page-top" class="index">
 <jsp:include page="header.jsp"></jsp:include>
 
-    <!-- Header -->
+<!-- Header -->
     <header>
         <div class="container">
             <div class="intro-text">
@@ -19,8 +19,6 @@
             </div>
         </div>
     </header>
-
-
 </body>
 
 </html>

@@ -17,5 +17,4 @@
         <beans:constructor-arg name="databaseName" value="minhye" />
     </beans:bean>
    
-	
 </beans:beans>

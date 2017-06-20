@@ -139,8 +139,8 @@ public class ChatController {
 		
 		String messageCode = map.get("messageCode").toString();
 		String roomCode = map.get("room").toString();
-		
-		//이 부분을 mongodb에서 리스트를 불러옴
+
+		// mongoDB 에서 채팅 더 불러들이기
 		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode), messageCode);
 		
 		return list;

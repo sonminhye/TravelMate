@@ -22,17 +22,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
 import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.security.MyUser;
 import com.travel.mate.service.UserService;
+import com.travel.mate.user.ReloadableUser;
 
 @Controller
 public class UserController {
 	Logger log = Logger.getLogger(this.getClass());
 
+	@Autowired
+	ReloadableUser reloadUser;
+	
 	@Resource(name = "UserService")
 	private UserService userService;
 	
@@ -116,18 +121,23 @@ public class UserController {
 		return String.valueOf(rowcount);
 	}
 	
-	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
-	public String myPage(Model model) {
+	@RequestMapping(value = "/myPage", method = {RequestMethod.GET,RequestMethod.POST})
+	public String myPage(HttpServletRequest request, Model model) {
 		System.out.println("myPage controller");
-
+		
 		return "myPage";
 	}
 	
-	
 	@RequestMapping(value = "/myInfo", method = RequestMethod.POST)
-	public String myInfo(@RequestParam("userCode") int userCode, Model model) {
+	public String myInfo(Model model) {
 		System.out.println("myPage controller");
+		int userCode = 0;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
 
+		if(principal != null && principal instanceof MyUser){
+			userCode = ((MyUser)principal).getUserCode();
+		}
 		UserDTO user = userService.showUser(userCode);
 		UserDetailDTO userDetail = userService.showUserDetail(userCode); 
 		
@@ -139,7 +149,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/modifyUserDetail", method = RequestMethod.POST)
-	public String modifyUserDetail(@ModelAttribute UserDetailDTO userDetailDTO, Model model) {
+	public String modifyUserDetail(@ModelAttribute UserDetailDTO userDetailDTO, Model model,  RedirectAttributes redirectAttributes) {
 		System.out.println("modifyUserDetail controller");
 		/*보안을 위해 서버단에서 세션을 통해 userCode를 얻음*/
 		int userCode = 0;
@@ -151,15 +161,23 @@ public class UserController {
 		}
 		userDetailDTO.setUserCode(userCode);
 		userService.updateUserDetail(userDetailDTO);
-		model.addAttribute("userCode", userDetailDTO.getUserCode());
-		return "myPage";
+
+		return "redirect:myPage";
+
 	}
+	
 	
 	/*비밀번호 변경 뷰*/
 	@RequestMapping(value = "/myPassword", method = RequestMethod.POST)
-	public String myPassword(@RequestParam("userCode") int userCode, Model model) {
+	public String myPassword(Model model) {
 		System.out.println("myPassword controller");
-		
+		int userCode = 0;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+
+		if(principal != null && principal instanceof MyUser){
+			userCode = ((MyUser)principal).getUserCode();
+		}
 		UserDTO user = userService.showUser(userCode);
 		
 		model.addAttribute("user",user);
@@ -185,6 +203,8 @@ public class UserController {
 			password = ((MyUser)principal).getPassword();
 		}
 		
+		System.out.println("userId=" + userDTO.getId());
+		
 		userDTO.setUserCode(userCode);
 		userDTO.setPassword(password);
 		
@@ -192,18 +212,19 @@ public class UserController {
 		boolean fail = false;
 		
 		/*기존 비밀번호가 DB와 일치할 경우 && 새 비밀번호와 새 비밀번호 확인이 일치할 경우*/
-		if(passwordEncoder.matches(originalPassword, userDTO.getPassword()) && newPassword.equals(newPasswordConfirm)){
+		if(passwordEncoder.matches(originalPassword, password) && newPassword.equals(newPasswordConfirm)){
 			/*새로운 패스워드 암호화*/
 			String bCryptNew = passwordEncoder.encode(newPassword);
 			userDTO.setPassword(bCryptNew);
-			userService.updatePassword(userDTO);			
-			return "myPage";
+			userService.updatePassword(userDTO);		
+			reloadUser.reloadAuthentication(userDTO.getId()); //세션재설정
+
+			return "redirect:myPage";
 		}
 		else{
 			fail = true;
 			model.addAttribute("fail",fail);
-			model.addAttribute("userCode", userDTO.getUserCode());
-			return "forward:/myPassword";
+			return "forward:myPassword";
 		}
 		
 	}

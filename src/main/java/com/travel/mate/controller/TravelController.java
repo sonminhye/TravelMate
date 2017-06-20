@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,7 @@ import com.travel.mate.dto.ApplyDTO;
 import com.travel.mate.dto.TravelDTO;
 import com.travel.mate.dto.TravelDetailDTO;
 import com.travel.mate.dto.TravelRouteDTO;
+import com.travel.mate.security.MyUser;
 import com.travel.mate.service.TravelService;
 import com.travel.mate.service.ReviewService;
 
@@ -83,6 +86,17 @@ public class TravelController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		
+		// url을 통해서 들어올 때 userCode가 0으로 되는 현상 방지
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+		int userCode = 0;
+		
+		if(principal != null && principal instanceof MyUser){
+			userCode = ((MyUser)principal).getUserCode();
+		}
+		travelDto.setTravelCode(travelCode);
+		travelDto.setUserCode(userCode);
+		
 		List<Map<String, Object>> listinfo = travelService.selectTravelDetail(travelDto);
 		List<Map<String, Object>> listRoute = travelService.selectTravelRoute(travelDto);
 		
@@ -113,6 +127,7 @@ public class TravelController {
 		mv.addObject("userInfo", listUserInfo);
 		
 		request.setAttribute("travelCode", travelCode);
+		request.setAttribute("userCode", userCode);
 		
 		return mv;
 	}

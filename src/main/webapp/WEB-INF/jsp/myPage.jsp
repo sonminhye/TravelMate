@@ -7,12 +7,10 @@
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	Object principal = auth.getPrincipal();
 	int code = 0;
-
 	if(principal != null && principal instanceof MyUser){
 		code = ((MyUser)principal).getUserCode();
 	}
-	
-	
+
 %>
 <html>
 <head>
@@ -35,30 +33,30 @@
     <!-- 탭 -->
 	<div role="tabpanel"style="margin-left: 2%;">
 		 <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-		   <li role="presentation" class="active">
+        <!-- <ul class="nav nav-tabs" role="tablist"> -->
+		<!--    <li role="presentation" class="active">
 		       <a href="#makeTravel" aria-controls="makeTravel" role="tab" data-toggle="tab">내가 만든 여행</a>
 		   </li>
 		   <li role="presentation">
 		       <a href="#applyTravel" aria-controls="applyTravel" role="tab" data-toggle="tab">내가 신청한 여행</a>
-		   </li>
-		   <li role="presentation">
+		   </li> -->
+		   <hr>
+		<div class="container" style="width: 70%; margin:50px auto; height:30%; text-align: center;">
 		   <form action="<c:url value='/myInfo' />" method="POST">
-		   	  <input type="hidden" name="userCode" value="<%=code %>" >
 		 	  <button type="submit" class="btn btn-default">내 정보 수정하기</button>
 		   </form>
-		   </li>
-		</ul>
+		</div>
+		
 		
 		 <!-- Tab panes -->
 		
-        <div class="tab-content">
-        
+<!--         <div class="tab-content">
+ -->        
         	<!-- 내가 만든 여행 -->
-		    <div role="tabpanel" class="tab-pane active" id="makeTravel">
+	<!-- 	    <div role="tabpanel" class="tab-pane active" id="makeTravel">
 		    	<section id="portfolio" class="bg-light-gray">
                     <div class="container">
-                        <!--카드 레이아웃 출력-->
+                        카드 레이아웃 출력
                         <div class="row">
                             <div class="col-md-4 col-sm-6 portfolio-item">
                                 <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
@@ -150,12 +148,12 @@
 				
 		    </div>
 		    
-		    <!-- 내가 신청한 여행 -->
+		    내가 신청한 여행
 		    <div role="tabpanel" class="tab-pane" id="applyTravel">...</div>
 		    
 	
 		  
-        </div>	
+        </div>	 -->
 	</div><!--탭-->
 	
 	<jsp:include page="footer.jsp"></jsp:include>

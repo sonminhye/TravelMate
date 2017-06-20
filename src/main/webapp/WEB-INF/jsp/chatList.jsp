@@ -131,7 +131,6 @@
 			date.html(data.date);
 			//메세지가 온 채팅방을 제일 위로 올리기
 			parent.prependTo("#chatList");
-		
 		};
 	</script>
 	<jsp:include page="footer.jsp"></jsp:include>
