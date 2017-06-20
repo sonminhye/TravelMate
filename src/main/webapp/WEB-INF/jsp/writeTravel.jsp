@@ -96,7 +96,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>사진첨부(10MB미만)<font color="red">*</font></td>
+					<td>사진첨부(2MB미만)<font color="red">*</font></td>
 					<td><input id="image" name="image" type="file" accept="image/*" onchange="fileCheck(this)" required></td>
 				</tr>
 			</table>

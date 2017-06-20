@@ -9,11 +9,11 @@ function fileCheck(obj) {
 	var filePoint = obj.value.lastIndexOf(".");
 	var fileName = obj.value.substring(filePoint + 1, obj.length);
 	var fileType = fileName.toLowerCase();
-	var maxSize = 10 * 1024 * 1024;
+	var maxSize = 2 * 1024 * 1024;
 	var fileSize = obj.files[0].size;
 	
 	if (fileSize > maxSize) {
-		alert("10MB 이하의 파일만 가능합니다");
+		alert("2MB 이하의 파일만 가능합니다");
 		$("#image").val("");
 		return false;
 	}
