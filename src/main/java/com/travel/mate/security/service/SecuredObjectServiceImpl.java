@@ -53,7 +53,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	  throws Exception {
 	  // TODO Auto-generated method stub
 	  LinkedHashMap<String, List<ConfigAttribute>> ret = new LinkedHashMap<String, List<ConfigAttribute>>();
-	  LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndPointcut();
+	 // LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndPointcut();
 	  Set<Object> keys = data.keySet();
 	  for(Object key : keys){
 	  ret.put((String)key, data.get(key));
@@ -61,7 +61,7 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	  return ret;
 	}
 	
-	@Override
+/*	@Override
 	public List<ConfigAttribute> getMatchedRequestMapping(String url) throws Exception {
 	  // TODO Auto-generated method stub
 	  return securedObjectDao.getRegexMatchedRequestMapping(url);
@@ -71,6 +71,6 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	public String getHierarchicalRoles() throws Exception {
 	  // TODO Auto-generated method stub
 	  return securedObjectDao.getHierarchicalRoles();
-	}
+	}*/
 
 }

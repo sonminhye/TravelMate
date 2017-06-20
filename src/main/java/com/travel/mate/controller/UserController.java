@@ -49,11 +49,12 @@ public class UserController {
 			               @ModelAttribute @Valid UserDetailDTO userDetailDTO, BindingResult result2 ,
 						   @RequestParam("authority") String authority,
 						   @ModelAttribute("langDTOList") UserLanguageDTO languageDTO, 
-						    Model model) {
+						   Model model) {
 		System.out.println("signup controller");
 
-			//아이디중복체크해주기
-	        // Validation 오류 발생시 
+			//아이디 중복체크
+	        //Validation 오류검사
+		    //userDTO에 대한 오류 검사
 	        if (result1.hasErrors()) {
 	            // 에러 출력
 	            List<ObjectError> list = result1.getAllErrors();
@@ -62,6 +63,7 @@ public class UserController {
 	            }
 	            return "signUp";
 	        }
+	        //userDetailDTO에 대한 오류 검사
 	        if (result2.hasErrors()) {
 	            // 에러 출력
 	            List<ObjectError> list = result2.getAllErrors();
@@ -121,7 +123,7 @@ public class UserController {
 		return String.valueOf(rowcount);
 	}
 	
-	@RequestMapping(value = "/myPage", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/myPage", method = {RequestMethod.GET})
 	public String myPage(HttpServletRequest request, Model model) {
 		System.out.println("myPage controller");
 		

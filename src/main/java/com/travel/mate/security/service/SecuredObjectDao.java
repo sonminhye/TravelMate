@@ -20,9 +20,7 @@ public class SecuredObjectDao {
 
 private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-/**
-    * url 형식인 보호자원 - Role 맵핑정보를 조회하는 default 쿼리이다.
-    */
+	// url형식의 리소스 정보를 조회하는 default 쿼리
     public static final String DEF_ROLES_AND_URL_QUERY =
       "SELECT A.RESOURCE_PATTERN AS URL, B.AUTHORITY AS AUTHORITY "
       + "FROM SECURED_RESOURCES A, SECURED_RESOURCES_ROLE B "
@@ -30,9 +28,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
       + "AND A.RESOURCE_TYPE = 'url' "
       + "ORDER BY A.SORT_ORDER ";
 
-    /**
-    * method 형식인 보호자원 - Role 맵핑정보를 조회하는 default 쿼리이다.
-    */
+    //method 형식의 리소스 정보를 조회하는 default 쿼리
     public static final String DEF_ROLES_AND_METHOD_QUERY =
       "SELECT A.RESOURCE_PATTERN AS METHOD, B.AUTHORITY AS AUTHORITY "
           + "FROM SECURED_RESOURCES A, SECURED_RESOURCES_ROLE B "
@@ -40,57 +36,16 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
           + "AND A.RESOURCE_TYPE = 'method' "
           + "ORDER BY A.SORT_ORDER ";
 
-    /**
-    * pointcut 형식인 보호자원 - Role 맵핑정보를 조회하는 default
-    * 쿼리이다.
-    */
-    public static final String DEF_ROLES_AND_POINTCUT_QUERY =
-      "SELECT A.RESOURCE_PATTERN AS POINTCUT, B.AUTHORITY AS AUTHORITY "
-          + "FROM SECURED_RESOURCES A, SECURED_RESOURCES_ROLE B "
-          + "WHERE A.RESOURCE_ID = B.RESOURCE_ID "
-          + "AND A.RESOURCE_TYPE = 'pointcut' "
-          + "ORDER BY A.SORT_ORDER ";
-
-    /**
-    * 매 request 마다 best matching url 보호자원 - Role 맵핑정보를
-    * 얻기위한 default 쿼리이다. (Oracle 10g specific)
-    */
-    public static final String DEF_REGEX_MATCHED_REQUEST_MAPPING_QUERY_ORACLE10G =
-        "SELECT a.resource_pattern uri, b.authority authority "
-            + "FROM secured_resources a, secured_resources_role b "
-            + "WHERE a.resource_id = b.resource_id "
-            + "AND a.resource_id =  "
-            + " ( SELECT resource_id FROM "
-            + "    ( SELECT resource_id, ROW_NUMBER() OVER (ORDER BY sort_order) resource_order FROM secured_resources c "
-            + "      WHERE REGEXP_LIKE ( :url, c.resource_pattern ) "
-            + "      AND c.resource_type = 'url' "
-            + "      ORDER BY c.sort_order ) "
-            + "  WHERE resource_order = 1 ) ";
-
-    /**
-    * Role 의 계층(Hierarchy) 관계를 조회하는 default 쿼리이다.
-    */
-    public static final String DEF_HIERARCHICAL_ROLES_QUERY =
-        "SELECT a.child_role child, a.parent_role parent "
-            + "FROM ROLES_HIERARCHY a LEFT JOIN ROLES_HIERARCHY b on (a.child_role = b.parent_role) ";
 
     private String sqlRolesAndUrl;
 
     private String sqlRolesAndMethod;
 
-    private String sqlRolesAndPointcut;
-
-    private String sqlRegexMatchedRequestMapping;
-
-    private String sqlHierarchicalRoles;
+/*    private String sqlRegexMatchedRequestMapping;*/
 
     public SecuredObjectDao() {
         this.sqlRolesAndUrl = DEF_ROLES_AND_URL_QUERY;
         this.sqlRolesAndMethod = DEF_ROLES_AND_METHOD_QUERY;
-        this.sqlRolesAndPointcut = DEF_ROLES_AND_POINTCUT_QUERY;
-        this.sqlRegexMatchedRequestMapping =
-            DEF_REGEX_MATCHED_REQUEST_MAPPING_QUERY_ORACLE10G;
-        this.sqlHierarchicalRoles = DEF_HIERARCHICAL_ROLES_QUERY;
     }
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -124,44 +79,29 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         this.sqlRolesAndMethod = sqlRolesAndMethod;
     }
 
-    public String getSqlRolesAndPointcut() {
-        return sqlRolesAndPointcut;
-    }
-
-    public void setSqlRolesAndPointcut(String sqlRolesAndPointcut) {
-        this.sqlRolesAndPointcut = sqlRolesAndPointcut;
-    }
-
-    public String getSqlRegexMatchedRequestMapping() {
+/*    public String getSqlRegexMatchedRequestMapping() {
         return sqlRegexMatchedRequestMapping;
     }
 
     public void setSqlRegexMatchedRequestMapping(
             String sqlRegexMatchedRequestMapping) {
         this.sqlRegexMatchedRequestMapping = sqlRegexMatchedRequestMapping;
-    }
+    }*/
 
-    public String getSqlHierarchicalRoles() {
-        return sqlHierarchicalRoles;
-    }
-
-    public void setSqlHierarchicalRoles(String sqlHierarchicalRoles) {
-        this.sqlHierarchicalRoles = sqlHierarchicalRoles;
-    }
-
+    //권한과 리소스 정보를 얻어옴
     public LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndResources(String resourceType) throws Exception {
 
         LinkedHashMap<Object, List<ConfigAttribute>> resourcesMap = new LinkedHashMap<Object, List<ConfigAttribute>>();
 
         String sqlRolesAndResources;
         boolean isResourcesUrl = true;
+        //리소스가 method 형식일 경우
         if ("method".equals(resourceType)) {
             sqlRolesAndResources = getSqlRolesAndMethod();
             isResourcesUrl = false;
-        } else if ("pointcut".equals(resourceType)) {
-            sqlRolesAndResources = getSqlRolesAndPointcut();
-            isResourcesUrl = false;
-        } else {
+        } 
+        //리소스가 url 형식일 경우
+        else {
             sqlRolesAndResources = getSqlRolesAndUrl();
         }
 
@@ -213,11 +153,11 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         return getRolesAndResources("method");
     }
 
-    public LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndPointcut() throws Exception {
+/*    public LinkedHashMap<Object, List<ConfigAttribute>> getRolesAndPointcut() throws Exception {
         return getRolesAndResources("pointcut");
-    }
+    }*/
 
-    public List<ConfigAttribute> getRegexMatchedRequestMapping(String url) throws Exception {
+/*    public List<ConfigAttribute> getRegexMatchedRequestMapping(String url) throws Exception {
 
         // best regex matching - best 매칭된 Uri 에 따른 Role List 조회, 
     // DB 차원의 정규식 지원이 있는 경우 사용 (ex. hsqldb custom function, Oracle 10g regexp_like 등)
@@ -239,9 +179,9 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
             
         }
         return configList;
-    }
+    }*/
 
-    public String getHierarchicalRoles() throws Exception {
+/*    public String getHierarchicalRoles() throws Exception {
 
     List<Map<String, Object>> resultList = this.namedParameterJdbcTemplate.queryForList(getSqlHierarchicalRoles(), new HashMap<String, String>());
 
@@ -257,6 +197,6 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         }
 
         return concatedRoles.toString();
-    }
+    }*/
 }
 
