@@ -103,6 +103,7 @@
 										ddayResult = getDiffDay(this.startDate, getToday());
 										
 										str = $(".travel").clone();
+										str.removeClass("travel");
 										str.find(".portfolio-link").attr("href", "<c:url value='/readTravel' />" + "/" + this.travelCode);
 										str.find(".travelCode").attr("data-tcode", this.travelCode);
 										str.find(".travelCode").attr("value", this.travelCode);
