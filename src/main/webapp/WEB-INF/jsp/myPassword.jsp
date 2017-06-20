@@ -27,7 +27,7 @@
 	   </p>
    </c:if>
 
-     <div class="container" style="margin-top: 150px; margin-bottom: 100px;">
+     <div class="container" style="margin-top: 100px; margin-bottom: 100px; ">
 	     <form action="<c:url value='/modifyPassword' />" method="POST" name="myForm">  	
 	    	<div class="row">
 	    	  <div class="form-group col-sm-10">
@@ -37,24 +37,25 @@
 			  </div>
 			</div>
 	    	<div class="row">
-	    	  <div class="form-group col-sm-10">
+	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">기존 비밀번호</label> 
 			     <input type="password" class="form-control" id="originalPassword" name="originalPassword" >
 			  </div>
 			</div>
 			<div class="row">
-	    	  <div class="form-group col-sm-10">
+	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">새 비밀번호</label> 
 			     <input type="password" class="form-control" id="newPassword" name="newPassword" >
 			  </div>
 			</div>
 			<div class="row">
-	    	  <div class="form-group col-sm-10">
+	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">새 비밀번호 확인</label> 
 			     <input type="password" class="form-control" id="newPasswordConfirm" onkeyup="checkPwd()" name="newPasswordConfirm" >
 			     <div id="checkPwd2"></div>
 			  </div>
 			</div>
+			<hr>
 			<button type="submit" class="btn btn-default">수정</button>
 	      </form>
       </div>

@@ -27,7 +27,6 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	  // TODO Auto-generated method stub
 	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> ret = new LinkedHashMap<RequestMatcher, List<ConfigAttribute>>();
 	  LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndUrl();
-      System.out.println("getRolesAndUrl!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
 
 	  Set<Object> keys = data.keySet();
 	  for(Object key : keys){
