@@ -19,7 +19,6 @@
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
-		int travelCode = (Integer) request.getAttribute("travelCode");
 		int userCode = (Integer) request.getAttribute("userCode");
 		String applyButtonStart = "<button style='float: right;' type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
 		String applyButtonEnd ="</button>";

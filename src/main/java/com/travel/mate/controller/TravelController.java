@@ -128,7 +128,6 @@ public class TravelController {
 		
 		mv.addObject("userInfo", listUserInfo);
 		
-		request.setAttribute("travelCode", travelCode);
 		request.setAttribute("userCode", userCode);
 		
 		return mv;
