@@ -136,6 +136,7 @@
 		
 		//상대방이 채팅창에 들어와있는지 안있는지 판단하는 아이콘
 		online = function(data){
+			
 			var c=document.getElementById("myCanvas");
 			var ctx = c.getContext("2d");
 			ctx.beginPath();
