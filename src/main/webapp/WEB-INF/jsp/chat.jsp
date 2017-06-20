@@ -98,8 +98,8 @@
 		var scode = '${scode}';
 		
 		var Message;
-		var sendMessage, scrollTop;
-		var message_side = 'right';
+		var sendMessage, scrollTop, prependMessage;
+		
 		var inchatRoom = false;
 		var nick = encodeURI(nickname); // 사용자의 닉네임을 utf-8 형식으로 바꿔서 보냄
 		
@@ -176,15 +176,19 @@
 			online(inchatRoom);
 		});
 		
+		//대화 더 불러오기
 		prependMessage = function(data){
-			
+			/*
+			어떤 형식으로 가져오는지?
+			*/
 			$.each(data, function(index, element) {
+				
 				var message;
 				if (element.senderName == nickname) //만약 내가 쓴 메세지라면
 					message_side = 'right';
 				else
 					message_side = 'left';
-
+				
 				//메세지 객체 생성
 				message = new Message({
 					messageCode : element.id,
@@ -199,6 +203,7 @@
 			});
 		}
 		
+		//실시간 메세지 구현부
 		appendMessage = function(data) {
 			
 			var message;
@@ -237,8 +242,11 @@
 			this.text = arg.text, this.message_side = arg.message_side;
 			this.nick = arg.nick, this.readFlag = arg.readFlag;
 			this.old = arg.old;
+			
 			this.draw = function(_this) {
+				
 				return function() {
+					
 					var $message;
 					//메세지 템플릿을 복사
 					$message = $($('.message_template').clone().html());
@@ -247,9 +255,11 @@
 					//text 클래스를 찾아서 메세지 오른쪽/왼쪽 정해주기
 					$message.addClass(_this.message_side).find('.text').html(
 							_this.text);
+					
 					//avatar 클래스 찾아서 닉네임 써주기
 					$message.find('.avatar').append(_this.nick);
 					
+					//현재 메세지
 					if(_this.old=='n')
 						$('.messages').append($message);
 					else{
@@ -260,7 +270,7 @@
 					    $('.messages').scrollTop(curOffset);
 					}
 					
-					//현재 이 메세지가 읽음 상태이면, 클래스명을 read 로 바꿔주기
+					//현재 이 메세지가 읽음 상태이면, 클래스 read 로 바꿔주기
 					if (_this.readFlag == 1) {
 						$message.find('.unread').empty();
 						$message.find('.unread').attr('class', 'read');
@@ -270,8 +280,8 @@
 					return setTimeout(function() {
 						return $message.addClass('appeared');
 					}, 0);
-					
 				};
+				
 			}(this)
 		};
 		
@@ -288,7 +298,7 @@
 			if (inchatRoom)
 				readFlag = 1;
 			
-			//date 형식
+			//date
 			var date = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
 			
 			socket.emit('msg', {

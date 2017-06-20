@@ -55,6 +55,7 @@ public class ChatController {
 	@RequestMapping(value = "/chat")
 	public String chatView(HttpServletRequest request, Model model) {
 		
+		
 		String rCode, roomCode;
 		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 		
@@ -94,10 +95,10 @@ public class ChatController {
 		//채팅방의 리스트를 불러오는 부분
 		ArrayList<ChatRoomDTO> list = chatService.showChatRooms(userCode);
 		ArrayList<ChatRoomDTO> unreadList = mongoService.checkUnReadMessageList(userCode);
-		System.out.println(unreadList.size());
+		
+		//현재 읽지 않은 개수 리스트(방별로)
 		model.addAttribute("unreadList", unreadList);
 		model.addAttribute("list", list);
-		model.addAttribute("myCode", userCode);
 		
 		return "chatList";
 	}
@@ -105,16 +106,15 @@ public class ChatController {
 	@RequestMapping(value="/checkChatRoom")
 	public String checkChatRoomExist(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
 		
-		String result="";
-		
 		int senderCode = getUserCode(); //나의 코드
 		int receiverCode = Integer.parseInt(request.getParameter("userCode")); //receiverCode(상대방)
 		
 		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentTime = fm.format(new Date());
+		String currentTime = fm.format(new Date()); //채팅방 생성 시간
 		
-		//두 유저간의 채팅방이 있는지 여부를 구해오는 함수
+		//두 유저간의 채팅방이 있는지 여부를 구해옴
 		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
+		
 		
 		Map<String,Integer> map = new HashMap<String,Integer>();
 		map.put("rcode",receiverCode);
@@ -126,10 +126,10 @@ public class ChatController {
 			map.put("room", chatRoom.getRoomCode());	
 		}
 		
-		//post 방식의 구현을 위한 변수
+		//파라미터를 get 방식으로 노출시키는 방식이 아닌, 감추기 위해서
 		redirectAttributes.addFlashAttribute("param", map);
-		result = "redirect:chat";
-		return result;
+		
+		return "redirect:chat";
 	}
 	
 	//채팅 더 불러오기
@@ -140,7 +140,7 @@ public class ChatController {
 		String messageCode = map.get("messageCode").toString();
 		String roomCode = map.get("room").toString();
 		
-		//이 부분을 mongodb에서 리스트를 불러오도록 고쳐야 함
+		//이 부분을 mongodb에서 리스트를 불러옴
 		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode), messageCode);
 		
 		return list;
