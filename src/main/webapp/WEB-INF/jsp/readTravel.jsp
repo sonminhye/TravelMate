@@ -207,7 +207,6 @@
 				</c:when>
 				<c:otherwise>
 					<%-- 리뷰 없음 --%>
-					<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 				</c:otherwise>
 			</c:choose>
 			
