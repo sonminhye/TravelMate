@@ -165,6 +165,7 @@
 								<form action="<c:url value='/doCancel'/>" method="post">
 									<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
 								</form>
+								<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 							</c:otherwise>
 						</c:choose>
 					</c:when>
@@ -174,6 +175,7 @@
 								<form action="<c:url value='/doApply'/>" method="post">
 									<%=applyButtonStart %><%=applyButtonEnd %>
 								</form>
+								<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 							</c:when>
 							<c:otherwise>
 								<p>신청 인원이 최대 인원입니다.</p>
@@ -193,9 +195,10 @@
 		<%-- 단, 리뷰를 남기는 것은 여행이 끝나야하므로 endDate와 비교하며 오늘이 endDate가 지났을 때만 리뷰를 남길 수 있도록 생성 --%>
 		<%-- 리뷰는 단 한번만 작성할 수 있다 --%>
 		<div id="review">
-		<br><br>
 			<c:choose>
 				<c:when test="${fn:length(reviewList) > 0 }">
+					<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
+					<hr>
 					<c:forEach items="${reviewList }" var="review">
 						<div>${review.name }(${review.writeTime })<textarea readonly="readonly" style="width: 100%; resize: none; border: none; display: inline;">${review.content }</textarea>
 						</div>
@@ -204,6 +207,7 @@
 				</c:when>
 				<c:otherwise>
 					<%-- 리뷰 없음 --%>
+					<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 				</c:otherwise>
 			</c:choose>
 			

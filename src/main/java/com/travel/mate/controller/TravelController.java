@@ -209,7 +209,7 @@ public class TravelController {
 			applyDto.setUserCode(userCode);
 			
 			travelService.insertTravelApply(applyDto);
-			mv.setViewName("redirect:/travelList");
+			mv.setViewName("redirect:/readTravel/" + travelCode);
 		}
 		catch (Exception e) {
 			mv.setViewName("redirect:/errorPage");
@@ -247,7 +247,7 @@ public class TravelController {
 			applyDto.setUserCode(userCode);			
 			
 			travelService.deleteTravelApply(applyDto);
-			mv.setViewName("redirect:/travelList");
+			mv.setViewName("redirect:/readTravel/" + travelCode);
 		}
 		catch (Exception e) {
 			mv.setViewName("redirect:/errorPage");

@@ -62,7 +62,7 @@ public class ReviewController {
 			applyDto.setUserCode(userCode);			
 			
 			reviewService.insertReview(applyDto, content, point);
-			mv.setViewName("redirect:/travelList");
+			mv.setViewName("redirect:/readTravel/" + travelCode);
 		}
 		catch (Exception e) {
 			mv.setViewName("redirect:/errorPage");
