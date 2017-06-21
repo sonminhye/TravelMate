@@ -183,7 +183,7 @@ public class TravelController {
 	/*
 	 * Method	: doApply
 	 * Summary	: 여행 신청하면 Database에 등록하는 Controller
-	 * @param	: ApplyDTO(for insert apply)
+	 * @param	: HttpServletRequest(for get travelCode)
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
@@ -221,7 +221,7 @@ public class TravelController {
 	/*
 	 * Method	: doCancel
 	 * Summary	: 여행 신청 취소하면 Database에서 삭제하는 Controller
-	 * @param	: ApplyDTO(for delete apply)
+	 * @param	: HttpServletRequest(for get travelCode)
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)

@@ -34,9 +34,9 @@ public class ReviewController {
 	/*
 	 * Method	: writeReview
 	 * Summary	: 작성한 리뷰를 Database에 등록하는 과정
-	 * @param	: ApplyDTO(for get applyInfo)
 	 * @param	: String content(for insert review)
 	 * @param	: int point(for insert point)
+	 * @param	: HttpServletRequest request(for get travelCode)
 	 * @Return	: void
 	 */
 	@RequestMapping(value = "/doWriteReview", method = RequestMethod.POST)
