@@ -1,6 +1,5 @@
 package com.travel.mate.security.service;
 
-//DefaultFilterInvocationSecurityMetadataSource 클래스와 같은 구조를 가지는 커스터마이즈클래스
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,19 +12,14 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import com.travel.mate.security.service.SecuredObjectService;
-
+/*DefaultFilterInvocationSecurityMetadataSource 클래스와 같은 구조를 가지는 커스터마이즈 클래스*/
 public class ReloadableFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+		
 	private final Map<RequestMatcher, Collection<ConfigAttribute>> requestMap;
 	
 	private SecuredObjectService securedObjectService;
@@ -47,10 +41,10 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	  HttpServletRequest request = ((FilterInvocation)object).getRequest();
 	  Collection<ConfigAttribute> result = null;
 	  for(Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : requestMap.entrySet()){
-	  if(entry.getKey().matches(request)){
-	    result = entry.getValue();
-	    break;
-	  }
+		  if(entry.getKey().matches(request)){
+		    result = entry.getValue();
+		    break;
+		  }
 	  }
 	  return result;
 	}
@@ -72,19 +66,21 @@ public class ReloadableFilterInvocationSecurityMetadataSource implements FilterI
 	  return FilterInvocation.class.isAssignableFrom(clazz);
 	}
 	
+	/*새롭게 추가한 reload 메소드
+	 * 권한 정보가 변경되었을 때 requestMap을 재설정함.*/
 	public void reload() throws Exception {
+		
 	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securedObjectService.getRolesAndUrl();
-	        Iterator<Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
+	  Iterator<Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
 	
-	        // 이전 데이터 삭제
-	        requestMap.clear();
+	  // 이전 데이터 삭제
+	  requestMap.clear();
 	
-	        while (iterator.hasNext()) {
-	        Entry<RequestMatcher, List<ConfigAttribute>> entry = iterator.next();
-	            
-	            requestMap.put(entry.getKey(), entry.getValue());
-	        }
+	    while (iterator.hasNext()) {
+	    Entry<RequestMatcher, List<ConfigAttribute>> entry = iterator.next();
+	        
+	        requestMap.put(entry.getKey(), entry.getValue());
+	    }
 	}
-
 }
 

@@ -39,19 +39,19 @@
 	    	<div class="row">
 	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">기존 비밀번호</label> 
-			     <input type="password" class="form-control" id="originalPassword" name="originalPassword" >
+			     <input required type="password" class="form-control" id="originalPassword" name="originalPassword" >
 			  </div>
 			</div>
 			<div class="row">
 	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">새 비밀번호</label> 
-			     <input type="password" class="form-control" id="newPassword" name="newPassword" >
+			     <input required type="password" class="form-control" id="newPassword" name="newPassword" >
 			  </div>
 			</div>
 			<div class="row">
 	    	  <div class="form-group col-sm-5">
 			    <label class="control-label">새 비밀번호 확인</label> 
-			     <input type="password" class="form-control" id="newPasswordConfirm" onkeyup="checkPwd()" name="newPasswordConfirm" >
+			     <input required type="password" class="form-control" id="newPasswordConfirm" onkeyup="checkPwd()" name="newPasswordConfirm" >
 			     <div id="checkPwd2"></div>
 			  </div>
 			</div>

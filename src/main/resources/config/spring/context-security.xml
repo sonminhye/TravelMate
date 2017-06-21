@@ -72,18 +72,6 @@
     	<property name="allowIfAllAbstainDecisions" value="false" />
     </bean>
     
-    
-    <bean id="reloadableFilterInvocationSecurityMetadataSource" class="com.travel.mate.security.service.ReloadableFilterInvocationSecurityMetadataSource">
-    	<constructor-arg ref="requestMap" />
-    	<property name="securedObjectService" ref="securedObjectService" />
-    </bean>
-    
-    
-    <bean id="securedObjectService" class="com.travel.mate.security.service.SecuredObjectServiceImpl">
-    	<property name="secureObjectDao" ref="securedObjectDao" />
-    </bean>
-
-    
     <bean id="securedObjectDao" class="com.travel.mate.security.service.SecuredObjectDao">
 		<property name="dataSource" ref="dataSource"/>    	
 		<property name="sqlRolesAndUrl" value="
@@ -94,11 +82,18 @@
     	" />
     </bean>
     
+    <bean id="securedObjectService" class="com.travel.mate.security.service.SecuredObjectServiceImpl">
+    	<property name="secureObjectDao" ref="securedObjectDao" />
+    </bean>
     
     <bean id="requestMap" class="com.travel.mate.security.service.UrlResourcesMapFactoryBean" init-method="init">
     	<property name="securedObjectService" ref="securedObjectService" />
     </bean>
-
+    
+    <bean id="reloadableFilterInvocationSecurityMetadataSource" class="com.travel.mate.security.service.ReloadableFilterInvocationSecurityMetadataSource">
+    	<constructor-arg ref="requestMap" />
+    	<property name="securedObjectService" ref="securedObjectService" />
+    </bean>
 
 </beans>
 

@@ -27,42 +27,46 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserDetailDTO showUserDetail(int userCode) {
-		// TODO Auto-generated method stub
 		return userDAO.selectUserDetail(userCode);
 	}
 
-	//회원가입
+	
+	/*회원가입을 위해 유저정보를 insert.*/ 
 	@Transactional(readOnly=false)
 	public void doSignup(UserDTO userDTO, UserDetailDTO userDetailDTO, String authority, List<UserLanguageDTO> langs){
 		System.out.println("doSignup Service");
 		int userCode = 0;
 		
-		userDAO.insertUser(userDTO);					//user 테이블에 삽입 후
-		userCode = userDTO.getUserCode();               //auto increment된 userCode 값 얻어오기
+		/*userDTO를 먼저 삽입한 후 auto increment 된 PK 값 userCode를 얻어온다.
+		userDetailDTO, langs, authority 는 해당 값을 FK로 가지므로 가져온 값을 입력해준다.*/
+		userDAO.insertUser(userDTO);					
+		userCode = userDTO.getUserCode();             
 		
-		//userCode값 입력
 		userDetailDTO.setUserCode(userCode);            
 		for(UserLanguageDTO lang : langs){
 			lang.setUserCode(userCode);
 		}
 		
-		UserAuthDTO userAuthDTO  = new UserAuthDTO(userCode, authority); //유저의 권한
+		UserAuthDTO userAuthDTO  = new UserAuthDTO(userCode, authority); 
 
 		userDAO.insertUserDetail(userDetailDTO);
 		userDAO.insertUserAuthority(userAuthDTO);
 		userDAO.insertUserLanguage(langs);
 		
 	}
-
+	
+	/*아이디 중복체크*/
 	public int checkSignup(String id) {
 		return userDAO.selectUserId(id);
 	}
 	
+	/*회원정보 수정*/
 	@Transactional(readOnly=false)
 	public void updateUserDetail(UserDetailDTO userDetailDTO){
 		userDAO.updateUserDetail(userDetailDTO);
 	}
 	
+	/*비밀번호 수정*/
 	@Transactional(readOnly=false)
 	public void updatePassword(UserDTO userDTO){
 		userDAO.updatePassword(userDTO);

@@ -1,17 +1,14 @@
 package com.travel.mate.dao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
 import com.travel.mate.common.dao.AbstractDAO;
-import com.travel.mate.dto.UserLanguageDTO;
 import com.travel.mate.dto.UserAuthDTO;
 import com.travel.mate.dto.UserDTO;
 import com.travel.mate.dto.UserDetailDTO;
+import com.travel.mate.dto.UserLanguageDTO;
 
 @Repository("UserDAO")
 public class UserDAO extends AbstractDAO{
@@ -40,7 +37,8 @@ public class UserDAO extends AbstractDAO{
 		insert("user.insertUserLanguage", langs);
 	}
 	
-	/*아이디 중복체크*/
+	/*아이디 중복체크
+	 *  DB조회 후 id와 중복되는 칼럼의 갯수를 반환*/
 	public int selectUserId(String id){
 		int rowcount = (Integer) selectOne("user.selectUserId", id);
 		return rowcount;

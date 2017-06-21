@@ -22,55 +22,31 @@ public class SecuredObjectServiceImpl implements SecuredObjectService {
 	  this.securedObjectDao = secureObjectDao;
 	}
 	
+	/*url 형식의 리소스를 얻어올 때*/
 	@Override
 	public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getRolesAndUrl() throws Exception {
 	  // TODO Auto-generated method stub
-	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> ret = new LinkedHashMap<RequestMatcher, List<ConfigAttribute>>();
+	  LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<RequestMatcher, List<ConfigAttribute>>();
 	  LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndUrl();
 
 	  Set<Object> keys = data.keySet();
 	  for(Object key : keys){
-	  ret.put((AntPathRequestMatcher)key, data.get(key));
+	  requestMap.put((AntPathRequestMatcher)key, data.get(key));
 	  }
-	  return ret;
+	  return requestMap;
 	}
 	
+	/*method 형식의 리소스를 얻어올 때*/
 	@Override
-	public LinkedHashMap<String, List<ConfigAttribute>> getRolesAndMethod()
-	  throws Exception {
+	public LinkedHashMap<String, List<ConfigAttribute>> getRolesAndMethod() throws Exception {
 	  // TODO Auto-generated method stub
-	  LinkedHashMap<String, List<ConfigAttribute>> ret = new LinkedHashMap<String, List<ConfigAttribute>>();
+	  LinkedHashMap<String, List<ConfigAttribute>> requestMap = new LinkedHashMap<String, List<ConfigAttribute>>();
 	  LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndMethod();
 	  Set<Object> keys = data.keySet();
 	  for(Object key : keys){
-	  ret.put((String)key, data.get(key));
+	  requestMap.put((String)key, data.get(key));
 	  }
-	  return ret;
+	  return requestMap;
 	}
-	
-	@Override
-	public LinkedHashMap<String, List<ConfigAttribute>> getRolesAndPointcut()
-	  throws Exception {
-	  // TODO Auto-generated method stub
-	  LinkedHashMap<String, List<ConfigAttribute>> ret = new LinkedHashMap<String, List<ConfigAttribute>>();
-	 // LinkedHashMap<Object, List<ConfigAttribute>> data = securedObjectDao.getRolesAndPointcut();
-	  Set<Object> keys = data.keySet();
-	  for(Object key : keys){
-	  ret.put((String)key, data.get(key));
-	  }
-	  return ret;
-	}
-	
-/*	@Override
-	public List<ConfigAttribute> getMatchedRequestMapping(String url) throws Exception {
-	  // TODO Auto-generated method stub
-	  return securedObjectDao.getRegexMatchedRequestMapping(url);
-	}
-	
-	@Override
-	public String getHierarchicalRoles() throws Exception {
-	  // TODO Auto-generated method stub
-	  return securedObjectDao.getHierarchicalRoles();
-	}*/
 
 }

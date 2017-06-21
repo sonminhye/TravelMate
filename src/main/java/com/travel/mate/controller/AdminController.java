@@ -92,20 +92,15 @@ public class AdminController {
 			}		
 		}//end for
 		
-		//테스트용 출력
-		for(SecuredResourceAuthDTO dto: auths){
-			System.out.println("authList"+dto.getResourceCode() +" : " + dto.getAuthority());
-		}
-		
-		//auths가 비어있지 않을 때만(체크박스가 최소 한개 선택되었을 때) 쿼리를 실행 
+		/*auths가 비어있지 않을 때만(체크박스가 최소 한개 선택되었을 때) 쿼리를 실행*/ 
 		if(!auths.isEmpty()){
 			adminService.modifySecuredResourceAuth(auths);
 		}
 		
-		//update sortOrder 
+		/*update sortOrder*/ 
 		adminService.updateSecuredResource(securedResourceDTO);
 		
-		//Spring security resource 재설정(reload 메소드 호출)
+		/*Spring security resource 재설정(reload 메소드 호출)*/
 		try {
 			relodable.reload();
 		} catch (Exception e) {
