@@ -19,41 +19,12 @@
 	<jsp:include page="header.jsp"></jsp:include>
 	
 	<%
-		int travelCode = (Integer) request.getAttribute("travelCode");
 		int userCode = (Integer) request.getAttribute("userCode");
-		String applyButtonStart = null;
-		String applyButtonEnd = null;
-		String applyCancelButtonStart = null;
-		String applyCancelButtonEnd = null;
-		// 로그인
-		if (userCode > 0) {
-			applyButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ userCode
-			+ ">"
-			+ "<input type='hidden' name='travelCode'class='form-class' value="
-			+ travelCode
-			+ ">"
-			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
-			applyButtonEnd ="</button></a>";
-			
-			applyCancelButtonStart = "<a href='#this' name='apply' style='float: right;'>"
-			+ "<input type='hidden' name='userCode' class='form-class' value="
-			+ userCode
-			+ ">"
-			+ "<input type='hidden' name='travelCode'class='form-class' value="
-			+ travelCode
-			+ ">"
-			+ "<button type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
-			applyCancelButtonEnd ="</button></a>";
-		}
-		// 로그인 x
-		else {
-			applyButtonStart = "";
-			applyButtonEnd = "";
-			applyCancelButtonStart = "";
-			applyCancelButtonEnd = "";
-		}
+		String applyButtonStart = "<button style='float: right;' type='submit' class='btn btn-primary btn-lg btn-info'>여행신청";
+		String applyButtonEnd ="</button>";
+		
+		String applyCancelButtonStart = "<button style='float: right;' type='submit' class='btn btn-primary btn-lg btn-info'>여행취소";
+		String applyCancelButtonEnd ="</button>";
 	%>
 	<c:set var="userCode" value="<%= userCode %>"></c:set>
 
@@ -194,6 +165,7 @@
 								<form action="<c:url value='/doCancel'/>" method="post">
 									<%=applyCancelButtonStart %><%=applyCancelButtonEnd %>
 								</form>
+								<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 							</c:otherwise>
 						</c:choose>
 					</c:when>
@@ -203,6 +175,7 @@
 								<form action="<c:url value='/doApply'/>" method="post">
 									<%=applyButtonStart %><%=applyButtonEnd %>
 								</form>
+								<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
 							</c:when>
 							<c:otherwise>
 								<p>신청 인원이 최대 인원입니다.</p>
@@ -222,9 +195,10 @@
 		<%-- 단, 리뷰를 남기는 것은 여행이 끝나야하므로 endDate와 비교하며 오늘이 endDate가 지났을 때만 리뷰를 남길 수 있도록 생성 --%>
 		<%-- 리뷰는 단 한번만 작성할 수 있다 --%>
 		<div id="review">
-		<br><br>
 			<c:choose>
 				<c:when test="${fn:length(reviewList) > 0 }">
+					<a href="<c:url value='/travelList'/>"><button class="btn btn-primary btn-lg btn-info">목록으로</button></a>
+					<hr>
 					<c:forEach items="${reviewList }" var="review">
 						<div>${review.name }(${review.writeTime })<textarea readonly="readonly" style="width: 100%; resize: none; border: none; display: inline;">${review.content }</textarea>
 						</div>
@@ -254,9 +228,7 @@
 										    <a href="#this" id="point5">★</a>
 										</p>
 										<input type="hidden" name="point" value="0">
-										<input type="hidden" name="travelCode" value="<%=travelCode %>">
 										<textarea name="content" placeholder="최대 300자 입력" class='form-control' style="width: 80%; height: 20%; resize: none; display: inline;" maxlength="300"></textarea>
-										<input type="hidden" name="userCode" value="<%=userCode %>">
 										<button type="submit" class="btn btn-primary btn-lg btn-link" style="margin-top: -40px;">리뷰작성</button>
 									</form>
 								</c:otherwise>

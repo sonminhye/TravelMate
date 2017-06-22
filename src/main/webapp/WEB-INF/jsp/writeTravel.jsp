@@ -7,15 +7,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	Object principal = auth.getPrincipal();
-	int code = 0;
-	
-	if (principal != null && principal instanceof MyUser) {
-		code = ((MyUser)principal).getUserCode();
-	}
-%> 
+
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,7 +20,6 @@
 	<div class="container" style="margin-top: 150px; margin-bottom: 100px;">
 		<form action="<c:url value='/doWrite' />" method="post" enctype="multipart/form-data">
 			<table class="table" width="500">
-			<input type="hidden" name="userCode" class="form-control" value="<%=code%>">
 				<tr>
 					<td>여행이름<font color="red">*</font></td>
 					<td><input name="title" class='form-control' type="text" maxlength="15" placeholder="여행제목을 입력하세요(15자이내)" required></td>

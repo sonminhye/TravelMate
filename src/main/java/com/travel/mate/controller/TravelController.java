@@ -76,13 +76,13 @@ public class TravelController {
 
 	/*
 	 * Method	: readTravel(view travel info)
-	 * Summary	: 여행 정보 상세
+	 * Summary	: 여행 정보 상세를 담당하는 Controller
 	 * @param	: TravelDTO(for use travelInfo)
 	 * @param	: PathVarible(for use url)
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/readTravel/{travelCode}")
-	public ModelAndView readTravel(TravelDTO travelDto, @PathVariable int travelCode, HttpServletRequest request) {
+	public ModelAndView readTravel(@PathVariable int travelCode, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/readTravel");
 		
@@ -91,9 +91,11 @@ public class TravelController {
 		Object principal = auth.getPrincipal();
 		int userCode = 0;
 		
-		if(principal != null && principal instanceof MyUser){
+		if (principal != null && principal instanceof MyUser) {
 			userCode = ((MyUser)principal).getUserCode();
 		}
+		
+		TravelDTO travelDto = new TravelDTO();
 		travelDto.setTravelCode(travelCode);
 		travelDto.setUserCode(userCode);
 		
@@ -126,7 +128,6 @@ public class TravelController {
 		
 		mv.addObject("userInfo", listUserInfo);
 		
-		request.setAttribute("travelCode", travelCode);
 		request.setAttribute("userCode", userCode);
 		
 		return mv;
@@ -134,7 +135,7 @@ public class TravelController {
 
 	/*
 	 * Method	: writeTravel
-	 * Summary	: 여행 글 작성으로 이동
+	 * Summary	: 여행 글 작성으로 이동하는 Controller
 	 * @param	: Notthing
 	 * @Return	: String
 	 */
@@ -145,7 +146,7 @@ public class TravelController {
 	
 	/*
 	 * Method	: doWrite
-	 * Summary	: 작성한 여행 정보를 Database에 등록하는 과정
+	 * Summary	: 작성한 여행 정보를 Database에 등록하는 Controller
 	 * @param	: TravelDTO(for insert travel)
 	 * @param	: TravelDetailDTO(for insert travelDetail)
 	 * @param	: TravelRouteDTO(for insert travelRoute)
@@ -159,6 +160,16 @@ public class TravelController {
 			MultipartHttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			Object principal = auth.getPrincipal();
+			int userCode = 0;
+			
+			if (principal != null && principal instanceof MyUser) {
+				userCode = ((MyUser)principal).getUserCode();
+			}
+			
+			travelDto.setUserCode(userCode);
+			
 			travelService.insertTravel(travelDto, travelDetailDto, travelRouteDto, request);
 			mv.setViewName("redirect:/travelList");
 		}
@@ -171,16 +182,34 @@ public class TravelController {
 
 	/*
 	 * Method	: doApply
-	 * Summary	: 여행 신청하면 Database에 등록하는 과정
-	 * @param	: ApplyDTO(for insert apply)
+	 * Summary	: 여행 신청하면 Database에 등록하는 Controller
+	 * @param	: HttpServletRequest(for get travelCode)
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/doApply", method = RequestMethod.POST)
-	public ModelAndView doApply(@ModelAttribute ApplyDTO applyDto) {
+	public ModelAndView doApply(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			// get travelCode
+			String beforeUrl = request.getHeader("referer");
+			int slashTravelCode = beforeUrl.lastIndexOf("/");
+			int travelCode = Integer.parseInt(beforeUrl.substring(slashTravelCode + 1, beforeUrl.length()));
+			
+			// get userCode
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			Object principal = auth.getPrincipal();
+			int userCode = 0;
+			
+			if (principal != null && principal instanceof MyUser) {
+				userCode = ((MyUser)principal).getUserCode();
+			}
+			
+			ApplyDTO applyDto = new ApplyDTO();
+			applyDto.setTravelCode(travelCode);
+			applyDto.setUserCode(userCode);
+			
 			travelService.insertTravelApply(applyDto);
-			mv.setViewName("redirect:/travelList");
+			mv.setViewName("redirect:/readTravel/" + travelCode);
 		}
 		catch (Exception e) {
 			mv.setViewName("redirect:/errorPage");
@@ -191,16 +220,34 @@ public class TravelController {
 
 	/*
 	 * Method	: doCancel
-	 * Summary	: 여행 신청 취소하면 Database에서 삭제 되는 과정
-	 * @param	: ApplyDTO(for delete apply)
+	 * Summary	: 여행 신청 취소하면 Database에서 삭제하는 Controller
+	 * @param	: HttpServletRequest(for get travelCode)
 	 * @Return	: ModelAndView
 	 */
 	@RequestMapping(value = "/doCancel", method = RequestMethod.POST)
-	public ModelAndView doCancel(@ModelAttribute ApplyDTO applyDto) {
+	public ModelAndView doCancel(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			// get travelCode
+			String beforeUrl = request.getHeader("referer");
+			int slashTravelCode = beforeUrl.lastIndexOf("/");
+			int travelCode = Integer.parseInt(beforeUrl.substring(slashTravelCode + 1, beforeUrl.length()));
+			
+			// get userCode
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			Object principal = auth.getPrincipal();
+			int userCode = 0;
+			
+			if (principal != null && principal instanceof MyUser) {
+				userCode = ((MyUser)principal).getUserCode();
+			}
+			
+			ApplyDTO applyDto = new ApplyDTO();
+			applyDto.setTravelCode(travelCode);
+			applyDto.setUserCode(userCode);			
+			
 			travelService.deleteTravelApply(applyDto);
-			mv.setViewName("redirect:/travelList");
+			mv.setViewName("redirect:/readTravel/" + travelCode);
 		}
 		catch (Exception e) {
 			mv.setViewName("redirect:/errorPage");
@@ -211,7 +258,7 @@ public class TravelController {
 	
 	/*
 	 * Method	: goErrorPage
-	 * Summary	: 예외가 발생할 경우 이동하는 페이지
+	 * Summary	: 예외가 발생할 경우 에러페이지로 이동하는 Controller
 	 * @param	: Notthing
 	 * @Return	: String
 	 */

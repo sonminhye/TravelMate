@@ -87,9 +87,7 @@ public class TravelServiceImpl implements TravelService {
 				throw new Exception();
 			}
 			
-			if ((temp.equals(".jpg") || temp.equals(".gif") ||
-						temp.equals(".png") || temp.equals(".jpeg") ||
-						temp.equals(".bmp"))
+			if ((temp.equals(".jpg") || temp.equals(".gif") || temp.equals(".png") || temp.equals(".jpeg") || temp.equals(".bmp"))
 					&& (null != request)) {
 				travelDAO.insertTravel(travelDto);
 				
