@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.travel.mate.dao.MongoDAO;
 import com.travel.mate.dto.ChatDTO;
@@ -22,7 +23,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 
 
-@Repository
+@Service("MongoChatService")
 public class MongoChatServiceImpl implements MongoChatService{
 	
 	@Resource(name = "MongoDAO")
@@ -51,7 +52,6 @@ public class MongoChatServiceImpl implements MongoChatService{
 			    sortagain
 		);
 		
-		System.out.println(agg.toString());
 		return mongoDAO.findAllChats(agg, COLLECTION);
 	}
 
@@ -59,12 +59,11 @@ public class MongoChatServiceImpl implements MongoChatService{
 	public ArrayList<ChatDTO> showChats(int roomCode, String messageCode) {
 		// TODO Auto-generated method stub
 		System.out.println("show more Chats by mongoSevice");
-		
+
 		Query query = new Query();
 		ObjectId obj = new ObjectId(messageCode);
 		//해당 메세지보다 작은 애들 중 35개 가져오기 날짜별로 내림차순
 		query.addCriteria(Criteria.where("roomCode").is(roomCode).and("_id").lt(obj)).with(new Sort(Sort.Direction.DESC, "sendDate")).limit(35);
-		System.out.println(query.toString());
 		
 		return mongoDAO.findAllChats(query, COLLECTION);
 	}
@@ -85,6 +84,7 @@ public class MongoChatServiceImpl implements MongoChatService{
 	public void changeUnReadMessage(int roomCode, int userCode) {
 		// TODO Auto-generated method stub
 		Query query = new Query();
+		
 		//해당 룸코드가 roomCode 인
 		query.addCriteria(Criteria.where("roomCode").is(roomCode));
 		//그리고 보낸사람이 내가 아닌 메세지들을
@@ -92,8 +92,6 @@ public class MongoChatServiceImpl implements MongoChatService{
 		//읽음 처리 하기
 		Update update = new Update();
 		update.set("readFlag", true);
-		
-		System.out.println(query.toString());
 		
 		mongoDAO.changeUnReadMessage(query, update, COLLECTION);
 	}
@@ -107,13 +105,11 @@ public class MongoChatServiceImpl implements MongoChatService{
 		//룸 코드를 기준으로 group 짓고, 그 수를 count 해서 unread 로 이름짓는다. 또한 roomCode 필드도 추가한다.
 		AggregationOperation group = Aggregation.group("roomCode").count().as("unread").addToSet("roomCode").as("roomCode");
 		
-		
 		Aggregation agg = Aggregation.newAggregation(
 				match,
 				group
 		);
 		
-		System.out.println(agg.toString());
 		return mongoDAO.checkUnReadMessageList(agg, COLLECTION);
 	}
 }

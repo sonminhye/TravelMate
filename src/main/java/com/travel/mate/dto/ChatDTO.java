@@ -7,7 +7,6 @@ public class ChatDTO {
 	@Id
 	private String id;
 	
-	int messageCode;
 	int roomCode;
 	int senderCode;
 	int receiverCode;
@@ -21,10 +20,10 @@ public class ChatDTO {
 		
 	}
 	
-	public ChatDTO(int messageCode, int roomCode, int senderCode, int receiverCode, String content, String sendDate,
+	public ChatDTO( int roomCode, int senderCode, int receiverCode, String content, String sendDate,
 			boolean readFlag, String senderName) {
 		super();
-		this.messageCode = messageCode;
+	
 		this.roomCode = roomCode;
 		this.senderCode = senderCode;
 		this.receiverCode = receiverCode;
@@ -42,13 +41,6 @@ public class ChatDTO {
 		this.id = id;
 	}
 
-	public int getMessageCode() {
-		return messageCode;
-	}
-
-	public void setMessageCode(int messageCode) {
-		this.messageCode = messageCode;
-	}
 
 	public int getRoomCode() {
 		return roomCode;

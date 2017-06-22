@@ -9,10 +9,6 @@ import com.travel.mate.dto.ChatRoomDTO;
 public interface ChatService {
 	
 	public ArrayList<ChatRoomDTO> showChatRooms(int userCode);
-	public ArrayList<ChatDTO> showChats(int roomCode);
-	public ArrayList<ChatDTO> showChats(int roomCode, int messageCode);
 	public ChatRoomDTO showChatRoomExist(int senderCode, int receiverCode);
-	public ChatRoomDTO addRoom(int senderCode, int receiverCode, String date);
-	public int checkUnReadMessage(int userCode);
 	public void changeUnReadMessage(int roomCode, int userCode);
 }

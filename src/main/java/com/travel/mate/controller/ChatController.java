@@ -41,30 +41,29 @@ import com.travel.mate.service.UserServiceImpl;
 public class ChatController {
 
 	@Autowired
-	ChatServiceImpl chatService;
+	private ChatServiceImpl chatService;
 
 	@Autowired
-	UserServiceImpl userService;
+	private UserServiceImpl userService;
 	
 	@Autowired
-	MongoChatServiceImpl mongoService;
+	private MongoChatServiceImpl mongoService;
 	
-	Authentication auth;
+	private Authentication auth;
 	
 	//채팅창 뷰
 	@RequestMapping(value = "/chat")
-	public String chatView(HttpServletRequest request, Model model) {
-		
-		
-		String rCode, roomCode;
+	public String chatView(HttpServletRequest request , Model model) {
+
+		String rcode, roomCode;
 		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 		
-        if(flashMap!=null){
+        if(flashMap!=null){ //checkChatRoom 으로부터 왔을 경우
         	Map<String, Integer> map = (HashMap) flashMap.get("param");
-        	rCode = map.get("rcode").toString();
+        	rcode = map.get("rcode").toString();
         	roomCode = map.get("room").toString();
-        }else{
-        	rCode = request.getParameter("rcode"); // 받는 이 (상대방)
+        }else{ //chatList 페이지에서 왔을 경우
+        	rcode = request.getParameter("rcode"); // 받는 이 (상대방)
     		roomCode = request.getParameter("room"); //room Code 
         }
 		
@@ -72,15 +71,15 @@ public class ChatController {
 		UserDetailDTO userDetail = userService.showUserDetail(userCode);
 		String name = userDetail.getName();
 		
-		model.addAttribute("rcode", rCode);
-		model.addAttribute("scode", userCode);
-		model.addAttribute("name", name);
-		model.addAttribute("room", roomCode);
+		model.addAttribute("rcode", rcode); //상대방 코드
+		model.addAttribute("scode", userCode); //내 코드
+		model.addAttribute("name", name); //내 이름
+		model.addAttribute("room", roomCode); //룸 코드
 		
 		//읽지않은 메세지 읽기
 		mongoService.changeUnReadMessage(Integer.parseInt(roomCode), userCode);
 		
-		//현재 이 방에 채팅로그가 저장되어있다면, 불러오기
+		//현재 채팅로그가 저장되어있다면, 불러오기
 		ArrayList<ChatDTO> list = mongoService.showChats(Integer.parseInt(roomCode));
 		model.addAttribute("list", list);
 		return "chat";
@@ -103,11 +102,12 @@ public class ChatController {
 		return "chatList";
 	}
 	
+	//두 유저간의 채팅방이 있는지를 검사
 	@RequestMapping(value="/checkChatRoom")
-	public String checkChatRoomExist(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
-		
+	public String checkChatRoomExist(@RequestParam int userCode, RedirectAttributes redirectAttributes){
+		System.out.println(userCode);
 		int senderCode = getUserCode(); //나의 코드
-		int receiverCode = Integer.parseInt(request.getParameter("userCode")); //receiverCode(상대방)
+		int receiverCode = userCode; //상대방 코드
 		
 		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentTime = fm.format(new Date()); //채팅방 생성 시간
@@ -115,20 +115,18 @@ public class ChatController {
 		//두 유저간의 채팅방이 있는지 여부를 구해옴
 		ChatRoomDTO chatRoom = chatService.showChatRoomExist(senderCode, receiverCode);
 		
-		
 		Map<String,Integer> map = new HashMap<String,Integer>();
-		map.put("rcode",receiverCode);
 		
 		//채팅방이 없을 경우,
 		if(chatRoom ==null){ //채팅방이 없을 때
 			map.put("room", 0);	
 		}else{
-			map.put("room", chatRoom.getRoomCode());	
+			map.put("room", chatRoom.getRoomCode());
 		}
+		map.put("rcode",receiverCode);
 		
 		//파라미터를 get 방식으로 노출시키는 방식이 아닌, 감추기 위해서
 		redirectAttributes.addFlashAttribute("param", map);
-		
 		return "redirect:chat";
 	}
 	

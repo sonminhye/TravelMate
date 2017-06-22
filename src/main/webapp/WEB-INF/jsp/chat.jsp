@@ -46,7 +46,7 @@
 							<li class="message right appeared" id="${dto.id }">
 						</c:when>
 						<c:otherwise>
-							<li class="message left appeared" id="${dto.messageCode }">
+							<li class="message left appeared" id="${dto.id }">
 						</c:otherwise>
 					</c:choose>
 					<div class="avatar">${dto.senderName }</div>
@@ -128,27 +128,18 @@
 							messageCode : messageCode
 						}),
 						dataType:'json',
-						success: function(data){prependMessage(data)}
+						success: function(data){
+							if(data.length==0)
+								alert("더이상 불러올 대화가 없습니다.");
+							else prependMessage(data)
+						}
 					});
 				}
 			}
 		});
 		
-		//상대방이 채팅창에 들어와있는지 안있는지 판단하는 아이콘
-		online = function(data){
-			
-			var c=document.getElementById("myCanvas");
-			var ctx = c.getContext("2d");
-			ctx.beginPath();
-			ctx.arc(c.width / 2, c.height / 2, 5, 0, 2 * Math.PI);
-			if(data)	
-				ctx.fillStyle ="#339933";	
-			else
-				ctx.fillStyle="#ff4d4d";
-			ctx.fill();
-		}
 		
-		//내가 입장했을 때, 환영메세지가 서버로부터 오는 부분
+		//내가 입장했을 때
 		socket.on('welcome', function(data) {
 			inchatRoom = data.participate;
 			online(inchatRoom);
@@ -159,7 +150,8 @@
 		socket.on('join', function(data) {
 			inchatRoom = data.participate;
 			online(inchatRoom);
-			//채팅방에 들어왔으니까, 읽은 상태이므로 class 를 read 상태로 바꿔준다.
+			//채팅방에 들어왔으니까, 내가 보낸 안읽은 메세지를 모두 읽은 것. 
+			//read 상태로 바꿔준다.
 			if (inchatRoom == true) {
 				$('.messages').find('.unread').empty();
 				$('.messages').find('.unread').attr('class', 'read');
@@ -171,21 +163,12 @@
 			appendMessage(data);
 		});
 	
-		//타 유저가 떠났을 때
-		socket.on('left', function(data) {
-			inchatRoom = data.participate;
-			online(inchatRoom);
-		});
-		
 		//대화 더 불러오기
 		prependMessage = function(data){
-			/*
-			어떤 형식으로 가져오는지?
-			*/
 			$.each(data, function(index, element) {
 				
 				var message;
-				if (element.senderName == nickname) //만약 내가 쓴 메세지라면
+				if (element.senderCode == scode) //만약 내가 쓴 메세지라면
 					message_side = 'right';
 				else
 					message_side = 'left';
@@ -225,29 +208,21 @@
 				old : 'n'
 			});
 			message.draw();
+			
 			return scrollTop();
 		};
 
-		//스크롤 자동 구현부
-		scrollTop = function() {
-			var $messages = $('.messages');
-			$messages.animate({
-				scrollTop : $messages.prop('scrollHeight')
-			}, 0);
-		};
-
-		//메세지 클래스
+		//메세지
 		Message = function(arg) {
-			//받은 변수로 부터 클래스 객체들을 초기화
+			
+			//arg 변수로부터 각 객체 초기화
 			this.messageCode = arg.messageCode;
 			this.text = arg.text, this.message_side = arg.message_side;
 			this.nick = arg.nick, this.readFlag = arg.readFlag;
 			this.old = arg.old;
 			
 			this.draw = function(_this) {
-				
 				return function() {
-					
 					var $message;
 					//메세지 템플릿을 복사
 					$message = $($('.message_template').clone().html());
@@ -286,10 +261,23 @@
 			}(this)
 		};
 		
+		//상대방이 채팅창에 들어와있는지 안있는지 판단하는 아이콘
+		online = function(){
+			
+			var c=document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.beginPath();
+			ctx.arc(c.width / 2, c.height / 2, 5, 0, 2 * Math.PI);
+			//상대방이 들어와있을 경우 녹색
+			if(inchatRoom)
+				ctx.fillStyle ="#339933";	
+			else
+				ctx.fillStyle="#ff4d4d";
+			ctx.fill();
+		}
+		
 		sendMessage = function(){
-			
 			var msg = $(".message_input").val();
-			
 			if(msg.length==0){
 				alert("메세지를 입력해주세요.");
 				return false;
@@ -301,7 +289,6 @@
 			
 			//date
 			var date = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
-			
 			socket.emit('msg', {
 				msg : msg,
 				date : date,
@@ -310,6 +297,8 @@
 			
 			$('.message_input').val('');
 		};
+		
+		
 		
 		//버튼을 클릭했을 때 (마우스 클릭)
 		$('.send_message').click(function(e) {
@@ -325,6 +314,20 @@
 		    	sendMessage();
 		    	return false;
 		    }
+		});
+		
+		//스크롤 내리기 
+		scrollTop = function() {
+			var $messages = $('.messages');
+			$messages.animate({
+				scrollTop : $messages.prop('scrollHeight')
+			}, 0);
+		};
+		
+		//타 유저가 떠났을 때
+		socket.on('left', function(data) {
+			inchatRoom = data.participate;
+			online(inchatRoom);
 		});
 
 	</script>

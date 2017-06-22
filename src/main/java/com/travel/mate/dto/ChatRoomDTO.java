@@ -1,6 +1,7 @@
 package com.travel.mate.dto;
 
 public class ChatRoomDTO {
+	
 	int roomCode;
 	String receive;
 	int senderCode;

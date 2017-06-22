@@ -313,9 +313,8 @@
 	</div>
  	<script type="text/javascript">
 	 	
- 		var socket = io('http://175.115.95.52:3000');
+ 		var socket = io('http://localhost:3000');
 	 	var userCode = '<%=code%>';
-	
 	 	// nick name 정보를 서버에 보냄
 	 	socket.emit('joinAllRooms', {
 	 		userCode : userCode
@@ -329,7 +328,6 @@
 	 			appendCount(data);
 	 	});
 		
-
 	 	// 읽지않은 메세지 개수 늘려주기
 	 	appendCount = function(data) {
 	 		var text = data.msg;
@@ -341,6 +339,7 @@
 	 			unread.html(1);
 	 		}
 	 	};
+	 	
  	</script>
 </body>
 </html>
