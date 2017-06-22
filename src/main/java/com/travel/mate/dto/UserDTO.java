@@ -17,8 +17,7 @@ public class UserDTO {
 	@Size(min=1, max=15)
 	private String password;
 	
-	public UserDTO(){
-		
+	public UserDTO(){	
 	}
 
 	public UserDTO(int userCode, String id, String password) {
@@ -57,8 +56,6 @@ public class UserDTO {
 	public String toString() {
 		return "UserDTO [userCode=" + userCode + ", id=" + id + ", password=" + password + "]";
 	}
-	
-	
-	
+
 }
 

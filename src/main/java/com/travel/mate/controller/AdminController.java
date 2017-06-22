@@ -37,7 +37,6 @@ public class AdminController {
 	/*목록불러오기*/
 	@RequestMapping(value = "/adminPage", method = RequestMethod.GET)
 	public String adminPage(Locale locale, Model model) {
-		System.out.println("Admincontroller!!!!!");
 		List<UserDTO> userList = adminService.showAllUser();
 		List<UserDetailDTO> userDetailList = adminService.showAllUserDetail();
 		List<LanguageDTO> languageList = adminService.showAllLanguage();
@@ -84,7 +83,7 @@ public class AdminController {
 	
 		List<SecuredResourceAuthDTO> auths = securedResourceAuthDTO.getSecuredResourceAuthDTOList();
 	
-		//선택되지 않은 체크박스는 null값이므로 이를 list에서 제거해 주는 작업
+		/*선택되지 않은 체크박스는 null값이므로 이를 list에서 제거해 주는 작업*/
 		for(Iterator<SecuredResourceAuthDTO> it = auths.iterator(); it.hasNext();){
 			SecuredResourceAuthDTO auth = it.next();
 			
@@ -92,26 +91,19 @@ public class AdminController {
 				it.remove();
 			}		
 		}//end for
-
 		
-		//테스트용 출력
-		for(SecuredResourceAuthDTO dto: auths){
-			System.out.println("authList"+dto.getResourceCode() +" : " + dto.getAuthority());
-		}
-		
-		//auths가 비어있으면(선택된 체크박스가 없으면)쿼리를 실행하지 않음 
+		/*auths가 비어있지 않을 때만(체크박스가 최소 한개 선택되었을 때) 쿼리를 실행*/ 
 		if(!auths.isEmpty()){
 			adminService.modifySecuredResourceAuth(auths);
 		}
 		
-		//update sortOrder 
+		/*update sortOrder*/ 
 		adminService.updateSecuredResource(securedResourceDTO);
 		
-		//Spring security resource 재설정(reload 메소드 호출)
+		/*Spring security resource 재설정(reload 메소드 호출)*/
 		try {
 			relodable.reload();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

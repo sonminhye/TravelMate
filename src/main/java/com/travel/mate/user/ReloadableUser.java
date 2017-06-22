@@ -14,15 +14,15 @@ public class ReloadableUser {
 	@Autowired
 	CustomJdbcDaoImpl dao;
 	
+	/*SecurityContextHolder 에 새로운 Authentication 객체를 셋팅*/
 	public void reloadAuthentication(String userName) {
-		// TODO Auto-generated method stub
-		System.out.println("reloadAuthentication!!");
 
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(authentication,userName));
 
 	}
 
+     /*새로운 Authentication 생성*/
 	 protected Authentication createNewAuthentication(Authentication currentAuth, String userName) {
 
 	        UserDetails newPrincipal = dao.loadUserByUsername(userName);

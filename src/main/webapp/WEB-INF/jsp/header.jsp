@@ -129,13 +129,7 @@
 	}
 
  	function checkSubmit(){
- 		var idEmptyCheck = document.forms[0].id.value;
- 		var passcheckCheck = document.forms[0].passwordCheck.value;
 
-		if(idEmptyCheck.length==0){
-			alert('이메일 주소를 입력해주세요.');
-			return false;
-		}
  		if(idCheck=='2'){
 			alert('이미 존재하는 메일주소 입니다.');
 			return false;
